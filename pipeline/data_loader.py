@@ -43,7 +43,7 @@ from pipeline.splits import Splits
 # ---------------------------------------------------------------------------
 
 ANALYSIS_OUTPUT_DIR = Path(os.environ.get("ANALYSIS_OUTPUT_DIR", "analysis_output"))
-FIGURE_DIR = ANALYSIS_OUTPUT_DIR / "figures"
+FIGURE_DIR = Path(os.environ.get("FIGURE_DIR", "figures"))
 
 # ---------------------------------------------------------------------------
 # Constants matching the paper
