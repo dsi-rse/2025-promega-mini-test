@@ -129,6 +129,7 @@ class SingleDayOrganoidDataset(Dataset):
 
         img = img.astype(np.float32) / 255.0  # Normalize to [0,1]
 
+
         # Optional bbox-crop: crop the image to its mask's bounding box, then
         # LETTERBOX it (pad with the image's mean color) to a target aspect
         # ratio (384/512 = 0.75 = H/W) so the subsequent Resize to (384, 512)
@@ -154,10 +155,10 @@ class SingleDayOrganoidDataset(Dataset):
                     # which under mean-fill clipping is always the global gray)
                     # so letterbox padding matches the existing background.
                     # Falls back to the crop mean only if the original is too small.
-                    if img.shape[0] >= 4 and img.shape[1] >= 4:
-                        fill = img[:2, :2].reshape(-1, img.shape[-1]).mean(axis=0)
-                    else:
-                        fill = crop.reshape(-1, crop.shape[-1]).mean(axis=0)
+                    # to be the exact mean-fill background gray for this specific image.
+                    corners = np.array([img[0, 0], img[0, -1], img[-1, 0], img[-1, -1]])
+                    fill = np.median(corners, axis=0).astype(crop.dtype)
+                    
                     if cur_ratio > target_h_over_w:
                         # too tall — pad sides
                         new_w = int(round(ch / target_h_over_w))
@@ -351,6 +352,7 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
     
     best_val_acc = -1.0
+    best_val_bal = -1.0
     best_state = None
     bad_epochs = 0
     history = []  # track per-epoch metrics for plotting
@@ -385,7 +387,7 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
         train_loss = running_loss / max(1, total)
         train_acc = correct / max(1, total)
         
-        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, _, _, _ = evaluate(
+        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, _, _, val_bal_acc = evaluate(
             model, val_loader, criterion, device
         )
         
@@ -404,11 +406,12 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
             'val_acc': val_acc,
         })
 
-        if val_acc > best_val_acc + 1e-4:
+        if val_bal_acc > best_val_bal + 1e-4:
+            best_val_bal = val_bal_acc
             best_val_acc = val_acc
             best_state = {k: v.cpu() for k, v in model.state_dict().items()}
             bad_epochs = 0
-            print("  * new best")
+            print(f"  * new best on val balanced acc ({val_bal_acc:.3f})")
         else:
             bad_epochs += 1
             if bad_epochs >= PATIENCE:
