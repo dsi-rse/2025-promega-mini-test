@@ -351,6 +351,7 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
     
     best_val_acc = -1.0
+    best_val_bal = -1.0
     best_state = None
     bad_epochs = 0
     history = []  # track per-epoch metrics for plotting
@@ -385,7 +386,7 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
         train_loss = running_loss / max(1, total)
         train_acc = correct / max(1, total)
         
-        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, _, _, _ = evaluate(
+        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, _, _, val_bal_acc = evaluate(
             model, val_loader, criterion, device
         )
         
@@ -402,13 +403,17 @@ def train_for_day(target_day, train_ids, val_ids, test_ids,
             'train_acc': train_acc,
             'val_loss': val_loss,
             'val_acc': val_acc,
+            'val_bal_acc': val_bal_acc,
         })
 
-        if val_acc > best_val_acc + 1e-4:
+        # Select on balanced accuracy (matches the attn/lstm scripts): avoids
+        # saving a collapsed all-one-class checkpoint that raw accuracy rewards.
+        if val_bal_acc > best_val_bal + 1e-4:
+            best_val_bal = val_bal_acc
             best_val_acc = val_acc
             best_state = {k: v.cpu() for k, v in model.state_dict().items()}
             bad_epochs = 0
-            print("  * new best")
+            print(f"  * new best on val balanced acc ({val_bal_acc:.3f})")
         else:
             bad_epochs += 1
             if bad_epochs >= PATIENCE:
