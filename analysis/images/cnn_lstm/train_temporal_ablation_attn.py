@@ -270,6 +270,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=5)
 
     best_val_acc = -1.0
+    best_val_bal = -1.0
     best_state = None
     bad_epochs = 0
     history = []  # per-epoch metrics for plotting
@@ -329,13 +330,18 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
             'train_acc': train_acc,
             'val_loss': val_loss,
             'val_acc': val_acc,
+            'val_bal_acc': val_bal_acc,
         })
 
-        if val_acc > best_val_acc + 1e-4:
+        # Select the checkpoint on balanced accuracy, not raw accuracy: a
+        # collapsed all-one-class model scores ~0.5 balanced acc, so it is
+        # never saved as "best" (raw accuracy would have rewarded it).
+        if val_bal_acc > best_val_bal + 1e-4:
+            best_val_bal = val_bal_acc
             best_val_acc = val_acc
             best_state = {k: v.cpu() for k, v in model.state_dict().items()}
             bad_epochs = 0
-            print("  * new best on val acc")
+            print(f"  * new best on val balanced acc ({val_bal_acc:.3f})")
         else:
             bad_epochs += 1
             if bad_epochs >= PATIENCE:
