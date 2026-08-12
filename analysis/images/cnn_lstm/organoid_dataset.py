@@ -287,3 +287,55 @@ class OrganoidTimeSeriesDataset(Dataset):
             organoid_id,
             pad_mask,
         )
+def resolve_split_path(splits_dir, phase):
+    """
+    Given a directory and a phase ('train' | 'val' | 'test'), return the path
+    to the matching split JSON. Supports both layouts so the trainers can read
+    from either:
+        new (cohort-style):  <splits_dir>/<phase>.json
+        old (data_splits/):  <splits_dir>/<phase>_idor_series.json
+    Cohort layout takes precedence when both exist.
+    """
+    d = Path(splits_dir)
+    cohort_style = d / f"{phase}.json"
+    legacy_style = d / f"{phase}_idor_series.json"
+    if cohort_style.exists():
+        return str(cohort_style)
+    if legacy_style.exists():
+        return str(legacy_style)
+    raise FileNotFoundError(
+        f"No split file for phase '{phase}' in {d}. Looked for "
+        f"{cohort_style.name} and {legacy_style.name}."
+    )
+
+
+def load_split_from_json(split_path):
+    """
+    Load a pre-made split JSON produced by scripts/split_series_reproducible.py.
+
+    Returns:
+        organoid_ids  - list of organoid_id strings
+        series_data   - dict {organoid_id: {label, n_votes_good, n_votes_total,
+                                            base_well, genealogy_type, n_timepoints,
+                                            timepoints: [{key, mdl_day, img_path,
+                                                          mask_path, ...}]}}
+
+    Usage:
+        train_ids, train_data = load_split_from_json('data_splits/series_train.json')
+        val_ids,   val_data   = load_split_from_json('data_splits/series_val.json')
+        test_ids,  test_data  = load_split_from_json('data_splits/series_test.json')
+
+        train_dataset = OrganoidTimeSeriesDataset(train_ids, train_data, ...)
+    """
+    with open(split_path) as f:
+        series_data = json.load(f)
+
+    organoid_ids = list(series_data.keys())
+
+    labels = [series_data[oid]['label'] for oid in organoid_ids]
+    acc    = labels.count('Acceptable')
+    na     = labels.count('Not Acceptable')
+    print(f"Loaded {len(organoid_ids)} organoids from {split_path} "
+          f"({acc} Acceptable, {na} Not Acceptable)")
+
+    return organoid_ids, series_data

@@ -26,13 +26,14 @@ from sklearn.metrics import precision_recall_fscore_support
 
 from analysis.images.cnn_lstm.organoid_dataset import (
     OrganoidTimeSeriesDataset,
-    make_canonical_splits,
+    load_split_from_json,
+    resolve_split_path,
 )
 
 # ---------------- Config ----------------
 DAY_RANGES = [
-    8, 10, 13, 15, 17, 20.5, 24, 28, 30
-]
+    6, 8, 10, 13, 15, 17, 20.5, 24, 28, 30
+]  # Aligned with temporal_lstm for direct comparison.
 BATCH_SIZE = 16
 NUM_WORKERS = 0
 MAX_EPOCHS = 100
@@ -42,7 +43,7 @@ LR_CNN_UNFREEZE = 1e-4   # lower: slow fine-tuning of pretrained CNN
 GRAD_CLIP = 1.0
 PATIENCE = 15            # faster convergence / less wasted epochs
 ATTN_DROPOUT = 0.4       # same as your best-performing LSTM run
-SEED = 42
+SEED = 1                 # aligned with base_effnet and temporal_lstm
 
 # -------------- Repro --------------
 def set_seed(seed=SEED):
@@ -63,13 +64,12 @@ class TemporalAttentionPool(nn.Module):
             nn.Tanh(),
             nn.Linear(d // 2, 1),
         )
-    def forward(self, feats, mask=None):  # feats: (B, T, D), mask: (B, T) bool
-        w = self.attn(feats).squeeze(-1)           # (B, T)
-        if mask is not None:
-            w = w.masked_fill(~mask, float('-inf'))
+    def forward(self, feats):  # feats: (B, T, D)
+        # weights over time
+        w = self.attn(feats).squeeze(-1)         # (B, T)
         a = torch.softmax(w, dim=1).unsqueeze(-1)  # (B, T, 1)
-        pooled = (a * feats).sum(dim=1)            # (B, D)
-        return pooled, a.squeeze(-1)               # (B, D), (B, T)
+        pooled = (a * feats).sum(dim=1)          # (B, D)
+        return pooled, a.squeeze(-1)             # (B, D), (B, T)
 
 class OrganoidCNN_TAtt(nn.Module):
     def __init__(self, d_cnn=1280, attn_dropout=0.4):
@@ -105,17 +105,17 @@ class OrganoidCNN_TAtt(nn.Module):
             if "features.6" in name or "features.7" in name:
                 p.requires_grad = True
 
-    def forward(self, x, days_norm, mask=None):  # x: (B,T,C,H,W), days_norm: (B,T), mask: (B,T) bool
+    def forward(self, x, days_norm):  # x: (B,T,C,H,W), days_norm: (B,T)
         B, T, C, H, W = x.shape
         feats = []
         for t in range(T):
             f = self.cnn(x[:, t])                    # (B, d_cnn)
             dt = days_norm[:, t].unsqueeze(1)
-            dt = dt.to(f.device)
-            f = f + self.time_proj(dt)
+            dt = dt.to(f.device)                     # ensure same device   
+            f = f + self.time_proj(dt)            # inject absolute time
             feats.append(f)
         feats = torch.stack(feats, dim=1)            # (B, T, d_cnn)
-        pooled, attn = self.temporal(feats, mask)
+        pooled, attn = self.temporal(feats)
         logit = self.head(pooled).squeeze(1)         # (B,)
         return logit, attn
 
@@ -127,13 +127,12 @@ def evaluate_binary(model, loader, criterion, device):
     all_probs, all_labels, losses = [], [], []
     false_pos, false_neg = [], []
 
-    for seqs, days, labels, weights, ids, masks in loader:
+    for seqs, days, labels, weights, ids in loader:
         seqs   = seqs.to(device)
         days   = days.to(device).float()
         labels = labels.float().to(device)
-        masks  = masks.to(device)
 
-        logits, _ = model(seqs, days, masks)
+        logits, _ = model(seqs, days)
         # criterion has reduction='none' → average for reporting
         loss_raw = criterion(logits, labels)   # (B,)
         losses.append(loss_raw.mean().item())
@@ -165,7 +164,9 @@ def evaluate_binary(model, loader, criterion, device):
         precision_recall_fscore_support,
         roc_auc_score,
         average_precision_score,
+        balanced_accuracy_score,
     )
+    bal_acc = float(balanced_accuracy_score(labels.numpy(), preds.numpy()))
 
     prec, rec, f1, _ = precision_recall_fscore_support(
         labels.numpy(), preds.numpy(), average="binary", zero_division=0
@@ -191,11 +192,12 @@ def evaluate_binary(model, loader, criterion, device):
         float(ap),
         false_pos,
         false_neg,
+        bal_acc,
     )
 
 # -------------- Training (one day range) --------------
 def train_for_day_range(max_day, train_ids, val_ids, test_ids,
-                        dataset, device, output_dir, image_type='clipped'):
+                        train_meta, val_meta, test_meta, device, output_dir, image_type='clipped'):
     print(f"\n{'='*70}\nTRAINING WITH DAYS 3–{max_day}\n{'='*70}")
 
     from torchvision.transforms import InterpolationMode
@@ -214,9 +216,9 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
         transforms.Resize((384, 384), interpolation=BILINEAR),
     ])
 
-    train_dataset = OrganoidTimeSeriesDataset(train_ids, dataset, max_day=max_day, transform=train_tf, image_type=image_type)
-    val_dataset   = OrganoidTimeSeriesDataset(val_ids,   dataset, max_day=max_day, transform=eval_tf, image_type=image_type)
-    test_dataset  = OrganoidTimeSeriesDataset(test_ids,  dataset, max_day=max_day, transform=eval_tf, image_type=image_type)
+    train_dataset = OrganoidTimeSeriesDataset(train_ids, train_meta, max_day=max_day, transform=train_tf, image_type=image_type)
+    val_dataset   = OrganoidTimeSeriesDataset(val_ids,   val_meta,   max_day=max_day, transform=eval_tf, image_type=image_type)
+    test_dataset  = OrganoidTimeSeriesDataset(test_ids,  test_meta,  max_day=max_day, transform=eval_tf, image_type=image_type)
 
     pin = (device.type == "cuda")
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True,
@@ -227,18 +229,20 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
                               num_workers=NUM_WORKERS, pin_memory=pin)
     # ---- END OF INSERT ----
 
-    # Class balance per rule #9: label 1 = Not Acceptable (minority).
-    train_labels = [
-        1 if dataset.organoid_label(oid) == "Not Acceptable" else 0
-        for oid in train_ids
-    ]
+    # class balance from train IDs (sequence-level)
+    train_labels = []
+    for org_id in train_ids:
+        s = str(train_meta[org_id].get("label","")).strip().lower()
+        lab = 1 if s in ("good","acceptable","accepted") else 0
+        train_labels.append(lab)
 
-    n_pos = int(np.sum(train_labels))
-    n_neg = int(len(train_labels) - n_pos)
-    if n_pos == 0: n_pos = 1
-    if n_neg == 0: n_neg = 1
-    pos_weight = torch.tensor([n_neg / n_pos], device=device, dtype=torch.float32)
-    print(f"class balance (train): NotAcceptable={n_pos}, Acceptable={n_neg}, pos_weight={pos_weight.item():.3f}")
+    n_good = int(np.sum(train_labels))
+    n_bad  = int(len(train_labels) - n_good)
+    # avoid div-by-zero
+    if n_good == 0: n_good = 1
+    if n_bad  == 0: n_bad  = 1
+    pos_weight = torch.tensor([n_bad / n_good], device=device, dtype=torch.float32)
+    print(f"class balance (train): good={n_good}, bad={n_bad}, pos_weight={pos_weight.item():.3f}")
 
     model = OrganoidCNN_TAtt(attn_dropout=ATTN_DROPOUT).to(device)
 
@@ -256,12 +260,12 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
 
     # warmup: CNN frozen → only head gets LR
     optimizer = make_optimizer(lr_cnn=0.0, lr_head=LR_HEAD)
-    # Per-sample weighting in train loop, so reduction='none' with no pos_weight.
+    # replace your criterion with reduction='none' and no pos_weight
     criterion = nn.BCEWithLogitsLoss(reduction='none')
 
-    # Upweight the minority class (label=1=Not Acceptable).
-    w_pos = n_neg / n_pos
-    w_neg = n_pos / n_neg
+    # before training loop (you already computed these counts)
+    w_pos = n_bad / n_good       # ~0.87
+    w_neg = n_good / n_bad       # ~1.15  <-- upweight negatives slightly
     
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=5)
 
@@ -280,15 +284,14 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
 
         model.train()
         running_loss, correct, total = 0.0, 0, 0
-        for seqs, days, labels, weights, ids, masks in tqdm(train_loader, desc=f"Epoch {epoch:02d}", leave=False):
+        for seqs, days, labels, weights, ids in tqdm(train_loader, desc=f"Epoch {epoch:02d}", leave=False):
             seqs   = seqs.to(device)
             days   = days.to(device).float()
             labels = labels.float().to(device)
             weights = weights.to(device).float()
-            masks  = masks.to(device)
 
             optimizer.zero_grad()
-            logits, _ = model(seqs, days, masks)
+            logits, _ = model(seqs, days)
 
             # combine class weights and agreement weights
             loss_raw = criterion(logits, labels)  # (B,)
@@ -308,7 +311,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
         train_loss = running_loss / max(1, total)
         train_acc = correct / max(1, total)
 
-        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, val_fp, val_fn = evaluate_binary(
+        val_loss, val_acc, val_prec, val_rec, val_f1, val_auc, val_ap, val_fp, val_fn, val_bal_acc = evaluate_binary(
             model, val_loader, criterion, device
         )
 
@@ -345,7 +348,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     # test with best
     model.load_state_dict(best_state, strict=True)
 
-    test_loss, test_acc, test_prec, test_rec, test_f1, test_auc, test_ap, test_fp, test_fn = evaluate_binary(
+    test_loss, test_acc, test_prec, test_rec, test_f1, test_auc, test_ap, test_fp, test_fn, test_bal_acc = evaluate_binary(
         model, test_loader, criterion, device
     )
 
@@ -365,11 +368,10 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     model.eval()
     all_preds_cm, all_labels_cm = [], []
     with torch.no_grad():
-        for seqs, days, labels, weights, ids, masks in test_loader:
+        for seqs, days, labels, weights, ids in test_loader:
             seqs = seqs.to(device)
             days = days.to(device).float()
-            masks = masks.to(device)
-            logits, _ = model(seqs, days, masks)
+            logits, _ = model(seqs, days)
             preds = (torch.sigmoid(logits) > 0.5).int().cpu()
             all_preds_cm.extend(preds.numpy())
             all_labels_cm.extend(labels.int().cpu().numpy())
@@ -377,15 +379,15 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     from sklearn.metrics import confusion_matrix as sk_cm
     cm = sk_cm(all_labels_cm, all_preds_cm)
     print("\nConfusion Matrix (Test Set):")
-    print(f"                       Predicted")
-    print(f"                Acceptable   Not Acceptable")
-    print(f"Acceptable        {cm[0,0]:4d}            {cm[0,1]:4d}")
-    print(f"Not Acceptable    {cm[1,0]:4d}            {cm[1,1]:4d}")
+    print(f"              Predicted")
+    print(f"              Bad    Good")
+    print(f"Actual Bad    {cm[0,0]:<6} {cm[0,1]:<6}")
+    print(f"Actual Good   {cm[1,0]:<6} {cm[1,1]:<6}")
 
     fig, ax = plt.subplots(figsize=(5, 4))
     im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     plt.colorbar(im, ax=ax)
-    classes = ['Acceptable (0)', 'Not Acceptable (1)']
+    classes = ['Bad/Neg', 'Good/Pos']
     ax.set(xticks=[0, 1], yticks=[0, 1],
            xticklabels=classes, yticklabels=classes,
            xlabel='Predicted', ylabel='Actual',
@@ -433,6 +435,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
         "max_day": max_day,
         "best_val_acc": float(best_val_acc),
         "test_acc": float(test_acc),
+        "test_balanced_acc": float(test_bal_acc),
         "test_precision": float(test_prec),
         "test_recall": float(test_rec),
         "test_f1": float(test_f1),
@@ -453,6 +456,11 @@ def main():
                         help='Output directory')
     parser.add_argument('--image-type', type=str, default='clipped', choices=['clipped', 'std'],
                         help='Image variant: clipped (575x575 AR meanfill) or std (512x384)')
+    parser.add_argument('--splits-dir', type=str, default='data_splits',
+                        help=('Directory holding train/val/test split JSONs. Accepts both '
+                              'cohort layout (<dir>/{train,val,test}.json) and legacy '
+                              'layout (<dir>/{train,val,test}_idor_series.json). Default: '
+                              'data_splits/ (legacy).'))
     args = parser.parse_args()
 
     set_seed(SEED)
@@ -467,7 +475,10 @@ def main():
     print("LOADING DATA")
     print("="*70)
 
-    ds, train_ids, val_ids, test_ids = make_canonical_splits()
+    print(f"Splits dir: {args.splits_dir}")
+    train_ids, train_meta = load_split_from_json(resolve_split_path(args.splits_dir, 'train'))
+    val_ids,   val_meta   = load_split_from_json(resolve_split_path(args.splits_dir, 'val'))
+    test_ids,  test_meta  = load_split_from_json(resolve_split_path(args.splits_dir, 'test'))
     print(f"Using image type: {args.image_type}")
 
     print("\n" + "="*70)
@@ -478,7 +489,7 @@ def main():
     for max_day in DAY_RANGES:
         res = train_for_day_range(
             max_day, train_ids, val_ids, test_ids,
-            ds, device,
+            train_meta, val_meta, test_meta, device,
             out_dir / f"days_3-{max_day}",
             image_type=args.image_type
         )
