@@ -69,6 +69,11 @@ def main():
                     default=Path("/net/projects2/promega/project_data/model_tests/lstm_runs"))
     ap.add_argument("--cohorts-dir", type=Path, default=Path("data/cohorts"))
     ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
+    ap.add_argument("--bbox-crop", action="store_true",
+                    help="Crop each organoid to its mask bbox + letterbox (size removed). "
+                         "Use to get per-organoid confidence for the bbox model. Note: "
+                         "focus/enrichment are meaningless under bbox (mask ~= whole frame); "
+                         "only prob/confidence/correct are valid.")
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
 
@@ -80,7 +85,7 @@ def main():
     test_ids, test_meta = load_split_from_json(test_json)
     eval_tf = T.Compose([T.Resize(TARGET_SIZE)])
     ds = SingleDayOrganoidDataset(test_ids, test_meta, args.day, transform=eval_tf,
-                                  image_type=args.image_type, bbox_crop=False)
+                                  image_type=args.image_type, bbox_crop=args.bbox_crop)
 
     # --- model ---
     ckpt = args.runs_root / args.label / "base_effnet" / f"day_{ds_day}" / f"model_day_{ds_day}.pth"
