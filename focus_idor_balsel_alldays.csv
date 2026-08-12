@@ -1,0 +1,298 @@
+day,organoid_id,true_label,prob_acceptable,pred,correct,confidence,focus,mask_frac,enrichment
+3,BA1_96_1_B9_nosplit,Acceptable,0.5098,Acceptable,1,0.0098,0.0,0.0089,0.0
+3,BA1_96_1_C10_nosplit,Acceptable,0.5228,Acceptable,1,0.0228,0.0,0.0083,0.0
+3,BA1_96_1_F2_nosplit,Acceptable,0.5041,Acceptable,1,0.0041,0.0,0.0087,0.0
+3,BA1_96_1_F4_nosplit,Acceptable,0.5074,Acceptable,1,0.0074,0.0,0.0081,0.0
+3,BA1_96_1_G10_nosplit,Acceptable,0.5029,Acceptable,1,0.0029,0.0,0.0081,0.0
+3,BA1_96_1_G3_nosplit,Acceptable,0.5136,Acceptable,1,0.0136,0.0,0.0086,0.0
+3,BA1_96_1_H10_nosplit,Acceptable,0.5131,Acceptable,1,0.0131,0.0,0.0082,0.0
+3,BA2_96_1_C10_nosplit,Acceptable,0.5295,Acceptable,1,0.0295,0.0,0.0098,0.0
+3,BA2_96_1_C11_nosplit,Acceptable,0.5142,Acceptable,1,0.0142,0.0,0.0084,0.0
+3,BA2_96_1_C8_nosplit,Acceptable,0.5231,Acceptable,1,0.0231,0.0,0.0099,0.0
+3,BA2_96_1_D9_nosplit,Acceptable,0.5243,Acceptable,1,0.0243,0.0,0.0097,0.0
+3,BA2_96_1_E12_nosplit,Not Acceptable,0.5296,Acceptable,0,0.0296,0.0006,0.0112,0.056
+3,BA2_96_1_E3_nosplit,Not Acceptable,0.5286,Acceptable,0,0.0286,0.0,0.0096,0.002
+3,BA2_96_1_E5_nosplit,Acceptable,0.533,Acceptable,1,0.033,0.0,0.0092,0.0
+3,BA2_96_1_G7_nosplit,Acceptable,0.5281,Acceptable,1,0.0281,0.0,0.0118,0.0
+3,BA2_96_1_H11_nosplit,Acceptable,0.5287,Acceptable,1,0.0287,0.0,0.0088,0.001
+3,BA2_96_2_B10_nosplit,Acceptable,0.5353,Acceptable,1,0.0353,0.0,0.0091,0.0
+3,BA2_96_2_C2_nosplit,Not Acceptable,0.5247,Acceptable,0,0.0247,0.0,0.0086,0.0
+3,BA2_96_2_E8_nosplit,Acceptable,0.5232,Acceptable,1,0.0232,0.0,0.0084,0.0
+3,BA2_96_2_F11_nosplit,Acceptable,0.5226,Acceptable,1,0.0226,0.0,0.0074,0.0
+3,BA2_96_2_F12_nosplit,Not Acceptable,0.525,Acceptable,0,0.025,0.0001,0.0138,0.007
+3,BA2_96_2_G1_nosplit,Acceptable,0.5309,Acceptable,1,0.0309,0.0,0.0108,0.001
+3,BA2_96_2_G3_nosplit,Acceptable,0.5093,Acceptable,1,0.0093,0.0,0.0086,0.0
+3,BA2_96_2_G6_nosplit,Not Acceptable,0.5227,Acceptable,0,0.0227,0.0,0.0094,0.0
+3,BA2_96_2_G9_nosplit,Not Acceptable,0.5337,Acceptable,0,0.0337,0.0002,0.0099,0.016
+3,BA2_96_2_H3_nosplit,Acceptable,0.5382,Acceptable,1,0.0382,0.0004,0.0093,0.045
+3,BA2_96_2_H8_nosplit,Acceptable,0.5319,Acceptable,1,0.0319,0.0,0.009,0.004
+6,BA1_96_1_B9_nosplit,Acceptable,0.5208,Acceptable,1,0.0208,0.0304,0.0126,2.405
+6,BA1_96_1_C10_nosplit,Acceptable,0.515,Acceptable,1,0.015,0.0,0.0116,0.0
+6,BA1_96_1_F2_nosplit,Acceptable,0.5201,Acceptable,1,0.0201,0.0162,0.0109,1.487
+6,BA1_96_1_F4_nosplit,Acceptable,0.5461,Acceptable,1,0.0461,0.071,0.0108,6.603
+6,BA1_96_1_G10_nosplit,Acceptable,0.5069,Acceptable,1,0.0069,0.016,0.0105,1.523
+6,BA1_96_1_G3_nosplit,Acceptable,0.5219,Acceptable,1,0.0219,0.0287,0.012,2.399
+6,BA1_96_1_H10_nosplit,Acceptable,0.5197,Acceptable,1,0.0197,0.0017,0.0111,0.148
+6,BA2_96_1_C10_nosplit,Acceptable,0.4918,Not Acceptable,0,0.0082,0.0009,0.0127,0.073
+6,BA2_96_1_C11_nosplit,Acceptable,0.4768,Not Acceptable,0,0.0232,0.0,0.0117,0.001
+6,BA2_96_1_C8_nosplit,Acceptable,0.4947,Not Acceptable,0,0.0053,0.0,0.0123,0.0
+6,BA2_96_1_D9_nosplit,Acceptable,0.4996,Not Acceptable,0,0.0004,0.0,0.0125,0.002
+6,BA2_96_1_E12_nosplit,Not Acceptable,0.4879,Not Acceptable,1,0.0121,0.0012,0.0147,0.084
+6,BA2_96_1_E3_nosplit,Not Acceptable,0.4999,Not Acceptable,1,0.0001,0.001,0.0123,0.079
+6,BA2_96_1_E5_nosplit,Acceptable,0.4971,Not Acceptable,0,0.0029,0.0,0.0122,0.0
+6,BA2_96_1_G7_nosplit,Acceptable,0.4811,Not Acceptable,0,0.0189,0.0172,0.0126,1.364
+6,BA2_96_1_H11_nosplit,Acceptable,0.4828,Not Acceptable,0,0.0172,0.0039,0.0115,0.341
+6,BA2_96_2_B10_nosplit,Acceptable,0.4942,Not Acceptable,0,0.0058,0.0,0.0116,0.0
+6,BA2_96_2_C2_nosplit,Not Acceptable,0.4951,Not Acceptable,1,0.0049,0.0,0.0118,0.0
+6,BA2_96_2_E8_nosplit,Acceptable,0.4909,Not Acceptable,0,0.0091,0.0,0.0117,0.0
+6,BA2_96_2_F11_nosplit,Acceptable,0.4911,Not Acceptable,0,0.0089,0.012,0.0111,1.081
+6,BA2_96_2_F12_nosplit,Not Acceptable,0.4841,Not Acceptable,1,0.0159,0.0,0.0153,0.0
+6,BA2_96_2_G1_nosplit,Acceptable,0.4913,Not Acceptable,0,0.0087,0.0,0.0125,0.002
+6,BA2_96_2_G3_nosplit,Acceptable,0.4961,Not Acceptable,0,0.0039,0.0016,0.0121,0.129
+6,BA2_96_2_G6_nosplit,Not Acceptable,0.5002,Acceptable,0,0.0002,0.0154,0.013,1.19
+6,BA2_96_2_G9_nosplit,Not Acceptable,0.4889,Not Acceptable,1,0.0111,0.0073,0.0115,0.631
+6,BA2_96_2_H3_nosplit,Acceptable,0.52,Acceptable,1,0.02,0.0718,0.0123,5.832
+6,BA2_96_2_H8_nosplit,Acceptable,0.4951,Not Acceptable,0,0.0049,0.0,0.0134,0.0
+8,BA1_96_1_B9_nosplit,Acceptable,0.5335,Acceptable,1,0.0335,0.0007,0.0099,0.075
+8,BA1_96_1_C10_nosplit,Acceptable,0.5268,Acceptable,1,0.0268,0.0001,0.0096,0.011
+8,BA1_96_1_F2_nosplit,Acceptable,0.522,Acceptable,1,0.022,0.0,0.0097,0.004
+8,BA1_96_1_F4_nosplit,Acceptable,0.5077,Acceptable,1,0.0077,0.0,0.0098,0.0
+8,BA1_96_1_G10_nosplit,Acceptable,0.4912,Not Acceptable,0,0.0088,0.0,0.0094,0.0
+8,BA1_96_1_G3_nosplit,Acceptable,0.5464,Acceptable,1,0.0464,0.0,0.0097,0.001
+8,BA1_96_1_H10_nosplit,Acceptable,0.4971,Not Acceptable,0,0.0029,0.0,0.0099,0.002
+8,BA2_96_1_C10_nosplit,Acceptable,0.5282,Acceptable,1,0.0282,0.0001,0.0113,0.013
+8,BA2_96_1_C11_nosplit,Acceptable,0.4901,Not Acceptable,0,0.0099,0.0,0.0118,0.0
+8,BA2_96_1_C8_nosplit,Acceptable,0.5269,Acceptable,1,0.0269,0.0002,0.0114,0.017
+8,BA2_96_1_D9_nosplit,Acceptable,0.5026,Acceptable,1,0.0026,0.0,0.0114,0.0
+8,BA2_96_1_E12_nosplit,Not Acceptable,0.5075,Acceptable,0,0.0075,0.0,0.0116,0.0
+8,BA2_96_1_E3_nosplit,Not Acceptable,0.5011,Acceptable,0,0.0011,0.0002,0.0119,0.018
+8,BA2_96_1_E5_nosplit,Acceptable,0.5126,Acceptable,1,0.0126,0.0,0.0115,0.0
+8,BA2_96_1_G7_nosplit,Acceptable,0.5142,Acceptable,1,0.0142,0.0,0.0112,0.004
+8,BA2_96_1_H11_nosplit,Acceptable,0.5151,Acceptable,1,0.0151,0.0,0.0107,0.0
+8,BA2_96_2_B10_nosplit,Acceptable,0.5209,Acceptable,1,0.0209,0.0001,0.0104,0.014
+8,BA2_96_2_C2_nosplit,Not Acceptable,0.4848,Not Acceptable,1,0.0152,0.0,0.0115,0.002
+8,BA2_96_2_E8_nosplit,Acceptable,0.5151,Acceptable,1,0.0151,0.0,0.0111,0.004
+8,BA2_96_2_F11_nosplit,Acceptable,0.5247,Acceptable,1,0.0247,0.0001,0.0095,0.009
+8,BA2_96_2_F12_nosplit,Not Acceptable,0.5147,Acceptable,0,0.0147,0.0002,0.0136,0.015
+8,BA2_96_2_G1_nosplit,Acceptable,0.5062,Acceptable,1,0.0062,0.0001,0.0116,0.012
+8,BA2_96_2_G3_nosplit,Acceptable,0.4954,Not Acceptable,0,0.0046,0.0,0.0117,0.001
+8,BA2_96_2_G6_nosplit,Not Acceptable,0.5044,Acceptable,0,0.0044,0.0,0.012,0.002
+8,BA2_96_2_G9_nosplit,Not Acceptable,0.5065,Acceptable,0,0.0065,0.0001,0.0105,0.011
+8,BA2_96_2_H3_nosplit,Acceptable,0.4952,Not Acceptable,0,0.0048,0.0,0.0122,0.001
+8,BA2_96_2_H8_nosplit,Acceptable,0.5017,Acceptable,1,0.0017,0.0,0.012,0.001
+10,BA1_96_1_B9_nosplit,Acceptable,0.5117,Acceptable,1,0.0117,0.0011,0.0102,0.111
+10,BA1_96_1_C10_nosplit,Acceptable,0.5025,Acceptable,1,0.0025,0.0011,0.0105,0.1
+10,BA1_96_1_F2_nosplit,Acceptable,0.5129,Acceptable,1,0.0129,0.0019,0.0113,0.168
+10,BA1_96_1_F4_nosplit,Acceptable,0.5214,Acceptable,1,0.0214,0.0046,0.0107,0.426
+10,BA1_96_1_G10_nosplit,Acceptable,0.5042,Acceptable,1,0.0042,0.0004,0.0101,0.039
+10,BA1_96_1_G3_nosplit,Acceptable,0.5094,Acceptable,1,0.0094,0.0,0.0111,0.0
+10,BA1_96_1_H10_nosplit,Acceptable,0.5068,Acceptable,1,0.0068,0.0,0.0117,0.001
+10,BA2_96_1_C10_nosplit,Acceptable,0.5189,Acceptable,1,0.0189,0.0058,0.014,0.416
+10,BA2_96_1_C11_nosplit,Acceptable,0.5246,Acceptable,1,0.0246,0.0092,0.0144,0.641
+10,BA2_96_1_C8_nosplit,Acceptable,0.5221,Acceptable,1,0.0221,0.0183,0.013,1.413
+10,BA2_96_1_D9_nosplit,Acceptable,0.5063,Acceptable,1,0.0063,0.0004,0.0128,0.033
+10,BA2_96_1_E12_nosplit,Not Acceptable,0.5181,Acceptable,0,0.0181,0.0159,0.0152,1.044
+10,BA2_96_1_E3_nosplit,Not Acceptable,0.5089,Acceptable,0,0.0089,0.0094,0.0151,0.623
+10,BA2_96_1_E5_nosplit,Acceptable,0.5208,Acceptable,1,0.0208,0.0004,0.0139,0.025
+10,BA2_96_1_G7_nosplit,Acceptable,0.4971,Not Acceptable,0,0.0029,0.001,0.0132,0.078
+10,BA2_96_1_H11_nosplit,Acceptable,0.4913,Not Acceptable,0,0.0087,0.0001,0.0146,0.009
+10,BA2_96_2_B10_nosplit,Acceptable,0.5078,Acceptable,1,0.0078,0.0022,0.0127,0.176
+10,BA2_96_2_C2_nosplit,Not Acceptable,0.5032,Acceptable,0,0.0032,0.0017,0.0132,0.128
+10,BA2_96_2_E8_nosplit,Acceptable,0.5231,Acceptable,1,0.0231,0.001,0.0124,0.078
+10,BA2_96_2_F11_nosplit,Acceptable,0.5191,Acceptable,1,0.0191,0.0031,0.011,0.283
+10,BA2_96_2_F12_nosplit,Not Acceptable,0.4957,Not Acceptable,1,0.0043,0.0007,0.0154,0.048
+10,BA2_96_2_G1_nosplit,Acceptable,0.5191,Acceptable,1,0.0191,0.0095,0.015,0.637
+10,BA2_96_2_G3_nosplit,Acceptable,0.506,Acceptable,1,0.006,0.0092,0.0137,0.672
+10,BA2_96_2_G6_nosplit,Not Acceptable,0.5064,Acceptable,0,0.0064,0.0052,0.014,0.375
+10,BA2_96_2_G9_nosplit,Not Acceptable,0.5112,Acceptable,0,0.0112,0.0081,0.0123,0.655
+10,BA2_96_2_H3_nosplit,Acceptable,0.5032,Acceptable,1,0.0032,0.0,0.0141,0.003
+10,BA2_96_2_H8_nosplit,Acceptable,0.4992,Not Acceptable,0,0.0008,0.0009,0.0134,0.065
+13,BA1_96_1_B9_nosplit,Acceptable,0.5298,Acceptable,1,0.0298,0.0333,0.0191,1.746
+13,BA1_96_1_C10_nosplit,Acceptable,0.5235,Acceptable,1,0.0235,0.0599,0.0181,3.308
+13,BA1_96_1_F2_nosplit,Acceptable,0.5131,Acceptable,1,0.0131,0.0287,0.0185,1.547
+13,BA1_96_1_F4_nosplit,Acceptable,0.5212,Acceptable,1,0.0212,0.0519,0.018,2.884
+13,BA1_96_1_G10_nosplit,Acceptable,0.5233,Acceptable,1,0.0233,0.0548,0.0177,3.091
+13,BA1_96_1_G3_nosplit,Acceptable,0.5127,Acceptable,1,0.0127,0.016,0.0216,0.744
+13,BA1_96_1_H10_nosplit,Acceptable,0.5231,Acceptable,1,0.0231,0.0667,0.0211,3.166
+13,BA2_96_1_C10_nosplit,Acceptable,0.5191,Acceptable,1,0.0191,0.073,0.0216,3.382
+13,BA2_96_1_C11_nosplit,Acceptable,0.512,Acceptable,1,0.012,0.0441,0.026,1.697
+13,BA2_96_1_C8_nosplit,Acceptable,0.5208,Acceptable,1,0.0208,0.0643,0.0234,2.754
+13,BA2_96_1_D9_nosplit,Acceptable,0.5156,Acceptable,1,0.0156,0.027,0.025,1.079
+13,BA2_96_1_E12_nosplit,Not Acceptable,0.5107,Acceptable,0,0.0107,0.0444,0.0216,2.057
+13,BA2_96_1_E3_nosplit,Not Acceptable,0.5016,Acceptable,0,0.0016,0.0144,0.0232,0.62
+13,BA2_96_1_E5_nosplit,Acceptable,0.5037,Acceptable,1,0.0037,0.036,0.0245,1.469
+13,BA2_96_1_G7_nosplit,Acceptable,0.5115,Acceptable,1,0.0115,0.0552,0.0247,2.236
+13,BA2_96_1_H11_nosplit,Acceptable,0.5015,Acceptable,1,0.0015,0.0006,0.0214,0.028
+13,BA2_96_2_B10_nosplit,Acceptable,0.5039,Acceptable,1,0.0039,0.0806,0.018,4.488
+13,BA2_96_2_C2_nosplit,Not Acceptable,0.4994,Not Acceptable,1,0.0006,0.0154,0.0199,0.773
+13,BA2_96_2_E8_nosplit,Acceptable,0.5091,Acceptable,1,0.0091,0.0084,0.0208,0.405
+13,BA2_96_2_F11_nosplit,Acceptable,0.5245,Acceptable,1,0.0245,0.0438,0.0218,2.009
+13,BA2_96_2_F12_nosplit,Not Acceptable,0.4998,Not Acceptable,1,0.0002,0.0246,0.0254,0.968
+13,BA2_96_2_G1_nosplit,Acceptable,0.5199,Acceptable,1,0.0199,0.1204,0.0243,4.959
+13,BA2_96_2_G3_nosplit,Acceptable,0.5283,Acceptable,1,0.0283,0.1002,0.0234,4.275
+13,BA2_96_2_G6_nosplit,Not Acceptable,0.5088,Acceptable,0,0.0088,0.0399,0.022,1.812
+13,BA2_96_2_G9_nosplit,Not Acceptable,0.5108,Acceptable,0,0.0108,0.1189,0.0204,5.818
+13,BA2_96_2_H3_nosplit,Acceptable,0.5135,Acceptable,1,0.0135,0.0211,0.0237,0.891
+13,BA2_96_2_H8_nosplit,Acceptable,0.5186,Acceptable,1,0.0186,0.1296,0.0238,5.442
+15,BA1_96_1_B9_nosplit,Acceptable,0.4942,Not Acceptable,0,0.0058,0.0002,0.0244,0.009
+15,BA1_96_1_C10_nosplit,Acceptable,0.5071,Acceptable,1,0.0071,0.0013,0.0257,0.049
+15,BA1_96_1_F2_nosplit,Acceptable,0.4985,Not Acceptable,0,0.0015,0.0,0.0251,0.001
+15,BA1_96_1_F4_nosplit,Acceptable,0.5019,Acceptable,1,0.0019,0.0009,0.0234,0.037
+15,BA1_96_1_G10_nosplit,Acceptable,0.5036,Acceptable,1,0.0036,0.0011,0.0224,0.05
+15,BA1_96_1_G3_nosplit,Acceptable,0.4907,Not Acceptable,0,0.0093,0.0001,0.029,0.005
+15,BA1_96_1_H10_nosplit,Acceptable,0.5105,Acceptable,1,0.0105,0.001,0.0252,0.038
+15,BA2_96_1_C10_nosplit,Acceptable,0.4983,Not Acceptable,0,0.0017,0.0002,0.0301,0.006
+15,BA2_96_1_C11_nosplit,Acceptable,0.5003,Acceptable,1,0.0003,0.0046,0.0384,0.12
+15,BA2_96_1_C8_nosplit,Acceptable,0.5001,Acceptable,1,0.0001,0.0,0.0303,0.0
+15,BA2_96_1_D9_nosplit,Acceptable,0.5045,Acceptable,1,0.0045,0.0003,0.0298,0.009
+15,BA2_96_1_E12_nosplit,Not Acceptable,0.4955,Not Acceptable,1,0.0045,0.0,0.0276,0.002
+15,BA2_96_1_E3_nosplit,Not Acceptable,0.5011,Acceptable,0,0.0011,0.0001,0.0304,0.004
+15,BA2_96_1_E5_nosplit,Acceptable,0.5157,Acceptable,1,0.0157,0.0066,0.0337,0.196
+15,BA2_96_1_G7_nosplit,Acceptable,0.4982,Not Acceptable,0,0.0018,0.0,0.0277,0.001
+15,BA2_96_1_H11_nosplit,Acceptable,0.509,Acceptable,1,0.009,0.0065,0.0288,0.225
+15,BA2_96_2_B10_nosplit,Acceptable,0.5159,Acceptable,1,0.0159,0.0015,0.0245,0.061
+15,BA2_96_2_C2_nosplit,Not Acceptable,0.5124,Acceptable,0,0.0124,0.0003,0.0264,0.013
+15,BA2_96_2_E8_nosplit,Acceptable,0.497,Not Acceptable,0,0.003,0.0,0.0308,0.0
+15,BA2_96_2_F11_nosplit,Acceptable,0.5059,Acceptable,1,0.0059,0.0043,0.0277,0.154
+15,BA2_96_2_F12_nosplit,Not Acceptable,0.4831,Not Acceptable,1,0.0169,0.0024,0.0312,0.078
+15,BA2_96_2_G1_nosplit,Acceptable,0.5055,Acceptable,1,0.0055,0.0006,0.0301,0.018
+15,BA2_96_2_G3_nosplit,Acceptable,0.5065,Acceptable,1,0.0065,0.0085,0.0307,0.277
+15,BA2_96_2_G6_nosplit,Not Acceptable,0.495,Not Acceptable,1,0.005,0.0002,0.0283,0.008
+15,BA2_96_2_G9_nosplit,Not Acceptable,0.5132,Acceptable,0,0.0132,0.0029,0.0232,0.125
+15,BA2_96_2_H3_nosplit,Acceptable,0.4922,Not Acceptable,0,0.0078,0.0,0.0212,0.0
+15,BA2_96_2_H8_nosplit,Acceptable,0.493,Not Acceptable,0,0.007,0.0,0.03,0.0
+17,BA1_96_1_B9_nosplit,Acceptable,0.5592,Acceptable,1,0.0592,0.0537,0.0319,1.684
+17,BA1_96_1_C10_nosplit,Acceptable,0.5622,Acceptable,1,0.0622,0.0192,0.0361,0.531
+17,BA1_96_1_F2_nosplit,Acceptable,0.5699,Acceptable,1,0.0699,0.0081,0.0339,0.24
+17,BA1_96_1_F4_nosplit,Acceptable,0.577,Acceptable,1,0.077,0.0666,0.0319,2.086
+17,BA1_96_1_G10_nosplit,Acceptable,0.5888,Acceptable,1,0.0888,0.0635,0.0316,2.013
+17,BA1_96_1_G3_nosplit,Acceptable,0.5761,Acceptable,1,0.0761,0.0347,0.0338,1.026
+17,BA1_96_1_H10_nosplit,Acceptable,0.5676,Acceptable,1,0.0676,0.029,0.0314,0.925
+17,BA2_96_1_C10_nosplit,Acceptable,0.5805,Acceptable,1,0.0805,0.0286,0.0395,0.724
+17,BA2_96_1_C11_nosplit,Acceptable,0.6067,Acceptable,1,0.1067,0.0549,0.0494,1.112
+17,BA2_96_1_C8_nosplit,Acceptable,0.5866,Acceptable,1,0.0866,0.0227,0.0409,0.555
+17,BA2_96_1_D9_nosplit,Acceptable,0.5765,Acceptable,1,0.0765,0.0471,0.0365,1.29
+17,BA2_96_1_E12_nosplit,Not Acceptable,0.571,Acceptable,0,0.071,0.0144,0.0323,0.446
+17,BA2_96_1_E3_nosplit,Not Acceptable,0.5516,Acceptable,0,0.0516,0.0234,0.0314,0.746
+17,BA2_96_1_E5_nosplit,Acceptable,0.5741,Acceptable,1,0.0741,0.0264,0.0446,0.591
+17,BA2_96_1_G7_nosplit,Acceptable,0.5935,Acceptable,1,0.0935,0.0981,0.0345,2.841
+17,BA2_96_1_H11_nosplit,Acceptable,0.5929,Acceptable,1,0.0929,0.0352,0.0306,1.149
+17,BA2_96_2_B10_nosplit,Acceptable,0.5685,Acceptable,1,0.0685,0.0029,0.0315,0.093
+17,BA2_96_2_C2_nosplit,Not Acceptable,0.5667,Acceptable,0,0.0667,0.0415,0.0308,1.344
+17,BA2_96_2_E8_nosplit,Acceptable,0.5809,Acceptable,1,0.0809,0.0399,0.0392,1.019
+17,BA2_96_2_F11_nosplit,Acceptable,0.575,Acceptable,1,0.075,0.073,0.0399,1.831
+17,BA2_96_2_F12_nosplit,Not Acceptable,0.5799,Acceptable,0,0.0799,0.0464,0.035,1.326
+17,BA2_96_2_G1_nosplit,Acceptable,0.5729,Acceptable,1,0.0729,0.0342,0.0363,0.943
+17,BA2_96_2_G3_nosplit,Acceptable,0.5757,Acceptable,1,0.0757,0.0356,0.0407,0.875
+17,BA2_96_2_G6_nosplit,Not Acceptable,0.5762,Acceptable,0,0.0762,0.0276,0.035,0.788
+17,BA2_96_2_G9_nosplit,Not Acceptable,0.5614,Acceptable,0,0.0614,0.0286,0.0272,1.049
+17,BA2_96_2_H3_nosplit,Acceptable,0.5707,Acceptable,1,0.0707,0.0333,0.0289,1.154
+17,BA2_96_2_H8_nosplit,Acceptable,0.5643,Acceptable,1,0.0643,0.0365,0.0405,0.901
+20.5,BA1_96_1_B9_nosplit,Acceptable,0.4833,Not Acceptable,0,0.0167,0.0176,0.0392,0.45
+20.5,BA1_96_1_C10_nosplit,Acceptable,0.5052,Acceptable,1,0.0052,0.0346,0.0409,0.846
+20.5,BA1_96_1_F2_nosplit,Acceptable,0.5233,Acceptable,1,0.0233,0.0098,0.0355,0.277
+20.5,BA1_96_1_F4_nosplit,Acceptable,0.4874,Not Acceptable,0,0.0126,0.0027,0.0374,0.073
+20.5,BA1_96_1_G10_nosplit,Acceptable,0.5194,Acceptable,1,0.0194,0.0343,0.0348,0.985
+20.5,BA1_96_1_G3_nosplit,Acceptable,0.5182,Acceptable,1,0.0182,0.0354,0.0404,0.875
+20.5,BA1_96_1_H10_nosplit,Acceptable,0.5146,Acceptable,1,0.0146,0.0011,0.0374,0.031
+20.5,BA2_96_1_C10_nosplit,Acceptable,0.677,Acceptable,1,0.177,0.127,0.0706,1.798
+20.5,BA2_96_1_C11_nosplit,Acceptable,0.623,Acceptable,1,0.123,0.0554,0.0629,0.88
+20.5,BA2_96_1_C8_nosplit,Acceptable,0.5748,Acceptable,1,0.0748,0.024,0.0585,0.411
+20.5,BA2_96_1_D9_nosplit,Acceptable,0.4962,Not Acceptable,0,0.0038,0.0004,0.0474,0.009
+20.5,BA2_96_1_E12_nosplit,Not Acceptable,0.4513,Not Acceptable,1,0.0487,0.0,0.0383,0.0
+20.5,BA2_96_1_E3_nosplit,Not Acceptable,0.4799,Not Acceptable,1,0.0201,0.0019,0.0334,0.056
+20.5,BA2_96_1_E5_nosplit,Acceptable,0.6059,Acceptable,1,0.1059,0.0201,0.0505,0.398
+20.5,BA2_96_1_G7_nosplit,Acceptable,0.5344,Acceptable,1,0.0344,0.0147,0.0467,0.315
+20.5,BA2_96_1_H11_nosplit,Acceptable,0.5144,Acceptable,1,0.0144,0.0125,0.0454,0.274
+20.5,BA2_96_2_B10_nosplit,Acceptable,0.5194,Acceptable,1,0.0194,0.0176,0.045,0.392
+20.5,BA2_96_2_C2_nosplit,Not Acceptable,0.4521,Not Acceptable,1,0.0479,0.0002,0.0333,0.006
+20.5,BA2_96_2_E8_nosplit,Acceptable,0.4983,Not Acceptable,0,0.0017,0.0003,0.0491,0.005
+20.5,BA2_96_2_F11_nosplit,Acceptable,0.489,Not Acceptable,0,0.011,0.0009,0.0487,0.018
+20.5,BA2_96_2_F12_nosplit,Not Acceptable,0.4718,Not Acceptable,1,0.0282,0.0019,0.0306,0.061
+20.5,BA2_96_2_G1_nosplit,Acceptable,0.5502,Acceptable,1,0.0502,0.012,0.0471,0.254
+20.5,BA2_96_2_G3_nosplit,Acceptable,0.5379,Acceptable,1,0.0379,0.0133,0.0502,0.264
+20.5,BA2_96_2_G6_nosplit,Not Acceptable,0.5069,Acceptable,0,0.0069,0.0078,0.0412,0.19
+20.5,BA2_96_2_G9_nosplit,Not Acceptable,0.4148,Not Acceptable,1,0.0852,0.0003,0.03,0.009
+20.5,BA2_96_2_H3_nosplit,Acceptable,0.4975,Not Acceptable,0,0.0025,0.0037,0.0381,0.097
+20.5,BA2_96_2_H8_nosplit,Acceptable,0.6643,Acceptable,1,0.1643,0.1156,0.063,1.835
+24,BA1_96_1_B9_nosplit,Acceptable,0.56,Acceptable,1,0.06,0.0381,0.0509,0.75
+24,BA1_96_1_C10_nosplit,Acceptable,0.6264,Acceptable,1,0.1264,0.0887,0.0553,1.605
+24,BA1_96_1_F2_nosplit,Acceptable,0.5747,Acceptable,1,0.0747,0.0595,0.0474,1.254
+24,BA1_96_1_F4_nosplit,Acceptable,0.5448,Acceptable,1,0.0448,0.0137,0.0481,0.284
+24,BA1_96_1_G10_nosplit,Acceptable,0.5453,Acceptable,1,0.0453,0.0319,0.044,0.725
+24,BA1_96_1_G3_nosplit,Acceptable,0.5634,Acceptable,1,0.0634,0.0211,0.0515,0.409
+24,BA1_96_1_H10_nosplit,Acceptable,0.558,Acceptable,1,0.058,0.0069,0.0538,0.129
+24,BA2_96_1_C10_nosplit,Acceptable,0.573,Acceptable,1,0.073,0.0975,0.0757,1.289
+24,BA2_96_1_C11_nosplit,Acceptable,0.6078,Acceptable,1,0.1078,0.1247,0.089,1.4
+24,BA2_96_1_C8_nosplit,Acceptable,0.5291,Acceptable,1,0.0291,0.021,0.0731,0.287
+24,BA2_96_1_D9_nosplit,Acceptable,0.5094,Acceptable,1,0.0094,0.0011,0.0572,0.018
+24,BA2_96_1_E12_nosplit,Not Acceptable,0.4865,Not Acceptable,1,0.0135,0.0002,0.0418,0.004
+24,BA2_96_1_E3_nosplit,Not Acceptable,0.5122,Acceptable,0,0.0122,0.0224,0.0363,0.617
+24,BA2_96_1_E5_nosplit,Acceptable,0.5565,Acceptable,1,0.0565,0.0368,0.0614,0.599
+24,BA2_96_1_G7_nosplit,Acceptable,0.49,Not Acceptable,0,0.01,0.0001,0.0468,0.001
+24,BA2_96_1_H11_nosplit,Acceptable,0.5464,Acceptable,1,0.0464,0.0076,0.0596,0.128
+24,BA2_96_2_B10_nosplit,Acceptable,0.5458,Acceptable,1,0.0458,0.0462,0.0567,0.814
+24,BA2_96_2_C2_nosplit,Not Acceptable,0.4891,Not Acceptable,1,0.0109,0.0,0.0361,0.001
+24,BA2_96_2_E8_nosplit,Acceptable,0.5305,Acceptable,1,0.0305,0.0035,0.057,0.062
+24,BA2_96_2_F11_nosplit,Acceptable,0.5582,Acceptable,1,0.0582,0.0556,0.0623,0.893
+24,BA2_96_2_F12_nosplit,Not Acceptable,0.4874,Not Acceptable,1,0.0126,0.0,0.0314,0.001
+24,BA2_96_2_G1_nosplit,Acceptable,0.526,Acceptable,1,0.026,0.0002,0.0569,0.003
+24,BA2_96_2_G3_nosplit,Acceptable,0.5314,Acceptable,1,0.0314,0.0013,0.0555,0.024
+24,BA2_96_2_G6_nosplit,Not Acceptable,0.4867,Not Acceptable,1,0.0133,0.0002,0.0418,0.005
+24,BA2_96_2_G9_nosplit,Not Acceptable,0.4885,Not Acceptable,1,0.0115,0.0,0.0304,0.0
+24,BA2_96_2_H3_nosplit,Acceptable,0.5299,Acceptable,1,0.0299,0.0443,0.0478,0.928
+24,BA2_96_2_H8_nosplit,Acceptable,0.579,Acceptable,1,0.079,0.0879,0.075,1.172
+28,BA1_96_1_B9_nosplit,Acceptable,0.5819,Acceptable,1,0.0819,0.1061,0.0576,1.841
+28,BA1_96_1_C10_nosplit,Acceptable,0.584,Acceptable,1,0.084,0.1299,0.0657,1.978
+28,BA1_96_1_F2_nosplit,Acceptable,0.5468,Acceptable,1,0.0468,0.0682,0.0608,1.122
+28,BA1_96_1_F4_nosplit,Acceptable,0.5496,Acceptable,1,0.0496,0.1209,0.0573,2.11
+28,BA1_96_1_G10_nosplit,Acceptable,0.5822,Acceptable,1,0.0822,0.0569,0.0546,1.041
+28,BA1_96_1_G3_nosplit,Acceptable,0.5589,Acceptable,1,0.0589,0.0699,0.0636,1.099
+28,BA1_96_1_H10_nosplit,Acceptable,0.5677,Acceptable,1,0.0677,0.0785,0.0639,1.228
+28,BA2_96_1_C10_nosplit,Acceptable,0.6396,Acceptable,1,0.1396,0.1573,0.097,1.622
+28,BA2_96_1_C11_nosplit,Acceptable,0.6556,Acceptable,1,0.1556,0.1582,0.1081,1.463
+28,BA2_96_1_C8_nosplit,Acceptable,0.6227,Acceptable,1,0.1227,0.151,0.0881,1.715
+28,BA2_96_1_D9_nosplit,Acceptable,0.6011,Acceptable,1,0.1011,0.1268,0.0698,1.817
+28,BA2_96_1_E12_nosplit,Not Acceptable,0.5222,Acceptable,0,0.0222,0.0744,0.0424,1.754
+28,BA2_96_1_E3_nosplit,Not Acceptable,0.4704,Not Acceptable,1,0.0296,0.0337,0.0336,1.004
+28,BA2_96_1_E5_nosplit,Acceptable,0.6185,Acceptable,1,0.1185,0.1248,0.0832,1.499
+28,BA2_96_1_G7_nosplit,Acceptable,0.5681,Acceptable,1,0.0681,0.1366,0.0614,2.226
+28,BA2_96_1_H11_nosplit,Acceptable,0.6333,Acceptable,1,0.1333,0.0961,0.0815,1.178
+28,BA2_96_2_B10_nosplit,Acceptable,0.6214,Acceptable,1,0.1214,0.1692,0.079,2.142
+28,BA2_96_2_C2_nosplit,Not Acceptable,0.4312,Not Acceptable,1,0.0688,0.2169,0.037,5.863
+28,BA2_96_2_E8_nosplit,Acceptable,0.6331,Acceptable,1,0.1331,0.1294,0.0802,1.613
+28,BA2_96_2_F11_nosplit,Acceptable,0.6282,Acceptable,1,0.1282,0.1252,0.0757,1.654
+28,BA2_96_2_F12_nosplit,Not Acceptable,0.4758,Not Acceptable,1,0.0242,0.2196,0.0309,7.118
+28,BA2_96_2_G1_nosplit,Acceptable,0.6407,Acceptable,1,0.1407,0.1284,0.0875,1.468
+28,BA2_96_2_G3_nosplit,Acceptable,0.6142,Acceptable,1,0.1142,0.1623,0.0713,2.277
+28,BA2_96_2_G6_nosplit,Not Acceptable,0.5368,Acceptable,0,0.0368,0.1329,0.0537,2.476
+28,BA2_96_2_G9_nosplit,Not Acceptable,0.4391,Not Acceptable,1,0.0609,0.1329,0.0311,4.27
+28,BA2_96_2_H3_nosplit,Acceptable,0.5876,Acceptable,1,0.0876,0.1261,0.0543,2.323
+28,BA2_96_2_H8_nosplit,Acceptable,0.6451,Acceptable,1,0.1451,0.1562,0.0994,1.572
+30,BA1_96_1_B9_nosplit,Acceptable,0.5607,Acceptable,1,0.0607,0.1014,0.0609,1.664
+30,BA1_96_1_C10_nosplit,Acceptable,0.611,Acceptable,1,0.111,0.1874,0.0692,2.708
+30,BA1_96_1_F2_nosplit,Acceptable,0.5633,Acceptable,1,0.0633,0.1408,0.0643,2.189
+30,BA1_96_1_F4_nosplit,Acceptable,0.5904,Acceptable,1,0.0904,0.1207,0.059,2.047
+30,BA1_96_1_G10_nosplit,Acceptable,0.5676,Acceptable,1,0.0676,0.1189,0.0585,2.032
+30,BA1_96_1_G3_nosplit,Acceptable,0.5722,Acceptable,1,0.0722,0.1695,0.0684,2.477
+30,BA1_96_1_H10_nosplit,Acceptable,0.6035,Acceptable,1,0.1035,0.1003,0.0699,1.435
+30,BA2_96_1_C10_nosplit,Acceptable,0.6158,Acceptable,1,0.1158,0.1378,0.0639,2.157
+30,BA2_96_1_C11_nosplit,Acceptable,0.7292,Acceptable,1,0.2292,0.2374,0.123,1.931
+30,BA2_96_1_C8_nosplit,Acceptable,0.6454,Acceptable,1,0.1454,0.2199,0.0953,2.307
+30,BA2_96_1_D9_nosplit,Acceptable,0.6541,Acceptable,1,0.1541,0.2002,0.0815,2.456
+30,BA2_96_1_E12_nosplit,Not Acceptable,0.5056,Acceptable,0,0.0056,0.1094,0.0434,2.524
+30,BA2_96_1_E3_nosplit,Not Acceptable,0.4777,Not Acceptable,1,0.0223,0.064,0.0292,2.192
+30,BA2_96_1_E5_nosplit,Acceptable,0.6543,Acceptable,1,0.1543,0.1597,0.0915,1.746
+30,BA2_96_1_G7_nosplit,Acceptable,0.6144,Acceptable,1,0.1144,0.1234,0.0729,1.693
+30,BA2_96_1_H11_nosplit,Acceptable,0.722,Acceptable,1,0.222,0.2113,0.0954,2.215
+30,BA2_96_2_B10_nosplit,Acceptable,0.6304,Acceptable,1,0.1304,0.2285,0.09,2.539
+30,BA2_96_2_C2_nosplit,Not Acceptable,0.4841,Not Acceptable,1,0.0159,0.0001,0.038,0.002
+30,BA2_96_2_E8_nosplit,Acceptable,0.6492,Acceptable,1,0.1492,0.2015,0.0859,2.346
+30,BA2_96_2_F11_nosplit,Acceptable,0.6856,Acceptable,1,0.1856,0.2722,0.0943,2.886
+30,BA2_96_2_F12_nosplit,Not Acceptable,0.4847,Not Acceptable,1,0.0153,0.0137,0.0288,0.476
+30,BA2_96_2_G1_nosplit,Acceptable,0.6469,Acceptable,1,0.1469,0.1771,0.1016,1.744
+30,BA2_96_2_G3_nosplit,Acceptable,0.6111,Acceptable,1,0.1111,0.1503,0.0851,1.765
+30,BA2_96_2_G6_nosplit,Not Acceptable,0.4868,Not Acceptable,1,0.0132,0.0957,0.0583,1.642
+30,BA2_96_2_G9_nosplit,Not Acceptable,0.4829,Not Acceptable,1,0.0171,0.1425,0.0296,4.811
+30,BA2_96_2_H3_nosplit,Acceptable,0.5855,Acceptable,1,0.0855,0.1091,0.0642,1.698
+30,BA2_96_2_H8_nosplit,Acceptable,0.6949,Acceptable,1,0.1949,0.2203,0.1165,1.891
