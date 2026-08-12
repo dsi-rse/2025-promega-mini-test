@@ -68,6 +68,10 @@ def main():
     ap.add_argument("--runs-root", type=Path,
                     default=Path("/net/projects2/promega/project_data/model_tests/lstm_runs"))
     ap.add_argument("--cohorts-dir", type=Path, default=Path("data/cohorts"))
+    ap.add_argument("--split-label", default=None,
+                    help="Cohort label for the TEST SPLIT, if different from the "
+                         "checkpoint label (--label). e.g. checkpoint idor_bbox, "
+                         "split idor_balsel (same organoids). Defaults to --label.")
     ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
     ap.add_argument("--bbox-crop", action="store_true",
                     help="Crop each organoid to its mask bbox + letterbox (size removed). "
@@ -81,7 +85,8 @@ def main():
     ds_day = day_str(args.day)
 
     # --- test split for this cohort ---
-    test_json = args.cohorts_dir / args.label / "series" / "test.json"
+    split_label = args.split_label or args.label
+    test_json = args.cohorts_dir / split_label / "series" / "test.json"
     test_ids, test_meta = load_split_from_json(test_json)
     eval_tf = T.Compose([T.Resize(TARGET_SIZE)])
     ds = SingleDayOrganoidDataset(test_ids, test_meta, args.day, transform=eval_tf,
