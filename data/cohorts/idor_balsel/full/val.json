@@ -1,0 +1,3032 @@
+{
+  "BA1_96_1_B10_nosplit": {
+    "organoid_id": "BA1_96_1_B10_nosplit",
+    "base_well": "BA1_96_1_B10",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 B10",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 B10",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 B10",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 B10",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 B10",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 B10",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 B10",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 B10",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 B10",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 B10",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy30 B10",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA1_96_1_Dy30_B10_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy30_B10.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy30_B10_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy30_B10_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy30_B10_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA1_96_1_B6_nosplit": {
+    "organoid_id": "BA1_96_1_B6_nosplit",
+    "base_well": "BA1_96_1_B6",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 B6",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 B6",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 B6",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 B6",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 B6",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 B6",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 B6",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 B6",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 B6",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 B6",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy30 B6",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA1_96_1_Dy30_B6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy30_B6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy30_B6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy30_B6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy30_B6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA1_96_1_C11_nosplit": {
+    "organoid_id": "BA1_96_1_C11_nosplit",
+    "base_well": "BA1_96_1_C11",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 10,
+    "n_votes_total": 10,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 C11",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 C11",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 C11",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 C11",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 C11",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 C11",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 C11",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 C11",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 C11",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 C11",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy30 C11",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA1_96_1_Dy30_C11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy30_C11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy30_C11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy30_C11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy30_C11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA1_96_1_D1_nosplit": {
+    "organoid_id": "BA1_96_1_D1_nosplit",
+    "base_well": "BA1_96_1_D1",
+    "genealogy_type": "nosplit",
+    "label": "Not Acceptable",
+    "n_votes_good": 0,
+    "n_votes_total": 5,
+    "n_timepoints": 10,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0
+    ],
+    "missing_days": [
+      30.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 D1",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 D1",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 D1",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 D1",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 D1",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 D1",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 D1",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 D1",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 D1",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 D1",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.04586129753914989
+      }
+    ]
+  },
+  "BA1_96_1_D2_nosplit": {
+    "organoid_id": "BA1_96_1_D2_nosplit",
+    "base_well": "BA1_96_1_D2",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 D2",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 D2",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 D2",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 D2",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 D2",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 D2",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 D2",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 D2",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 D2",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 D2",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy30 D2",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA1_96_1_Dy30_D2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy30_D2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy30_D2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy30_D2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy30_D2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA1_96_1_H5_nosplit": {
+    "organoid_id": "BA1_96_1_H5_nosplit",
+    "base_well": "BA1_96_1_H5",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 4,
+    "n_votes_total": 5,
+    "n_timepoints": 10,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0
+    ],
+    "missing_days": [
+      30.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA1 96_1 Dy03 H5",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA1_96_1_Dy03_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy03_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy03_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy03_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy03_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy06 H5",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA1_96_1_Dy06_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy06_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy06_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy06_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy06_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy08 H5",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA1_96_1_Dy08_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy08_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy08_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy08_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy08_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy10 H5",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA1_96_1_Dy10_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy10_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy10_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy10_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy10_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy13 H5",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA1_96_1_Dy13_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy13_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy13_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy13_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy13_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy15 H5",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA1_96_1_Dy15_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy15_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy15_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy15_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy15_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy17 H5",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA1_96_1_Dy17_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy17_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy17_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy17_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy17_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy20.5 H5",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA1_96_1_Dy20_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy20.5_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy20.5_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy20.5_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy20_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy24 H5",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA1_96_1_Dy24_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy24_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy24_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy24_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy24_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA1 96_1 Dy28 H5",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA1_96_1_Dy28_H5_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA1_96_1_Dy28_H5.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA1_96_1_Dy28_H5_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA1_96_1_Dy28_H5_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA1_96_1_Dy28_H5_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.04194630872483222
+      }
+    ]
+  },
+  "BA2_96_1_A4_nosplit": {
+    "organoid_id": "BA2_96_1_A4_nosplit",
+    "base_well": "BA2_96_1_A4",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 4,
+    "n_votes_total": 5,
+    "n_timepoints": 8,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5
+    ],
+    "missing_days": [
+      24.0,
+      28.0,
+      30.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA2 96_1 Dy03 A4",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_1_Dy03_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy03_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy03_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy03_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy03_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy06 A4",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_1_Dy06_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy06_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy06_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy06_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy06_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy08 A4",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_1_Dy08_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy08_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy08_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy08_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy08_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy10 A4",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_1_Dy10_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy10_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy10_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy10_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy10_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy13 A4",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_1_Dy13_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy13_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy13_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy13_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy13_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy15 A4",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_1_Dy15_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy15_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy15_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy15_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy15_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy17 A4",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_1_Dy17_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy17_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy17_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy17_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy17_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy20.5 A4",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_1_Dy21_A4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy20.5_A4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy20.5_A4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy20.5_A4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy21_A4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_1_B9_nosplit": {
+    "organoid_id": "BA2_96_1_B9_nosplit",
+    "base_well": "BA2_96_1_B9",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 4,
+    "n_votes_total": 5,
+    "n_timepoints": 8,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      30.0
+    ],
+    "missing_days": [
+      20.5,
+      24.0,
+      28.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA2 96_1 Dy03 B9",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_1_Dy03_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy03_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy03_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy03_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy03_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy06 B9",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_1_Dy06_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy06_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy06_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy06_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy06_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy08 B9",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_1_Dy08_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy08_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy08_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy08_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy08_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy10 B9",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_1_Dy10_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy10_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy10_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy10_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy10_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy13 B9",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_1_Dy13_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy13_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy13_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy13_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy13_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy15 B9",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_1_Dy15_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy15_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy15_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy15_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy15_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy17 B9",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_1_Dy17_B9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy17_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy17_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy17_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy17_B9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy30 B9",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_1_Dy30_B9_nosplit_stitched",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy30_B9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy30_B9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy30_B9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy30_B9_nosplit_stitched.png"
+        },
+        "edge_fraction": 0.006152125279642058
+      }
+    ]
+  },
+  "BA2_96_1_D1_nosplit": {
+    "organoid_id": "BA2_96_1_D1_nosplit",
+    "base_well": "BA2_96_1_D1",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 9,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      28.0
+    ],
+    "missing_days": [
+      24.0,
+      30.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA2 96_1 Dy03 D1",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_1_Dy03_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy03_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy03_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy03_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy03_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy06 D1",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_1_Dy06_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy06_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy06_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy06_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy06_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy08 D1",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_1_Dy08_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy08_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy08_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy08_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy08_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy10 D1",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_1_Dy10_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy10_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy10_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy10_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy10_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy13 D1",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_1_Dy13_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy13_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy13_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy13_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy13_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.02181208053691275
+      },
+      {
+        "key": "BA2 96_1 Dy15 D1",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_1_Dy15_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy15_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy15_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy15_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy15_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy17 D1",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_1_Dy17_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy17_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy17_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy17_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy17_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy20.5 D1",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_1_Dy21_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy20.5_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy20.5_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy20.5_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy21_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy28 D1",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_1_Dy28_D1_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy28_D1.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy28_D1_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy28_D1_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy28_D1_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_1_E11_nosplit": {
+    "organoid_id": "BA2_96_1_E11_nosplit",
+    "base_well": "BA2_96_1_E11",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 9,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0
+    ],
+    "missing_days": [
+      28.0,
+      30.0
+    ],
+    "timepoints": [
+      {
+        "key": "BA2 96_1 Dy03 E11",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_1_Dy03_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy03_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy03_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy03_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy03_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy06 E11",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_1_Dy06_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy06_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy06_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy06_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy06_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy08 E11",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_1_Dy08_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy08_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy08_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy08_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy08_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy10 E11",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_1_Dy10_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy10_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy10_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy10_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy10_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy13 E11",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_1_Dy13_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy13_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy13_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy13_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy13_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy15 E11",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_1_Dy15_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy15_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy15_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy15_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy15_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy17 E11",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_1_Dy17_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy17_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy17_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy17_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy17_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy20.5 E11",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_1_Dy21_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy20.5_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy20.5_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy20.5_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy21_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy24 E11",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_1_Dy24_E11_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy24_E11.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy24_E11_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy24_E11_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy24_E11_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.04138702460850112
+      }
+    ]
+  },
+  "BA2_96_1_G9_nosplit": {
+    "organoid_id": "BA2_96_1_G9_nosplit",
+    "base_well": "BA2_96_1_G9",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 4,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_1 Dy03 G9",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_1_Dy03_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy03_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy03_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy03_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy03_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy06 G9",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_1_Dy06_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy06_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy06_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy06_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy06_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy08 G9",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_1_Dy08_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy08_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy08_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy08_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy08_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy10 G9",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_1_Dy10_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy10_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy10_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy10_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy10_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy13 G9",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_1_Dy13_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy13_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy13_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy13_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy13_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy15 G9",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_1_Dy15_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy15_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy15_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy15_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy15_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy17 G9",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_1_Dy17_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy17_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy17_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy17_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy17_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy20.5 G9",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_1_Dy21_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy20.5_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy20.5_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy20.5_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy21_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy24 G9",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_1_Dy24_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy24_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy24_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy24_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy24_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.009507829977628635
+      },
+      {
+        "key": "BA2 96_1 Dy28 G9",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_1_Dy28_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy28_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy28_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy28_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy28_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_1 Dy30 G9",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_1_Dy30_G9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_1_Dy30_G9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_1_Dy30_G9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_1_Dy30_G9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_1_Dy30_G9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_2_B7_nosplit": {
+    "organoid_id": "BA2_96_2_B7_nosplit",
+    "base_well": "BA2_96_2_B7",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_2 Dy03 B7",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_2_Dy03_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy03_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy03_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy03_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy03_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy06 B7",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_2_Dy06_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy06_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy06_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy06_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy06_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy08 B7",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_2_Dy08_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy08_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy08_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy08_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy08_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy10 B7",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_2_Dy10_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy10_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy10_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy10_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy10_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy13 B7",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_2_Dy13_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy13_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy13_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy13_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy13_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy15 B7",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_2_Dy15_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy15_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy15_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy15_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy15_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy17 B7",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_2_Dy17_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy17_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy17_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy17_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy17_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy20.5 B7",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_2_Dy21_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy20.5_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy20.5_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy20.5_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy21_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy24 B7",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_2_Dy24_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy24_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy24_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy24_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy24_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy28 B7",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_2_Dy28_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy28_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy28_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy28_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy28_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy30 B7",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_2_Dy30_B7_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy30_B7.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy30_B7_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy30_B7_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy30_B7_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_2_C9_nosplit": {
+    "organoid_id": "BA2_96_2_C9_nosplit",
+    "base_well": "BA2_96_2_C9",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 5,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_2 Dy03 C9",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_2_Dy03_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy03_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy03_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy03_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy03_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy06 C9",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_2_Dy06_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy06_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy06_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy06_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy06_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy08 C9",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_2_Dy08_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy08_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy08_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy08_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy08_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy10 C9",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_2_Dy10_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy10_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy10_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy10_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy10_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy13 C9",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_2_Dy13_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy13_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy13_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy13_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy13_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy15 C9",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_2_Dy15_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy15_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy15_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy15_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy15_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy17 C9",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_2_Dy17_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy17_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy17_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy17_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy17_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy20.5 C9",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_2_Dy21_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy20.5_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy20.5_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy20.5_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy21_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy24 C9",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_2_Dy24_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy24_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy24_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy24_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy24_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.011185682326621925
+      },
+      {
+        "key": "BA2 96_2 Dy28 C9",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_2_Dy28_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy28_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy28_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy28_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy28_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy30 C9",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_2_Dy30_C9_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy30_C9.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy30_C9_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy30_C9_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy30_C9_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_2_F6_nosplit": {
+    "organoid_id": "BA2_96_2_F6_nosplit",
+    "base_well": "BA2_96_2_F6",
+    "genealogy_type": "nosplit",
+    "label": "Acceptable",
+    "n_votes_good": 4,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_2 Dy03 F6",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_2_Dy03_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy03_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy03_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy03_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy03_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy06 F6",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_2_Dy06_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy06_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy06_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy06_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy06_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy08 F6",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_2_Dy08_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy08_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy08_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy08_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy08_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy10 F6",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_2_Dy10_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy10_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy10_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy10_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy10_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy13 F6",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_2_Dy13_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy13_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy13_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy13_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy13_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy15 F6",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_2_Dy15_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy15_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy15_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy15_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy15_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy17 F6",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_2_Dy17_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy17_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy17_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy17_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy17_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy20.5 F6",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_2_Dy21_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy20.5_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy20.5_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy20.5_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy21_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy24 F6",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_2_Dy24_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy24_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy24_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy24_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy24_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy28 F6",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_2_Dy28_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy28_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy28_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy28_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy28_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy30 F6",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_2_Dy30_F6_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy30_F6.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy30_F6_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy30_F6_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy30_F6_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_2_G4_nosplit": {
+    "organoid_id": "BA2_96_2_G4_nosplit",
+    "base_well": "BA2_96_2_G4",
+    "genealogy_type": "nosplit",
+    "label": "Not Acceptable",
+    "n_votes_good": 1,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_2 Dy03 G4",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_2_Dy03_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy03_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy03_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy03_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy03_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy06 G4",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_2_Dy06_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy06_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy06_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy06_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy06_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy08 G4",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_2_Dy08_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy08_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy08_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy08_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy08_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy10 G4",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_2_Dy10_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy10_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy10_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy10_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy10_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy13 G4",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_2_Dy13_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy13_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy13_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy13_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy13_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy15 G4",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_2_Dy15_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy15_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy15_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy15_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy15_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy17 G4",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_2_Dy17_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy17_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy17_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy17_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy17_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy20.5 G4",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_2_Dy21_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy20.5_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy20.5_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy20.5_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy21_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy24 G4",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_2_Dy24_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy24_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy24_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy24_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy24_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy28 G4",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_2_Dy28_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy28_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy28_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy28_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy28_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy30 G4",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_2_Dy30_G4_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy30_G4.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy30_G4_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy30_G4_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy30_G4_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  },
+  "BA2_96_2_H2_nosplit": {
+    "organoid_id": "BA2_96_2_H2_nosplit",
+    "base_well": "BA2_96_2_H2",
+    "genealogy_type": "nosplit",
+    "label": "Not Acceptable",
+    "n_votes_good": 0,
+    "n_votes_total": 5,
+    "n_timepoints": 11,
+    "days_present": [
+      3.0,
+      6.0,
+      8.0,
+      10.0,
+      13.0,
+      15.0,
+      17.0,
+      20.5,
+      24.0,
+      28.0,
+      30.0
+    ],
+    "missing_days": [],
+    "timepoints": [
+      {
+        "key": "BA2 96_2 Dy03 H2",
+        "mdl_day": 3.0,
+        "dayID": "Dy3",
+        "main_id": "BA2_96_2_Dy03_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy03_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy03_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy03_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy03_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy06 H2",
+        "mdl_day": 6.0,
+        "dayID": "Dy6",
+        "main_id": "BA2_96_2_Dy06_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy06_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy06_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy06_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy06_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy08 H2",
+        "mdl_day": 8.0,
+        "dayID": "Dy8",
+        "main_id": "BA2_96_2_Dy08_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy08_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy08_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy08_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy08_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy10 H2",
+        "mdl_day": 10.0,
+        "dayID": "Dy10",
+        "main_id": "BA2_96_2_Dy10_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy10_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy10_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy10_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy10_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy13 H2",
+        "mdl_day": 13.0,
+        "dayID": "Dy13",
+        "main_id": "BA2_96_2_Dy13_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy13_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy13_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy13_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy13_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy15 H2",
+        "mdl_day": 15.0,
+        "dayID": "Dy15",
+        "main_id": "BA2_96_2_Dy15_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy15_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy15_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy15_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy15_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy17 H2",
+        "mdl_day": 17.0,
+        "dayID": "Dy17",
+        "main_id": "BA2_96_2_Dy17_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy17_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy17_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy17_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy17_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy20.5 H2",
+        "mdl_day": 20.5,
+        "dayID": "Dy20.5",
+        "main_id": "BA2_96_2_Dy21_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy20.5_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy20.5_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy20.5_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy21_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy24 H2",
+        "mdl_day": 24.0,
+        "dayID": "Dy24",
+        "main_id": "BA2_96_2_Dy24_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy24_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy24_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy24_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy24_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy28 H2",
+        "mdl_day": 28.0,
+        "dayID": "Dy28",
+        "main_id": "BA2_96_2_Dy28_H2_nosplit_nostitch",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy28_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy28_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy28_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy28_H2_nosplit_nostitch.png"
+        },
+        "edge_fraction": 0.0
+      },
+      {
+        "key": "BA2 96_2 Dy30 H2",
+        "mdl_day": 30.0,
+        "dayID": "Dy30",
+        "main_id": "BA2_96_2_Dy30_H2_nosplit_stitched",
+        "split_type": "nosplit",
+        "img_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/resized_512x384/BA2_96_2_Dy30_H2.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/images/mean_fill_clip/BA2_96_2_Dy30_H2_clipped_meanfill_auto_filled.png"
+        },
+        "mask_paths": {
+          "std": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/predicted/BA2_96_2_Dy30_H2_mask.png",
+          "clipped": "/net/projects2/promega/2026_04_non_env/project_data/amanda_test/masks/resized_575_square/BA2_96_2_Dy30_H2_nosplit_stitched.png"
+        },
+        "edge_fraction": 0.0
+      }
+    ]
+  }
+}
