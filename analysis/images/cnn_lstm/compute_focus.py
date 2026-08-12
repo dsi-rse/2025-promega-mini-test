@@ -2,27 +2,28 @@
 """
 compute_focus.py — exact Grad-CAM content-focus for the single-image base model.
 
-For each TEST organoid at a given day, this loads the trained base checkpoint,
-computes Grad-CAM on the last conv layer, and measures the FRACTION of CAM
-"energy" that falls inside the organoid's segmentation mask:
+For each TEST organoid at a given day, loads the trained base checkpoint, computes
+Grad-CAM on the last conv layer, and measures the FRACTION of CAM "energy" inside the
+organoid mask, plus the size-corrected ENRICHMENT (= focus / mask_area_fraction).
 
-    focus = sum(CAM * mask) / sum(CAM)      in [0, 1]
+    focus       in [0,1]   fraction of CAM on the organoid
+    mask_frac              organoid's share of the frame
+    enrichment  = focus/mask_frac   (>1 = denser on organoid than chance)
 
-1.0 = all activation on the organoid, 0.0 = all on the background/well.
-Unlike the earlier estimate (decoded from rendered heatmap PNGs), this uses the
-raw CAM array and the real mask, so the numbers are exact.
+Also writes prob/confidence/correct per organoid.
 
-Writes a CSV with one row per organoid:
-    organoid_id, true_label, prob_acceptable, pred, correct, confidence, focus
+Examples:
+    # single day
+    python analysis/images/cnn_lstm/compute_focus.py --label idor_balsel --day 30 \\
+        --image-type clipped --out focus_idor_balsel_Dy30.csv
 
-Run on the cluster (needs the checkpoint, images/masks, and a GPU), e.g.:
-    conda activate /net/projects2/promega
-    python analysis/images/cnn_lstm/compute_focus.py \\
-        --label idor_balsel --day 30 \\
-        --runs-root /net/projects2/promega/project_data/model_tests/lstm_runs \\
-        --cohorts-dir data/cohorts \\
-        --image-type clipped \\
-        --out focus_idor_balsel_Dy30.csv
+    # ALL days (adds a 'day' column) -> does focus change over development?
+    python analysis/images/cnn_lstm/compute_focus.py --label idor_balsel --all-days \\
+        --image-type clipped --out focus_idor_balsel_alldays.csv
+
+    # bbox model (size removed) — prob/confidence valid, focus meaningless
+    python analysis/images/cnn_lstm/compute_focus.py --label idor_bbox_balsel \\
+        --split-label idor_balsel --day 30 --bbox-crop --out focus_bbox.csv
 """
 from __future__ import annotations
 import argparse, csv, sys
@@ -36,7 +37,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from analysis.images.cnn_lstm.train_base_model import (
-    BaselineEfficientNet, SingleDayOrganoidDataset, TARGET_SIZE,
+    BaselineEfficientNet, SingleDayOrganoidDataset, TARGET_SIZE, DAY_RANGES,
 )
 from analysis.images.cnn_lstm.organoid_dataset import load_split_from_json
 from torchvision import transforms as T
@@ -55,51 +56,24 @@ def day_str(day: float) -> str:
 
 
 def load_mask(mask_path, hw):
-    """Load a mask, resize to (H,W), return a float {0,1} array."""
     m = Image.open(mask_path).convert("L").resize((hw[1], hw[0]), Image.NEAREST)
     a = np.asarray(m).astype(np.float32)
     return (a > (0.5 * a.max() if a.max() > 0 else 0.5)).astype(np.float32)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--label", required=True, help="cohort label, e.g. idor_balsel")
-    ap.add_argument("--day", type=float, default=30)
-    ap.add_argument("--runs-root", type=Path,
-                    default=Path("/net/projects2/promega/project_data/model_tests/lstm_runs"))
-    ap.add_argument("--cohorts-dir", type=Path, default=Path("data/cohorts"))
-    ap.add_argument("--split-label", default=None,
-                    help="Cohort label for the TEST SPLIT, if different from the "
-                         "checkpoint label (--label). e.g. checkpoint idor_bbox, "
-                         "split idor_balsel (same organoids). Defaults to --label.")
-    ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
-    ap.add_argument("--bbox-crop", action="store_true",
-                    help="Crop each organoid to its mask bbox + letterbox (size removed). "
-                         "Use to get per-organoid confidence for the bbox model. Note: "
-                         "focus/enrichment are meaningless under bbox (mask ~= whole frame); "
-                         "only prob/confidence/correct are valid.")
-    ap.add_argument("--out", type=Path, required=True)
-    args = ap.parse_args()
-
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    ds_day = day_str(args.day)
-
-    # --- test split for this cohort ---
-    split_label = args.split_label or args.label
-    test_json = args.cohorts_dir / split_label / "series" / "test.json"
-    test_ids, test_meta = load_split_from_json(test_json)
+def process_day(day, test_ids, test_meta, args, device):
+    """Compute focus/confidence for every test organoid at one day. Returns rows."""
+    ds_day = day_str(day)
     eval_tf = T.Compose([T.Resize(TARGET_SIZE)])
-    ds = SingleDayOrganoidDataset(test_ids, test_meta, args.day, transform=eval_tf,
+    ds = SingleDayOrganoidDataset(test_ids, test_meta, day, transform=eval_tf,
                                   image_type=args.image_type, bbox_crop=args.bbox_crop)
-
-    # --- model ---
     ckpt = args.runs_root / args.label / "base_effnet" / f"day_{ds_day}" / f"model_day_{ds_day}.pth"
-    print(f"Loading checkpoint: {ckpt}")
-    state = torch.load(ckpt, map_location=device)
-    state = state.get("state_dict", state)
+    if not ckpt.exists():
+        print(f"  [skip] no checkpoint for day {day}: {ckpt}")
+        return [], 0
+    state = torch.load(ckpt, map_location=device); state = state.get("state_dict", state)
     model = BaselineEfficientNet().to(device)
-    model.load_state_dict(state, strict=True)
-    model.eval()
+    model.load_state_dict(state, strict=True); model.eval()
     for p in model.parameters():
         p.requires_grad_(True)
 
@@ -109,10 +83,9 @@ def main():
         acts["v"] = out
         if out.requires_grad:
             out.register_hook(lambda g: grads.__setitem__("v", g))
-    target_layer.register_forward_hook(fwd_hook)
+    h = target_layer.register_forward_hook(fwd_hook)
 
-    rows = []
-    n_nomask = 0
+    rows, n_nomask = [], 0
     for i in range(len(ds)):
         samp = ds.samples[i]
         if not samp.get("mask_path"):
@@ -120,53 +93,72 @@ def main():
             continue
         x, label, org_id = ds[i]
         x = x.unsqueeze(0).to(device)
-
-        model.zero_grad(set_to_none=True)
-        acts.clear(); grads.clear()
-        logit = model(x)                       # (1,)
-        prob = torch.sigmoid(logit).item()
-        logit.backward()
-
-        a = acts["v"]; g = grads["v"]          # (1,C,h,w)
-        w = g.mean(dim=(2, 3), keepdim=True)   # (1,C,1,1)
-        cam = F.relu((w * a).sum(dim=1, keepdim=True))            # (1,1,h,w)
+        model.zero_grad(set_to_none=True); acts.clear(); grads.clear()
+        logit = model(x); prob = torch.sigmoid(logit).item(); logit.backward()
+        a = acts["v"]; g = grads["v"]
+        w = g.mean(dim=(2, 3), keepdim=True)
+        cam = F.relu((w * a).sum(dim=1, keepdim=True))
         cam = F.interpolate(cam, size=TARGET_SIZE, mode="bilinear", align_corners=False)
         cam = cam.squeeze().detach().cpu().numpy()
         if cam.max() > 0:
             cam = cam / cam.max()
-
         mask = load_mask(samp["mask_path"], TARGET_SIZE)
         denom = cam.sum()
         focus = float((cam * mask).sum() / denom) if denom > 0 else float("nan")
-        mask_frac = float(mask.mean())                       # organoid's share of the frame
+        mask_frac = float(mask.mean())
         enrichment = float(focus / mask_frac) if mask_frac > 0 else float("nan")
-        # enrichment > 1  -> CAM is denser on the organoid than chance (content focus)
-        # enrichment ~ 1  -> CAM spread uniformly (no organoid preference)
-
         lab = int(label.item()) if hasattr(label, "item") else int(label)
         pred = int(prob > 0.5)
         rows.append({
-            "organoid_id": org_id,
+            "day": day, "organoid_id": org_id,
             "true_label": "Acceptable" if lab == 1 else "Not Acceptable",
             "prob_acceptable": round(prob, 4),
             "pred": "Acceptable" if pred == 1 else "Not Acceptable",
-            "correct": int(pred == lab),
-            "confidence": round(abs(prob - 0.5), 4),
-            "focus": round(focus, 4),
-            "mask_frac": round(mask_frac, 4),
+            "correct": int(pred == lab), "confidence": round(abs(prob - 0.5), 4),
+            "focus": round(focus, 4), "mask_frac": round(mask_frac, 4),
             "enrichment": round(enrichment, 3),
         })
+    h.remove()
+    return rows, n_nomask
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--label", required=True)
+    ap.add_argument("--day", type=float, default=30)
+    ap.add_argument("--all-days", action="store_true",
+                    help="Loop over all base day checkpoints (adds a 'day' column).")
+    ap.add_argument("--runs-root", type=Path,
+                    default=Path("/net/projects2/promega/project_data/model_tests/lstm_runs"))
+    ap.add_argument("--cohorts-dir", type=Path, default=Path("data/cohorts"))
+    ap.add_argument("--split-label", default=None,
+                    help="Test-split cohort label if different from --label.")
+    ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
+    ap.add_argument("--bbox-crop", action="store_true",
+                    help="Crop to mask bbox + letterbox (size removed). focus/enrichment "
+                         "meaningless under bbox; only prob/confidence/correct are valid.")
+    ap.add_argument("--out", type=Path, required=True)
+    args = ap.parse_args()
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    split_label = args.split_label or args.label
+    test_json = args.cohorts_dir / split_label / "series" / "test.json"
+    test_ids, test_meta = load_split_from_json(test_json)
+
+    days = list(DAY_RANGES) if args.all_days else [args.day]
+    all_rows = []
+    for day in days:
+        rows, nn = process_day(day, test_ids, test_meta, args, device)
+        all_rows += rows
+        if rows:
+            fs = [r["enrichment"] for r in rows if r["enrichment"] == r["enrichment"]]
+            print(f"day {day}: {len(rows)} organoids  mean enrichment {np.mean(fs):.2f}x  ({nn} no-mask)")
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w", newline="") as f:
-        wtr = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-        wtr.writeheader(); wtr.writerows(rows)
-
-    print(f"\nWrote {len(rows)} organoids -> {args.out}  ({n_nomask} skipped: no mask)")
-    if rows:
-        fs = [r["focus"] for r in rows if r["focus"] == r["focus"]]
-        print(f"focus: mean={np.mean(fs):.3f}  median={np.median(fs):.3f}  "
-              f"range {min(fs):.3f}-{max(fs):.3f}")
+        wtr = csv.DictWriter(f, fieldnames=list(all_rows[0].keys()))
+        wtr.writeheader(); wtr.writerows(all_rows)
+    print(f"\nWrote {len(all_rows)} rows -> {args.out}")
 
 
 if __name__ == "__main__":
