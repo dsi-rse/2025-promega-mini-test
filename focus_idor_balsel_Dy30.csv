@@ -1,0 +1,28 @@
+organoid_id,true_label,prob_acceptable,pred,correct,confidence,focus
+BA1_96_1_B9_nosplit,Acceptable,0.5618,Acceptable,1,0.0618,0.1035
+BA1_96_1_C10_nosplit,Acceptable,0.6113,Acceptable,1,0.1113,0.1945
+BA1_96_1_F2_nosplit,Acceptable,0.5641,Acceptable,1,0.0641,0.154
+BA1_96_1_F4_nosplit,Acceptable,0.5913,Acceptable,1,0.0913,0.1175
+BA1_96_1_G10_nosplit,Acceptable,0.567,Acceptable,1,0.067,0.1201
+BA1_96_1_G3_nosplit,Acceptable,0.5724,Acceptable,1,0.0724,0.1958
+BA1_96_1_H10_nosplit,Acceptable,0.605,Acceptable,1,0.105,0.1011
+BA2_96_1_C10_nosplit,Acceptable,0.6155,Acceptable,1,0.1155,0.1476
+BA2_96_1_C11_nosplit,Acceptable,0.7276,Acceptable,1,0.2276,0.237
+BA2_96_1_C8_nosplit,Acceptable,0.6445,Acceptable,1,0.1445,0.2239
+BA2_96_1_D9_nosplit,Acceptable,0.6557,Acceptable,1,0.1557,0.2017
+BA2_96_1_E12_nosplit,Not Acceptable,0.5037,Acceptable,0,0.0037,0.1113
+BA2_96_1_E3_nosplit,Not Acceptable,0.476,Not Acceptable,1,0.024,0.0674
+BA2_96_1_E5_nosplit,Acceptable,0.654,Acceptable,1,0.154,0.166
+BA2_96_1_G7_nosplit,Acceptable,0.6153,Acceptable,1,0.1153,0.1292
+BA2_96_1_H11_nosplit,Acceptable,0.7226,Acceptable,1,0.2226,0.2131
+BA2_96_2_B10_nosplit,Acceptable,0.6314,Acceptable,1,0.1314,0.2306
+BA2_96_2_C2_nosplit,Not Acceptable,0.4828,Not Acceptable,1,0.0172,0.0001
+BA2_96_2_E8_nosplit,Acceptable,0.6521,Acceptable,1,0.1521,0.202
+BA2_96_2_F11_nosplit,Acceptable,0.6857,Acceptable,1,0.1857,0.2749
+BA2_96_2_F12_nosplit,Not Acceptable,0.4817,Not Acceptable,1,0.0183,0.0194
+BA2_96_2_G1_nosplit,Acceptable,0.6463,Acceptable,1,0.1463,0.1818
+BA2_96_2_G3_nosplit,Acceptable,0.6117,Acceptable,1,0.1117,0.1474
+BA2_96_2_G6_nosplit,Not Acceptable,0.4865,Not Acceptable,1,0.0135,0.0951
+BA2_96_2_G9_nosplit,Not Acceptable,0.4789,Not Acceptable,1,0.0211,0.1859
+BA2_96_2_H3_nosplit,Acceptable,0.5861,Acceptable,1,0.0861,0.1087
+BA2_96_2_H8_nosplit,Acceptable,0.6937,Acceptable,1,0.1937,0.2251
