@@ -128,6 +128,10 @@ def main():
         mask = load_mask(samp["mask_path"], TARGET_SIZE)
         denom = cam.sum()
         focus = float((cam * mask).sum() / denom) if denom > 0 else float("nan")
+        mask_frac = float(mask.mean())                       # organoid's share of the frame
+        enrichment = float(focus / mask_frac) if mask_frac > 0 else float("nan")
+        # enrichment > 1  -> CAM is denser on the organoid than chance (content focus)
+        # enrichment ~ 1  -> CAM spread uniformly (no organoid preference)
 
         lab = int(label.item()) if hasattr(label, "item") else int(label)
         pred = int(prob > 0.5)
@@ -139,6 +143,8 @@ def main():
             "correct": int(pred == lab),
             "confidence": round(abs(prob - 0.5), 4),
             "focus": round(focus, 4),
+            "mask_frac": round(mask_frac, 4),
+            "enrichment": round(enrichment, 3),
         })
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
