@@ -129,13 +129,34 @@ class EfficientNetClassifier(nn.Module):
         return self.head(self.backbone(x)).squeeze(-1)
 
 
-def _build_transforms(train: bool):
+# Fill colour for areas revealed by rotation/translation: ImageNet mean (≈ mean-fill background)
+_FILL = [int(v * 255) for v in IMAGENET_MEAN]  # [123, 116, 103]
+
+
+def _build_transforms(train: bool, translate: tuple = (0.1, 0.1)):
+    """Build transform pipeline.
+
+    Geometric design (no redundancy):
+      - RandomHorizontalFlip(p=0.5) + full rotation covers all 8 dihedral
+        symmetries.  VerticalFlip is omitted: V-flip = H-flip + 180° rotation.
+      - RandomAffine combines rotation [-180°, 180°] and translation [±10%]
+        in one interpolation pass to avoid double resampling.
+      - translate=None disables translation (use for days where organoids
+        touch the image boundary, e.g. Dy28/Dy30 in the base cohort).
+
+    Photometric: brightness/contrast/saturation jitter; hue kept small
+    because the mean-fill background is fixed and does not shift with hue.
+    """
     base = [T.Resize((IMG_HEIGHT, IMG_WIDTH))]
     if train:
         base.extend([
             T.RandomHorizontalFlip(p=0.5),
-            T.RandomVerticalFlip(p=0.5),
-            T.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+            T.RandomAffine(
+                degrees=180,
+                translate=translate,
+                fill=_FILL,
+            ),
+            T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05),
         ])
     base.extend([T.ToTensor(), T.Normalize(IMAGENET_MEAN, IMAGENET_STD)])
     return T.Compose(base)
@@ -146,6 +167,11 @@ def _split_data(ds: OrganoidDataset, split: str, day: str, input_mode: str) -> T
     paths = [p for _, _, p in items]
     labels = [LABEL_TO_INT[lbl] for _, lbl, _ in items]
     return paths, labels
+
+
+# Days where large organoids may touch the image boundary in the base cohort.
+# Translation is disabled for these days to avoid shifting boundary-clipped cells.
+_BOUNDARY_DAYS = {"Dy28", "Dy30"}
 
 
 def train_one_day(ds: OrganoidDataset, day: str, *, input_mode: str = "overlay",
@@ -172,8 +198,10 @@ def train_one_day(ds: OrganoidDataset, day: str, *, input_mode: str = "overlay",
         print(f"  Val:   {len(val_paths)}")
         print(f"  Test:  {len(test_paths)}")
 
+    # Disable translation for days where cells commonly reach the image boundary
+    translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
     train_loader = DataLoader(
-        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True)),
+        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0,
     )
     val_loader = DataLoader(
