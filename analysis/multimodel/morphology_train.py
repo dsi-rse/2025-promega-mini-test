@@ -249,13 +249,18 @@ def main():
     parser.add_argument("--n-folds", type=int, default=5)
     parser.add_argument("--skip-lgbm", action="store_true")
     parser.add_argument("--skip-lr", action="store_true")
+    parser.add_argument("--filter-mode", default="base",
+                        choices=["base", "series_idor"],
+                        help="Organoid filter: 'base' (205 organoids, no ef gate) "
+                             "or 'series_idor' (132 organoids, ef<=0.05 every day)")
     args = parser.parse_args()
 
     ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
-                         filters=filters_for_mode("base"))
+                         filters=filters_for_mode(args.filter_mode))
     print(ds.summary())
     morph_df = _load_morph_df()
     print(f"Morphology CSV: {len(morph_df)} rows, features: {MORPH_FEATURES}")
+    print(f"Filter mode: {args.filter_mode}")
     print(f"Cross-validation: {args.n_folds}-fold stratified (threshold fixed at 0.5)")
 
     days_to_train = args.days if args.days else DAY_ORDER
@@ -285,8 +290,10 @@ def main():
                 results["logreg"][day] = m
                 print(f"  Balanced Acc: {m['balanced_accuracy_mean']:.4f} ± {m['balanced_accuracy_std']:.4f}")
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    results_path = OUTPUT_DIR / "results.json"
+    suffix = f"_{args.filter_mode}" if args.filter_mode != "base" else ""
+    out_dir = OUTPUT_DIR.parent / (OUTPUT_DIR.name + suffix) if suffix else OUTPUT_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+    results_path = out_dir / "results.json"
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\nSaved results to {results_path}")
@@ -294,28 +301,29 @@ def main():
     _print_aggregate(results)
 
     if results.get("lgbm") or results.get("logreg"):
+        import shutil
         FIGURE_DIR.mkdir(parents=True, exist_ok=True)
         series = {}
         if results["lgbm"]:
             series["LightGBM"] = results["lgbm"]
         if results["logreg"]:
             series["Logistic Regression"] = results["logreg"]
+        fig_name = f"morphology_LightGBM_vs_LogReg{suffix}.png"
+        title = f"Morphology Features: Balanced Accuracy by Day ({args.filter_mode})"
         plot_balanced_accuracy_by_day(
             series,
             day_order=DAY_ORDER,
-            output_path=FIGURE_DIR / "morphology_LightGBM_vs_LogReg.png",
-            title="Morphology Features: Balanced Accuracy by Day",
+            output_path=FIGURE_DIR / fig_name,
+            title=title,
             style_overrides={
                 "LightGBM":            {"color": "#2ca02c", "marker": "o", "linestyle": "-"},
                 "Logistic Regression": {"color": "#d62728", "marker": "s", "linestyle": "--"},
             },
             late_stage_shade_from_day=24,
         )
-        out_png = FIGURE_DIR / "morphology_LightGBM_vs_LogReg.png"
-        import shutil
-        repo_fig = Path("figures/morphology_LightGBM_vs_LogReg.png")
+        repo_fig = Path(f"figures/{fig_name}")
         repo_fig.parent.mkdir(exist_ok=True)
-        shutil.copy(out_png, repo_fig)
+        shutil.copy(FIGURE_DIR / fig_name, repo_fig)
         print(f"Copied to {repo_fig}")
 
 
