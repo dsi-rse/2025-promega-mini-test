@@ -1,0 +1,17 @@
+Category,Statistic,BA1,BA2,Combined
+Counts & coverage,Organoids (unique),96,213,309
+Counts & coverage,Image records,1038,2055,3093
+Counts & coverage,Plates,1,2,3
+Counts & coverage,Day timepoints,11,11,11
+Counts & coverage,Train (organoids),56,102,158
+Counts & coverage,Val (organoids),8,10,18
+Counts & coverage,Test (organoids),14,30,44
+Counts & coverage,Complete Dy03–Dy30 series,93 (96.9%),162 (76.1%),255 (82.5%)
+Label distribution,Acceptable (Dy30),72 (75.0%),99 (46.5%),171 (55.3%)
+Label distribution,Not Acceptable (Dy30),5 (5.2%),32 (15.0%),37 (12.0%)
+Label distribution,No consensus / unlabeled,19 (19.8%),82 (38.5%),101 (32.7%)
+Label distribution,Mean survey votes per organoid,5.38,5.39,5.38
+Modality coverage,Has metabolite data,96 (100.0%),213 (100.0%),309 (100.0%)
+Modality coverage,Has survey votes,92 (95.8%),181 (85.0%),273 (88.3%)
+Modality coverage,Has manual mask,96 (100.0%),185 (86.9%),281 (90.9%)
+Modality coverage,Has predicted mask,96 (100.0%),213 (100.0%),309 (100.0%)

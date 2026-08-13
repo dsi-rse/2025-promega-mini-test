@@ -1,0 +1,6 @@
+Metabolite,Mean,Min,Max,Std. Dev.,N
+Glucose concentration (μM),11.633,-0.083,19.92,2.579,2178
+Glutamate concentration (μM),1.281,0.024,22.902,1.002,2178
+Lactate concentration (μM),10.722,0.059,46.68,6.531,2178
+Pyruvate concentration (μM),2.828,-0.462,6.738,0.863,2178
+Malate concentration (μM),0.12,-0.167,26.818,0.729,1398
