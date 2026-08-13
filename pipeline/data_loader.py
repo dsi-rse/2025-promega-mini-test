@@ -52,6 +52,12 @@ FIGURE_DIR = ANALYSIS_OUTPUT_DIR / "figures"
 REQUIRED_METABOLITES = ["GlucoseGlo", "GlutamateGlo", "LactateGlo", "PyruvateGlo", "BCAAGlo"]
 CONDITIONAL_METABOLITES = {"MalateGlo": lambda day_num: day_num > 10}
 
+# concentration_uM values below this threshold are physically impossible and
+# indicate an assay failure (e.g. BA2 96_2 Dy10 MalateGlo reads −5662 µM).
+# Such values are replaced with NaN so LightGBM can route them via its native
+# missing-value handling rather than treating them as real signal.
+CONCENTRATION_FLOOR = -500.0  # µM
+
 # Metabolite numeric fields available per assay block (see data/normalized/README.md).
 # "concentration_uM" / "initial_concentration" are raw assay-derived; "win" / "win_vol_norm"
 # are Promega-residualized (winsorized + per-metabolite scaled, MalateGlo behaves differently
@@ -980,6 +986,11 @@ class OrganoidDataset:
                 if val is None:
                     skip = True
                     break
+                # Replace physically impossible concentration values with NaN.
+                # LightGBM handles NaN natively; the organoid is kept so its
+                # other metabolite features still contribute.
+                if field == "concentration_uM" and val < CONCENTRATION_FLOOR:
+                    val = np.nan
                 row.append(val)
                 if include_initial:
                     row.append(met_data.get("initial_concentration", np.nan))
@@ -1067,7 +1078,11 @@ class OrganoidDataset:
                 if curr_c is None or prev_c is None:
                     skip = True
                     break
-                growth_row.append(curr_c - prev_c)
+                if curr_c < CONCENTRATION_FLOOR:
+                    curr_c = np.nan
+                if prev_c < CONCENTRATION_FLOOR:
+                    prev_c = np.nan
+                growth_row.append(curr_c - prev_c)  # NaN propagates if either is NaN
             if skip:
                 continue
 

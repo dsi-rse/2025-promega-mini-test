@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""Reproduce metabolite-only model results: LightGBM and Logistic Regression per day.
+"""Metabolite-only classifier: LightGBM and Logistic Regression per day.
 
-Pipeline (same shape for both models):
-  1. Build features via OrganoidDataset.get_metabolite_features(
-         split, day, include_growth=True, include_initial=True)
-     — single source of truth for concentration / initial / growth columns.
-  2. GridSearchCV with StratifiedGroupKFold(3) on train.
-  3. Threshold tuning on validation (model-specific grid + scoring).
-  4. Refit on train+val, evaluate on test.
+Evaluation: stratified k-fold cross-validation across all labeled organoids
+(no fixed train/val/test split).  For each outer fold the best hyperparameters
+are selected by an inner 3-fold GridSearch, then the model is evaluated on the
+held-out fold at threshold 0.5.  Results report mean ± std balanced accuracy
+across k folds.
 
-Differences vs LightGBM are encoded as a small DSL in MODEL_SPECS, not as
-forked train_lgbm_day / train_logreg_day functions. Outputs match the legacy
-results.json schema so feature_importance.py + three_model_plot.py keep
-working.
+Differences between LightGBM and LogReg are encoded in MODEL_SPECS, not as
+forked functions.
 
 Outputs:
   - $ANALYSIS_OUTPUT_DIR/metabolites/results.json
@@ -20,7 +16,7 @@ Outputs:
 
 Usage:
     make run ARGS="-m analysis.paper_2026_04.metabolites_train"
-    make run ARGS="-m analysis.paper_2026_04.metabolites_train --days Dy30"
+    make run ARGS="-m analysis.paper_2026_04.metabolites_train --days Dy30 --n-folds 10"
 """
 
 import argparse
@@ -32,7 +28,7 @@ from typing import Callable, Optional
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
-from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 
 from pipeline.data_loader import (
@@ -40,6 +36,7 @@ from pipeline.data_loader import (
     DAY_ORDER,
     FIGURE_DIR,
     OrganoidDataset,
+    filters_for_mode,
 )
 from pipeline.splits import Splits
 
@@ -132,89 +129,94 @@ MODEL_SPECS = {
 }
 
 
-def _features_for_day(ds: OrganoidDataset, day: str):
-    """Pull (X, y, names, ids) for each split on one day. include_growth=True."""
-    out = {}
+def _features_for_day_all(ds: OrganoidDataset, day: str):
+    """Pull (X, y, feat_names, org_ids) for ALL labeled organoids on one day.
+
+    Concatenates train + val + test splits so that k-fold CV can reassign
+    organoids freely without being constrained by the canonical split.
+    """
+    parts = []
     for split in ("train", "val", "test"):
         X, y, names, ids = ds.get_metabolite_features(
             split, day, include_growth=True, include_initial=True,
         )
-        out[split] = (X, y, names, ids)
-    return out
+        if len(X):
+            parts.append((X, y, names, ids))
+    if not parts:
+        return np.empty((0, 0)), np.empty(0), [], []
+    Xs, ys, names_list, ids_list = zip(*parts)
+    feat_names = names_list[0]
+    return (
+        np.vstack(Xs),
+        np.concatenate(ys),
+        feat_names,
+        [oid for ids in ids_list for oid in ids],
+    )
 
 
-def _train_one(spec: ModelSpec, day: str, day_features: dict, *, verbose: bool) -> Optional[dict]:
-    X_train, y_train, feat_names, ids_train = day_features["train"]
-    X_val,   y_val,   _,         _          = day_features["val"]
-    X_test,  y_test,  _,         _          = day_features["test"]
-
-    if len(X_train) == 0 or len(X_test) == 0:
+def _train_kfold(
+    spec: ModelSpec,
+    day: str,
+    X: np.ndarray,
+    y: np.ndarray,
+    feat_names: list,
+    *,
+    n_folds: int,
+    verbose: bool,
+) -> Optional[dict]:
+    """k-fold CV evaluation: inner 3-fold GridSearch per fold, threshold fixed at 0.5."""
+    if len(X) == 0 or len(np.unique(y)) < 2:
         return None
 
-    # Optional standardization (LR uses it; LGBM doesn't).
-    if spec.use_scaler:
-        scaler = StandardScaler()
-        X_train_p = scaler.fit_transform(X_train)
-        X_val_p = scaler.transform(X_val) if len(X_val) > 0 else np.empty((0, X_train.shape[1]))
-        X_test_p = scaler.transform(X_test)
-    else:
-        X_train_p, X_val_p, X_test_p = X_train, X_val, X_test
+    outer_cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=SEED)
+    inner_cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=SEED)
 
-    # Phase 1: GridSearchCV on train (group-aware).
-    base = spec.factory() if spec.name == "logreg" else spec.factory(
-        scale_pos_weight=(sum(y_train == 0) / max(sum(y_train == 1), 1)),
-    )
-    cv = StratifiedGroupKFold(n_splits=3, shuffle=True, random_state=SEED)
-    grid = GridSearchCV(base, spec.param_grid, cv=cv, scoring=spec.cv_scoring,
-                        n_jobs=-1, refit=True)
-    grid.fit(X_train_p, y_train, groups=np.asarray(ids_train))
-    best_params = grid.best_params_
-    if verbose:
-        print(f"  Best params: {best_params}")
+    oof_probs = np.zeros(len(y))
+    fold_bal_accs = []
+    importances_list = []
 
-    # Phase 2: threshold tuning on validation.
-    best_threshold = 0.5
-    if len(X_val_p) > 0 and len(np.unique(y_val)) > 1:
-        val_probs = grid.predict_proba(X_val_p)[:, 1]
-        best_score = -np.inf
-        for t in spec.threshold_grid:
-            score = spec.threshold_scoring(y_val, (val_probs >= t).astype(int))
-            if score > best_score:
-                best_score = score
-                best_threshold = t
-    if verbose:
-        print(f"  Best threshold: {best_threshold:.2f}")
+    for fold_i, (tr_idx, te_idx) in enumerate(outer_cv.split(X, y)):
+        X_tr, X_te = X[tr_idx], X[te_idx]
+        y_tr, y_te = y[tr_idx], y[te_idx]
 
-    # Phase 3: refit on train+val, evaluate on test.
-    if len(X_val_p) > 0:
-        X_tv = np.vstack([X_train_p, X_val_p])
-        y_tv = np.concatenate([y_train, y_val])
-    else:
-        X_tv, y_tv = X_train_p, y_train
+        if spec.use_scaler:
+            scaler = StandardScaler()
+            X_tr = scaler.fit_transform(X_tr)
+            X_te = scaler.transform(X_te)
 
-    if spec.name == "logreg":
-        final = spec.factory()
-        final.set_params(**best_params)
-    else:
-        spw_tv = sum(y_tv == 0) / max(sum(y_tv == 1), 1)
-        final = spec.factory(scale_pos_weight=spw_tv)
-        final.set_params(**best_params)
-    final.fit(X_tv, y_tv)
+        spw = sum(y_tr == 0) / max(sum(y_tr == 1), 1)
+        base = spec.factory() if spec.name == "logreg" else spec.factory(scale_pos_weight=spw)
+        grid = GridSearchCV(base, spec.param_grid, cv=inner_cv,
+                            scoring=spec.cv_scoring, n_jobs=-1, refit=True)
+        grid.fit(X_tr, y_tr)
 
-    test_probs = final.predict_proba(X_test_p)[:, 1]
-    test_preds = (test_probs >= best_threshold).astype(int)
-    metrics = compute_classification_metrics(y_test, test_preds, test_probs)
-    metrics["threshold"] = float(best_threshold)
-    metrics["best_params"] = best_params
+        fold_probs = grid.predict_proba(X_te)[:, 1]
+        oof_probs[te_idx] = fold_probs
+
+        fold_preds = (fold_probs >= 0.5).astype(int)
+        fold_metrics = compute_classification_metrics(y_te, fold_preds, fold_probs)
+        fold_bal_accs.append(fold_metrics["balanced_accuracy"])
+
+        if spec.captures_feature_importance and hasattr(grid.best_estimator_, "feature_importances_"):
+            importances_list.append(grid.best_estimator_.feature_importances_)
+
+        if verbose:
+            print(f"  Fold {fold_i+1}/{n_folds}  bal_acc={fold_bal_accs[-1]:.3f}"
+                  f"  params={grid.best_params_}")
+
+    # Aggregate OOF predictions for overall metrics
+    oof_preds = (oof_probs >= 0.5).astype(int)
+    metrics = compute_classification_metrics(y, oof_preds, oof_probs)
+    metrics["balanced_accuracy_mean"] = float(np.mean(fold_bal_accs))
+    metrics["balanced_accuracy_std"]  = float(np.std(fold_bal_accs))
+    metrics["n_folds"] = n_folds
+    metrics["fold_balanced_accuracies"] = [float(v) for v in fold_bal_accs]
     metrics["feature_names"] = feat_names
 
-    if spec.captures_feature_importance and hasattr(final, "feature_importances_"):
-        ranked = sorted(
-            zip(feat_names, final.feature_importances_),
-            key=lambda kv: kv[1],
-            reverse=True,
-        )
-        metrics["feature_importance"] = [{"feature": f, "importance": int(i)} for f, i in ranked]
+    if importances_list:
+        mean_imp = np.mean(importances_list, axis=0)
+        ranked = sorted(zip(feat_names, mean_imp), key=lambda kv: kv[1], reverse=True)
+        metrics["feature_importance"] = [{"feature": f, "importance": float(i)} for f, i in ranked]
 
     return metrics
 
@@ -233,11 +235,14 @@ def _print_aggregate(results: dict) -> None:
             if m is None:
                 continue
             accs.append(m["accuracy"])
-            bal_accs.append(m["balanced_accuracy"])
+            ba = m.get("balanced_accuracy_mean", m.get("balanced_accuracy", 0.0))
+            ba_std = m.get("balanced_accuracy_std", 0.0)
+            bal_accs.append(ba)
             r_na = m["recall_not_acceptable"]
             recall_nas.append(r_na)
             zero_recall_days += int(r_na == 0.0)
-            best_bal_acc = max(best_bal_acc, m["balanced_accuracy"])
+            best_bal_acc = max(best_bal_acc, ba)
+            print(f"    {day:<10}  bal_acc={ba:.3f} ± {ba_std:.3f}")
         n_days = len(accs)
         print(f"\n{spec.display}:")
         print(f"  Avg Accuracy:       {np.mean(accs):.1%}")
@@ -253,6 +258,8 @@ def main():
                         help="Specific days to train (e.g. Dy30 Dy24)")
     parser.add_argument("--skip-lr", action="store_true", help="Skip logistic regression")
     parser.add_argument("--skip-lgbm", action="store_true", help="Skip LightGBM")
+    parser.add_argument("--n-folds", type=int, default=10,
+                        help="Number of outer CV folds (default: 10)")
     args = parser.parse_args()
 
     enabled = []
@@ -261,8 +268,11 @@ def main():
     if not args.skip_lr:
         enabled.append(MODEL_SPECS["logreg"])
 
-    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical())
+    # Load all labeled organoids (no fixed split — k-fold assigns them)
+    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
+                         filters=filters_for_mode("base"))
     print(ds.summary())
+    print(f"Cross-validation: {args.n_folds}-fold stratified (threshold fixed at 0.5)")
 
     days_to_train = args.days if args.days else DAY_ORDER
     results: dict = {spec.name: {} for spec in enabled}
@@ -271,15 +281,20 @@ def main():
         if day not in ds.days:
             print(f"\nSkipping {day} (no data)")
             continue
-        day_features = _features_for_day(ds, day)
+        X, y, feat_names, org_ids = _features_for_day_all(ds, day)
+        if len(X) == 0:
+            print(f"\nSkipping {day} (no features)")
+            continue
+        print(f"\n  {day}: {len(X)} organoids, "
+              f"{int(y.sum())} Not Acceptable / {int((y==0).sum())} Acceptable")
         for spec in enabled:
             print(f"\n{'=' * 50}\n{spec.display} - {day}\n{'=' * 50}")
-            m = _train_one(spec, day, day_features, verbose=True)
+            m = _train_kfold(spec, day, X, y, feat_names,
+                             n_folds=args.n_folds, verbose=True)
             if m is None:
                 continue
             results[spec.name][day] = m
-            print(f"  Accuracy:     {m['accuracy']:.4f}")
-            print(f"  Balanced Acc: {m['balanced_accuracy']:.4f}")
+            print(f"  Balanced Acc: {m['balanced_accuracy_mean']:.4f} ± {m['balanced_accuracy_std']:.4f}")
             print(f"  Recall (NA):  {m['recall_not_acceptable']:.4f}")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

@@ -82,7 +82,10 @@ def plot_balanced_accuracy_by_day(
     late_stage_shade_from_day: if given (e.g. 24), shade the region from that
             day onwards in light grey.
     """
-    days, ys_per_label = [], {label: [] for label in series}
+    days = []
+    ys_per_label:  dict = {label: [] for label in series}
+    std_per_label: dict = {label: [] for label in series}
+
     for day in day_order:
         present = any(day in s for s in series.values())
         if not present:
@@ -90,7 +93,14 @@ def plot_balanced_accuracy_by_day(
         days.append(day)
         for label, s in series.items():
             r = s.get(day)
-            ys_per_label[label].append(r["balanced_accuracy"] if r else None)
+            if r is None:
+                ys_per_label[label].append(None)
+                std_per_label[label].append(None)
+            else:
+                # Prefer mean from k-fold CV; fall back to single-split value
+                ba = r.get("balanced_accuracy_mean", r.get("balanced_accuracy"))
+                ys_per_label[label].append(ba)
+                std_per_label[label].append(r.get("balanced_accuracy_std"))
 
     if not days:
         print(f"plot_balanced_accuracy_by_day: no overlap on {day_order}")
@@ -99,16 +109,26 @@ def plot_balanced_accuracy_by_day(
     style_overrides = style_overrides or {}
     fig, ax = plt.subplots(figsize=(10, 6))
     for label, ys in ys_per_label.items():
-        valid = [(i, v) for i, v in enumerate(ys) if v is not None]
+        stds = std_per_label[label]
+        color = style_overrides.get(label, {}).get("color")
+        marker = style_overrides.get(label, {}).get("marker", "o")
+        linestyle = style_overrides.get(label, {}).get("linestyle", "-")
+
+        valid = [(i, y, s) for i, (y, s) in enumerate(zip(ys, stds)) if y is not None]
         if not valid:
             continue
-        xs, vals = zip(*valid)
-        ax.plot(xs, vals,
-                marker=style_overrides.get(label, {}).get("marker", "o"),
-                linestyle=style_overrides.get(label, {}).get("linestyle", "-"),
-                label=label,
-                color=style_overrides.get(label, {}).get("color"),
-                linewidth=2)
+        xs, vals, svals = zip(*valid)
+        xs, vals, svals = list(xs), list(vals), list(svals)
+
+        line, = ax.plot(xs, vals, marker=marker, linestyle=linestyle,
+                        label=label, color=color, linewidth=2)
+        plot_color = line.get_color()
+
+        # Shade ±1 std if available
+        if any(s is not None for s in svals):
+            lo = [v - s if s is not None else v for v, s in zip(vals, svals)]
+            hi = [v + s if s is not None else v for v, s in zip(vals, svals)]
+            ax.fill_between(xs, lo, hi, color=plot_color, alpha=0.15, linewidth=0)
 
     ax.set_xticks(range(len(days)))
     ax.set_xticklabels(days, rotation=45)
