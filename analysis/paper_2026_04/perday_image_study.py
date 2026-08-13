@@ -315,12 +315,19 @@ def main():
     parser.add_argument("--days", nargs="+", default=None)
     parser.add_argument("--input-mode", default="cm_source_image",
                         choices=["cm_source_image", "cm_source_mask", "overlay", "img", "mask"])
+    parser.add_argument("--filter-mode", default="base",
+                        choices=["base", "series_idor"],
+                        help="'base' (canonical 205 org) or 'series_idor' (132 org, ef<=0.05 "
+                             "every day — same cohort as Amanda's idor_minvotes3/series split)")
     args = parser.parse_args()
 
+    from pipeline.data_loader import filters_for_mode
     set_seed(SEED)
-    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical())
+    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
+                         filters=filters_for_mode(args.filter_mode))
     print(ds.summary())
     print(f"Device: {DEVICE}")
+    print(f"Filter mode: {args.filter_mode}")
 
     days_to_train = args.days if args.days else DAY_ORDER
     results: dict = {}
@@ -333,8 +340,9 @@ def main():
         if m:
             results[day] = m
 
+    suffix = f"_{args.filter_mode}" if args.filter_mode != "base" else ""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUTPUT_DIR / "perday_results.json"
+    out_path = OUTPUT_DIR / f"perday_results{suffix}.json"
     with open(out_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\nSaved results to {out_path}")
