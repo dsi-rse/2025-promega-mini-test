@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=32G
 #SBATCH --cpus-per-task=4
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=logs/perday_image_kfold_%j.out
 #SBATCH --error=logs/perday_image_kfold_%j.err
 
@@ -13,7 +13,7 @@
 #
 # Configurable via env vars:
 #   FILTER_MODE    base | series_idor   (default: series_idor)
-#   INPUT_MODE     cm_source_image | overlay | img  (default: cm_source_image)
+#   INPUT_MODE     cm_image | cm_source_image | overlay | img  (default: cm_image)
 #   DAYS           space-separated days e.g. "Dy30 Dy28" (default: all 11)
 #   N_FOLDS        integer (default: 5)
 #
@@ -25,7 +25,7 @@ set -euo pipefail
 
 PROJ_ROOT="${PROJ_ROOT:-/net/projects/CLS/lding/gitcode/2025-promega-mini-test}"
 FILTER_MODE="${FILTER_MODE:-series_idor}"
-INPUT_MODE="${INPUT_MODE:-cm_source_image}"
+INPUT_MODE="${INPUT_MODE:-cm_image}"
 DAYS="${DAYS:-}"
 N_FOLDS="${N_FOLDS:-5}"
 

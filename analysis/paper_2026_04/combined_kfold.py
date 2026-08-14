@@ -67,7 +67,7 @@ os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 SEED        = 1
 N_FOLDS     = 5
 FILTER_MODE = "series_idor"
-INPUT_MODE  = "cm_source_image"
+INPUT_MODE  = "cm_image"
 ALL_DATA_PATH  = "data/all_data.json"
 MORPH_CSV_PATH = "data/normalized/CONC_data_organoides_residualized_final.csv"
 OUTPUT_DIR  = Path("analysis_output") / "images"

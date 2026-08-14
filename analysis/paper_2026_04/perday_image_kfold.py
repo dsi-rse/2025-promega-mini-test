@@ -364,8 +364,8 @@ def train_one_day_kfold(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--days", nargs="+", default=None)
-    parser.add_argument("--input-mode", default="cm_source_image",
-                        choices=["cm_source_image", "cm_source_mask", "overlay", "img", "mask"])
+    parser.add_argument("--input-mode", default="cm_image",
+                        choices=["cm_image", "cm_source_image", "cm_source_mask", "overlay", "img", "mask"])
     parser.add_argument("--filter-mode", default="series_idor",
                         choices=["base", "series_idor"])
     parser.add_argument("--n-folds", type=int, default=N_FOLDS)

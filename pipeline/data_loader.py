@@ -98,15 +98,16 @@ DAY_ALIAS = {
 # Image-mode → image_path-key mapping. Single source of truth for translating
 # user-facing mode names to record keys.
 # Flat modes resolve directly under images.*; nested modes use tuple (parent, key).
-# cm_source_image / cm_source_mask are aspect-ratio-conserved (resized_575_square)
-# and are the correct inputs for the per-day image classifier.
-# img / overlay use resized_512x384 which is NOT aspect-ratio-conserved.
+# cm_image      — background replaced with ImageNet-mean fill (mean_fill_clip dir)
+# cm_source_*   — aspect-ratio-conserved source images (resized_575_square), NOT mean-filled
+# img / overlay — resized_512x384, NOT aspect-ratio-conserved
 IMAGE_MODE_TO_PATH_KEY = {
     "img": "img_path",
     "mask": "mask_path",
     "overlay": "overlay_path",
+    "cm_image":        ("clipped_meanfill", "cm_image_abs"),
     "cm_source_image": ("clipped_meanfill", "cm_source_image_abs"),
-    "cm_source_mask": ("clipped_meanfill", "cm_source_mask_abs"),
+    "cm_source_mask":  ("clipped_meanfill", "cm_source_mask_abs"),
 }
 
 

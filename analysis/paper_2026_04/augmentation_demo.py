@@ -34,14 +34,14 @@ SEED   = 42
 
 SAMPLES = [
     ("Dy06",   "BA1 96_1 A2",
-     "/net/projects2/promega/2026_04_15_data/intermediate/resized_575_square"
-     "/BA1_96_1_Dy06_A2_nosplit_nostitch.png"),
+     "/net/projects2/promega/2026_04_15_data/intermediate/mean_fill_clip"
+     "/BA1_96_1_Dy06_A2_clipped_meanfill_auto_filled.png"),
     ("Dy20.5", "BA1 96_1 A2",
-     "/net/projects2/promega/2026_04_15_data/intermediate/resized_575_square"
-     "/BA1_96_1_Dy20_A2_nosplit_nostitch.png"),
+     "/net/projects2/promega/2026_04_15_data/intermediate/mean_fill_clip"
+     "/BA1_96_1_Dy20.5_A2_clipped_meanfill_auto_filled.png"),
     ("Dy28",   "BA1 96_1 A2",
-     "/net/projects2/promega/2026_04_15_data/intermediate/resized_575_square"
-     "/BA1_96_1_Dy28_A2_nosplit_nostitch.png"),
+     "/net/projects2/promega/2026_04_15_data/intermediate/mean_fill_clip"
+     "/BA1_96_1_Dy28_A2_clipped_meanfill_auto_filled.png"),
 ]
 
 OUT_PATH = Path("figures/augmentation_demo.png")
@@ -87,9 +87,12 @@ def main():
         if row_i == 0:
             ax.set_title("Original", fontsize=8, fontweight="bold", pad=3)
 
-        # Row label on left
-        axes[row_i, 0].set_ylabel(day_label, fontsize=10, fontweight="bold",
-                                   rotation=0, labelpad=42, va="center")
+        # Row label — annotate outside the axes since axis("off") hides ylabel
+        axes[row_i, 0].annotate(
+            day_label, xy=(0, 0.5), xycoords="axes fraction",
+            xytext=(-8, 0), textcoords="offset points",
+            fontsize=11, fontweight="bold", va="center", ha="right",
+        )
 
         # Dy28: disable translation (organoid touches boundary)
         translate = None if day_label == "Dy28" else (0.1, 0.1)
