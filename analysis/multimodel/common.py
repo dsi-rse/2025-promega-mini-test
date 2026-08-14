@@ -34,9 +34,10 @@ def compute_classification_metrics(y_true, y_pred, y_prob=None) -> dict:
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
     tn, fp, fn, tp = cm.ravel()
 
-    tpr = tp / (tp + fn) if (tp + fn) > 0 else 0.0  # sensitivity / recall_acceptable
-    tnr = tn / (tn + fp) if (tn + fp) > 0 else 0.0  # specificity / recall_not_acceptable
+    tpr = tp / (tp + fn) if (tp + fn) > 0 else 0.0  # recall for NAcc (positive, label 1)
+    tnr = tn / (tn + fp) if (tn + fp) > 0 else 0.0  # recall for Acc  (negative, label 0)
 
+    # labels=[0,1] → index 0 = Acceptable, index 1 = Not Acceptable
     prec, rec, f1, _ = precision_recall_fscore_support(
         y_true, y_pred, labels=[0, 1], zero_division=0,
     )
@@ -46,14 +47,12 @@ def compute_classification_metrics(y_true, y_pred, y_prob=None) -> dict:
         "balanced_accuracy": round(balanced_accuracy_score(y_true, y_pred), 4),
         "sensitivity": round(tpr, 4),
         "specificity": round(tnr, 4),
-        "tpr_acceptable": round(tpr, 4),
-        "tnr_not_acceptable": round(tnr, 4),
-        "precision_not_acceptable": round(prec[0], 4),
-        "recall_not_acceptable": round(rec[0], 4),
-        "f1_not_acceptable": round(f1[0], 4),
-        "precision_acceptable": round(prec[1], 4),
-        "recall_acceptable": round(rec[1], 4),
-        "f1_acceptable": round(f1[1], 4),
+        "precision_not_acceptable": round(prec[1], 4),
+        "recall_not_acceptable": round(rec[1], 4),
+        "f1_not_acceptable": round(f1[1], 4),
+        "precision_acceptable": round(prec[0], 4),
+        "recall_acceptable": round(rec[0], 4),
+        "f1_acceptable": round(f1[0], 4),
         "confusion_matrix": {"tn": int(tn), "fp": int(fp), "fn": int(fn), "tp": int(tp)},
         "n_test": int(len(y_true)),
         "n_positive": int((y_true == 1).sum()),
