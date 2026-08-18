@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse, csv, sys
 from pathlib import Path
 
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -58,8 +59,21 @@ def main():
                     default=Path("/net/projects2/promega/project_data/model_tests/lstm_runs"))
     ap.add_argument("--cohorts-dir", type=Path, default=Path("data/cohorts"))
     ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
+    ap.add_argument("--order", default="chrono", choices=["chrono", "reverse", "shuffle"],
+                    help="Frame order before occlusion. reverse/shuffle test RECENCY: each "
+                         "frame keeps its true day tag, only its sequence position changes. "
+                         "If importance follows position (not day), the model is recency-driven. "
+                         "Note: reordering is out-of-distribution, so absolute predictions "
+                         "degrade — read the importance-by-position pattern, not accuracy.")
+    ap.add_argument("--seed", type=int, default=0, help="Seed for --order shuffle.")
+    ap.add_argument("--occlude-set", default=None,
+                    help="Comma-separated days to occlude JOINTLY (redundancy test), e.g. "
+                         "'28,30'. Adds one row per organoid with day='set:...'. Compare the "
+                         "joint swing to the single-day swings: if joint >> each single, the "
+                         "days are substitutable/redundant.")
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
+    occ_set = [float(x) for x in args.occlude_set.split(",")] if args.occlude_set else None
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     ds_day = day_str(args.day)
@@ -81,25 +95,58 @@ def main():
     model.load_state_dict(state, strict=True)
     model.eval()
 
+    rng = np.random.RandomState(args.seed)
     rows = []
     with torch.no_grad():
         for seqs, days, labels, weights, ids in loader:
             seqs = seqs.to(device); days = days.to(device).float()
             oid = ids[0]
             raw_days = days_used_for(ds, oid, args.day)
-            p_full = torch.sigmoid(model(seqs, days)).item()
             T = seqs.shape[1]
+
+            # Reorder frames (with their day tags) to test recency. Each frame keeps
+            # its true day embedding; only its position in the sequence changes.
+            if args.order == "reverse":
+                perm = list(range(T))[::-1]
+            elif args.order == "shuffle":
+                perm = list(rng.permutation(T))
+            else:
+                perm = list(range(T))
+            if perm != list(range(T)):
+                seqs = seqs[:, perm]; days = days[:, perm]
+                raw_days = [raw_days[i] if i < len(raw_days) else None for i in perm]
+
+            p_full = torch.sigmoid(model(seqs, days)).item()
+
             for t in range(T):
                 occ = seqs.clone()
                 occ[:, t] = 0.0  # ImageNet mean in normalized space = neutral frame
                 p_occ = torch.sigmoid(model(occ, days)).item()
                 rows.append({
+                    "position": t,               # 0 = first fed, T-1 = last (readout)
                     "organoid_id": oid,
                     "day": raw_days[t] if t < len(raw_days) else "",
                     "prob_full": round(p_full, 4),
                     "prob_occluded": round(p_occ, 4),
                     "importance": round(abs(p_full - p_occ), 4),
                 })
+
+            # Joint occlusion of a set of days (redundancy test).
+            if occ_set:
+                idxs = [i for i, d in enumerate(raw_days) if d in occ_set]
+                if idxs:
+                    occ = seqs.clone()
+                    for i in idxs:
+                        occ[:, i] = 0.0
+                    p_occ = torch.sigmoid(model(occ, days)).item()
+                    rows.append({
+                        "position": "",
+                        "organoid_id": oid,
+                        "day": "set:" + ",".join(day_str(d) for d in occ_set),
+                        "prob_full": round(p_full, 4),
+                        "prob_occluded": round(p_occ, 4),
+                        "importance": round(abs(p_full - p_occ), 4),
+                    })
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w", newline="") as f:
