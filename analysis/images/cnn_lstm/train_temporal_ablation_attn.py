@@ -38,12 +38,21 @@ BATCH_SIZE = 16
 NUM_WORKERS = 0
 MAX_EPOCHS = 100
 WARMUP_EPOCHS = 3
-LR_HEAD = 5e-4           # higher: new layers adapt quickly
+LR_HEAD = 3e-4           # lowered for stability on tiny data (was 5e-4)
 LR_CNN_UNFREEZE = 1e-4   # lower: slow fine-tuning of pretrained CNN
 GRAD_CLIP = 1.0
 PATIENCE = 15            # faster convergence / less wasted epochs
 ATTN_DROPOUT = 0.4       # same as your best-performing LSTM run
 SEED = 1                 # aligned with base_effnet and temporal_lstm
+
+# ---- Stabilization knobs (attention collapsed on n=27 with the old settings) ----
+# The earlier collapse had three causes: accuracy-based checkpoint selection
+# (already fixed -> balanced-acc), over-aggressive class weighting, and unfreezing
+# the backbone after only 3 epochs. These control the latter two.
+UNFREEZE_BACKBONE = False   # keep EfficientNet frozen: fewer params, far more stable
+                            # on 27 organoids. Set True to fine-tune last blocks.
+CLASS_WEIGHT_CAP = 2.0      # cap the rare-class upweight (was ~3.5x = destabilizing).
+CLASS_WEIGHT_POWER = 0.5    # sqrt-softened inverse-frequency instead of full.
 
 # -------------- Repro --------------
 def set_seed(seed=SEED):
@@ -64,6 +73,11 @@ class TemporalAttentionPool(nn.Module):
             nn.Tanh(),
             nn.Linear(d // 2, 1),
         )
+        # Zero-init the final score layer so softmax starts UNIFORM: the model
+        # begins as a mean-pool over timesteps and learns to deviate. Prevents
+        # the early collapse onto a single frame that killed the old run.
+        nn.init.zeros_(self.attn[-1].weight)
+        nn.init.zeros_(self.attn[-1].bias)
     def forward(self, feats):  # feats: (B, T, D)
         # weights over time
         w = self.attn(feats).squeeze(-1)         # (B, T)
@@ -263,9 +277,17 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     # replace your criterion with reduction='none' and no pos_weight
     criterion = nn.BCEWithLogitsLoss(reduction='none')
 
-    # before training loop (you already computed these counts)
-    w_pos = n_bad / n_good       # ~0.87
-    w_neg = n_good / n_bad       # ~1.15  <-- upweight negatives slightly
+    # Softened, capped class weights. Full inverse-frequency (n_good/n_bad ~3.5x)
+    # over-upweighted the rare negatives and drove the collapse. Use sqrt-scaled,
+    # ratio-capped weights normalized around 1.0.
+    inv_pos = (n_good + n_bad) / (2.0 * n_good)   # <1 for majority (good)
+    inv_neg = (n_good + n_bad) / (2.0 * n_bad)    # >1 for minority (bad)
+    w_pos = inv_pos ** CLASS_WEIGHT_POWER
+    w_neg = inv_neg ** CLASS_WEIGHT_POWER
+    if w_neg / w_pos > CLASS_WEIGHT_CAP:          # cap the rare-class upweight
+        w_neg = w_pos * CLASS_WEIGHT_CAP
+    print(f"class weights: w_pos(good)={w_pos:.3f}, w_neg(bad)={w_neg:.3f} "
+          f"(cap {CLASS_WEIGHT_CAP}x, power {CLASS_WEIGHT_POWER})")
     
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=5)
 
@@ -276,8 +298,8 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     history = []  # per-epoch metrics for plotting
 
     for epoch in range(1, MAX_EPOCHS + 1):
-        # unfreeze last blocks after warmup
-        if epoch == WARMUP_EPOCHS + 1:
+        # unfreeze last blocks after warmup (only if enabled; frozen is more stable on n=27)
+        if UNFREEZE_BACKBONE and epoch == WARMUP_EPOCHS + 1:
             model.unfreeze_last_blocks()
             optimizer = make_optimizer(lr_cnn=LR_CNN_UNFREEZE, lr_head=LR_HEAD)
             scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=5)
@@ -373,14 +395,26 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     # --- Confusion matrix image ---
     model.eval()
     all_preds_cm, all_labels_cm = [], []
+    attn_by_pos = {}   # position -> list of attention weights across test organoids
     with torch.no_grad():
         for seqs, days, labels, weights, ids in test_loader:
             seqs = seqs.to(device)
             days = days.to(device).float()
-            logits, _ = model(seqs, days)
+            logits, attn = model(seqs, days)   # attn: (B, T)
             preds = (torch.sigmoid(logits) > 0.5).int().cpu()
             all_preds_cm.extend(preds.numpy())
             all_labels_cm.extend(labels.int().cpu().numpy())
+            a = attn.cpu().numpy()
+            for b in range(a.shape[0]):
+                for t in range(a.shape[1]):
+                    attn_by_pos.setdefault(t, []).append(float(a[b, t]))
+    # positions are chronological (0..T-1); map to the day sweep used here.
+    day_seq = [d for d in [3, 6, 8, 10, 13, 15, 17, 20.5, 24, 28, 30] if d <= max_day]
+    attn_by_day = {}
+    for t, vals in sorted(attn_by_pos.items()):
+        day = day_seq[t] if t < len(day_seq) else f"pos{t}"
+        attn_by_day[str(day)] = float(np.mean(vals))
+    print("  mean test attention weight by day:", {k: round(v, 3) for k, v in attn_by_day.items()})
 
     from sklearn.metrics import confusion_matrix as sk_cm
     cm = sk_cm(all_labels_cm, all_preds_cm)
@@ -452,6 +486,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
         "val_false_negatives": val_fn,
         "test_false_positives": test_fp,
         "test_false_negatives": test_fn,
+        "test_attn_by_day": attn_by_day,
     }
 
 

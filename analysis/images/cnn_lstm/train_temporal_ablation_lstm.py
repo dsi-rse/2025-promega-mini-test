@@ -63,8 +63,15 @@ SEED = 1
 
 
 class OrganoidCNN_LSTM(nn.Module):
-    def __init__(self, d_cnn=1280, hidden_size=256, num_layers=1, bidirectional=False):
+    def __init__(self, d_cnn=1280, hidden_size=256, num_layers=1, bidirectional=False,
+                 readout="last"):
         super().__init__()
+        # readout: "last" = final hidden state (recency-biased; every timestep must
+        # pass through the last state to reach the classifier). "mean" = mean-pool
+        # over all LSTM outputs, giving every day a direct route to the prediction
+        # so day 30 can't dominate just by being the only state handed to the head.
+        assert readout in ("last", "mean")
+        self.readout = readout
         eff = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
         eff.classifier = nn.Identity()
         self.cnn = eff
@@ -118,9 +125,12 @@ class OrganoidCNN_LSTM(nn.Module):
             feats.append(f)
         feats = torch.stack(feats, dim=1)
 
-        lstm_out, _ = self.lstm(feats)
-        last_hidden = lstm_out[:, -1, :]
-        logit = self.head(last_hidden).squeeze(1)
+        lstm_out, _ = self.lstm(feats)   # (B, T, H)
+        if self.readout == "mean":
+            pooled = lstm_out.mean(dim=1)      # every timestep routes to the head
+        else:
+            pooled = lstm_out[:, -1, :]        # final-state readout (default)
+        logit = self.head(pooled).squeeze(1)
         return logit
 
 
@@ -202,7 +212,8 @@ def evaluate_binary(model, loader, criterion, device):
 
 # -------------- Training (one day range) --------------
 def train_for_day_range(max_day, train_ids, val_ids, test_ids,
-                        train_meta, val_meta, test_meta, device, output_dir, image_type='clipped'):
+                        train_meta, val_meta, test_meta, device, output_dir, image_type='clipped',
+                        readout='last'):
     print(f"\n{'='*70}\nTRAINING WITH DAYS 3–{max_day}\n{'='*70}")
 
     # ---- ADD/REPLACE THIS SECTION ----
@@ -251,7 +262,7 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
     pos_weight = torch.tensor([n_bad / n_good], device=device, dtype=torch.float32)
     print(f"class balance (train): good={n_good}, bad={n_bad}, pos_weight={pos_weight.item():.3f}")
 
-    model = OrganoidCNN_LSTM().to(device)
+    model = OrganoidCNN_LSTM(readout=readout).to(device)
 
 
     # two phase optimizer setup (we'll swap LR when unfreezing)
@@ -480,6 +491,11 @@ def main():
                               'cohort layout (<dir>/{train,val,test}.json) and legacy '
                               'layout (<dir>/{train,val,test}_idor_series.json). Default: '
                               'data_splits/ (legacy).'))
+    parser.add_argument('--readout', type=str, default='last', choices=['last', 'mean'],
+                        help="LSTM readout: 'last' = final hidden state (recency-biased, "
+                             "default/original); 'mean' = mean-pool all timesteps so every "
+                             "day routes to the classifier. Run both on the same splits to "
+                             "test whether the trajectory helps once day 30 can't dominate.")
     args = parser.parse_args()
 
     set_seed(SEED)
@@ -504,17 +520,20 @@ def main():
     print("STARTING TEMPORAL ABLATION (LSTM POOL)")
     print("="*70)
 
+    print(f"LSTM readout: {args.readout}")
     results = []
     for max_day in DAY_RANGES:
         res = train_for_day_range(
             max_day, train_ids, val_ids, test_ids,
             train_meta, val_meta, test_meta, device,
             out_dir / f"days_3-{max_day}",
-            image_type=args.image_type
+            image_type=args.image_type, readout=args.readout
         )
         results.append(res)
 
-    results_path = out_dir / "temporal_ablation_results_lstm.json"
+    # suffix results by readout so the 'mean' run never overwrites the 'last' run
+    suffix = "" if args.readout == "last" else f"_{args.readout}"
+    results_path = out_dir / f"temporal_ablation_results_lstm{suffix}.json"
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
 
