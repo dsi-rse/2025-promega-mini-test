@@ -84,8 +84,8 @@ def cv_scores(X, y, seed_shift=0, permute=False):
             for tr, te in folds:
                 pipe = make_pipeline(
                     StandardScaler(),
-                    PCA(n_components=min(k, len(tr) - 1)),
-                    LogisticRegression(class_weight="balanced", max_iter=5000, C=1.0),
+                    PCA(n_components=min(k, len(tr) - 1), svd_solver="randomized", random_state=0),
+                    LogisticRegression(class_weight="balanced", max_iter=2000, C=1.0),
                 )
                 pipe.fit(X[f][tr], yy[tr])
                 oof[te] = pipe.predict_proba(X[f][te])[:, 1]
@@ -106,8 +106,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--emb", type=Path, required=True)
     ap.add_argument("--out-prefix", default="traj")
-    ap.add_argument("--outdir", type=Path,
-                    default=Path("/sessions/keen-youthful-franklin/mnt/Promega/promega_cluster_results/FINAL_FIGURES/clean"))
+    ap.add_argument("--outdir", type=Path, default=Path("trajectory_out"),
+                    help="Where to write the CSV + curve (relative to cwd). Default: ./trajectory_out")
     args = ap.parse_args()
 
     d = np.load(args.emb, allow_pickle=True)
