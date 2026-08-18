@@ -1,0 +1,28 @@
+organoid_id,k,true_label,prob_full,prob_lastk,prob_diff,flip
+BA1_96_1_B9_nosplit,1,Acceptable,0.4676,0.5518,0.0842,1
+BA1_96_1_C10_nosplit,1,Acceptable,0.5296,0.6361,0.1065,0
+BA1_96_1_F2_nosplit,1,Acceptable,0.6376,0.6476,0.0101,0
+BA1_96_1_F4_nosplit,1,Acceptable,0.6221,0.6698,0.0478,0
+BA1_96_1_G10_nosplit,1,Acceptable,0.4635,0.5734,0.1099,1
+BA1_96_1_G3_nosplit,1,Acceptable,0.5745,0.6624,0.0879,0
+BA1_96_1_H10_nosplit,1,Acceptable,0.7673,0.7149,0.0524,0
+BA2_96_1_C10_nosplit,1,Acceptable,0.6681,0.6834,0.0153,0
+BA2_96_1_C11_nosplit,1,Acceptable,0.8818,0.7795,0.1023,0
+BA2_96_1_C8_nosplit,1,Acceptable,0.8281,0.7946,0.0335,0
+BA2_96_1_D9_nosplit,1,Acceptable,0.7413,0.7193,0.022,0
+BA2_96_1_E12_nosplit,1,Not Acceptable,0.0954,0.2669,0.1715,0
+BA2_96_1_E3_nosplit,1,Not Acceptable,0.027,0.121,0.0941,0
+BA2_96_1_E5_nosplit,1,Acceptable,0.7888,0.746,0.0428,0
+BA2_96_1_G7_nosplit,1,Acceptable,0.5315,0.5352,0.0037,0
+BA2_96_1_H11_nosplit,1,Acceptable,0.8062,0.7281,0.078,0
+BA2_96_2_B10_nosplit,1,Acceptable,0.7894,0.785,0.0044,0
+BA2_96_2_C2_nosplit,1,Not Acceptable,0.0945,0.3174,0.223,0
+BA2_96_2_E8_nosplit,1,Acceptable,0.9346,0.9073,0.0273,0
+BA2_96_2_F11_nosplit,1,Acceptable,0.8261,0.7249,0.1012,0
+BA2_96_2_F12_nosplit,1,Not Acceptable,0.0658,0.2513,0.1855,0
+BA2_96_2_G1_nosplit,1,Acceptable,0.8566,0.7418,0.1148,0
+BA2_96_2_G3_nosplit,1,Acceptable,0.8125,0.7787,0.0338,0
+BA2_96_2_G6_nosplit,1,Not Acceptable,0.3369,0.492,0.1551,0
+BA2_96_2_G9_nosplit,1,Not Acceptable,0.0371,0.1533,0.1163,0
+BA2_96_2_H3_nosplit,1,Acceptable,0.2776,0.4202,0.1426,0
+BA2_96_2_H8_nosplit,1,Acceptable,0.8129,0.7663,0.0466,0
