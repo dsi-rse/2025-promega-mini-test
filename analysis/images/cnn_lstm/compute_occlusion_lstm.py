@@ -71,6 +71,11 @@ def main():
                          "'28,30'. Adds one row per organoid with day='set:...'. Compare the "
                          "joint swing to the single-day swings: if joint >> each single, the "
                          "days are substitutable/redundant.")
+    ap.add_argument("--keep-last-k", type=int, default=None,
+                    help="TRUNCATION test: run the model on only the last K frames and compare "
+                         "to the full-sequence prediction (no occlusion). Writes prob_full, "
+                         "prob_lastk, and whether the hard call flipped. K=1 tests whether the "
+                         "model is effectively a single-last-frame classifier.")
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
     occ_set = [float(x) for x in args.occlude_set.split(",")] if args.occlude_set else None
@@ -117,6 +122,22 @@ def main():
                 raw_days = [raw_days[i] if i < len(raw_days) else None for i in perm]
 
             p_full = torch.sigmoid(model(seqs, days)).item()
+
+            # Truncation test: predict from only the last K frames, compare to full.
+            if args.keep_last_k is not None:
+                k = min(args.keep_last_k, T)
+                p_lastk = torch.sigmoid(model(seqs[:, -k:], days[:, -k:])).item()
+                lab = int(labels.item())
+                rows.append({
+                    "organoid_id": oid,
+                    "k": k,
+                    "true_label": "Acceptable" if lab == 1 else "Not Acceptable",
+                    "prob_full": round(p_full, 4),
+                    "prob_lastk": round(p_lastk, 4),
+                    "prob_diff": round(abs(p_full - p_lastk), 4),
+                    "flip": int((p_full > 0.5) != (p_lastk > 0.5)),
+                })
+                continue  # truncation mode: skip per-frame occlusion
 
             for t in range(T):
                 occ = seqs.clone()
