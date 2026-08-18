@@ -328,10 +328,10 @@ def train_for_day_range(max_day, train_ids, val_ids, test_ids,
 
             # For now: no weighting, use scalar directly
             loss_raw = criterion(logits, labels)          # shape (B,)
-            cls_w = labels * 1.0 + (1 - labels) * (n_good / n_bad)
-            loss = (loss_raw * weights * cls_w).mean()
-            # cls_w = labels * (n_bad / n_good) + (1 - labels) * (n_good / n_bad)
+            # cls_w = labels * 1.0 + (1 - labels) * (n_good / n_bad)
             # loss = (loss_raw * weights * cls_w).mean()
+            cls_w = labels * (n_bad / n_good) + (1 - labels) * (n_good / n_bad)
+            loss = (loss_raw * weights * cls_w).mean()
 
 
             loss.backward()

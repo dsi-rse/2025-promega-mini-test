@@ -76,6 +76,11 @@ def main():
                          "to the full-sequence prediction (no occlusion). Writes prob_full, "
                          "prob_lastk, and whether the hard call flipped. K=1 tests whether the "
                          "model is effectively a single-last-frame classifier.")
+    ap.add_argument("--readout", default="last", choices=["last", "mean"],
+                    help="Which trained model to load: 'last' = final-state LSTM (default, in "
+                         "temporal_ablation_lstm/); 'mean' = mean-pool LSTM (in "
+                         "temporal_ablation_lstm_mean/). Use 'mean' to occlusion-test the "
+                         "mean-pool checkpoint for the final-state-vs-mean-pool comparison.")
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args()
     occ_set = [float(x) for x in args.occlude_set.split(",")] if args.occlude_set else None
@@ -92,11 +97,12 @@ def main():
     # batch_size=1: sequences have variable length; occlude one frame at a time.
     loader = DataLoader(ds, batch_size=1, shuffle=False, num_workers=0)
 
-    ckpt = args.runs_root / args.label / "temporal_ablation_lstm" / f"days_3-{ds_day}" / f"model_days_3-{ds_day}.pth"
-    print(f"Loading checkpoint: {ckpt}")
+    subdir = "temporal_ablation_lstm" + ("_mean" if args.readout == "mean" else "")
+    ckpt = args.runs_root / args.label / subdir / f"days_3-{ds_day}" / f"model_days_3-{ds_day}.pth"
+    print(f"Loading checkpoint ({args.readout} readout): {ckpt}")
     state = torch.load(ckpt, map_location=device)
     state = state.get("state_dict", state)
-    model = OrganoidCNN_LSTM().to(device)
+    model = OrganoidCNN_LSTM(readout=args.readout).to(device)
     model.load_state_dict(state, strict=True)
     model.eval()
 
