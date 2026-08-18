@@ -1,0 +1,28 @@
+day,organoid_id,true_label,prob_acceptable,pred,correct,confidence,focus,mask_frac,enrichment
+13.0,BA1_96_1_B9_nosplit,Acceptable,0.5296,Acceptable,1,0.0296,0.0334,0.0191,1.751
+13.0,BA1_96_1_C10_nosplit,Acceptable,0.5234,Acceptable,1,0.0234,0.0597,0.0181,3.295
+13.0,BA1_96_1_F2_nosplit,Acceptable,0.5128,Acceptable,1,0.0128,0.0305,0.0185,1.647
+13.0,BA1_96_1_F4_nosplit,Acceptable,0.521,Acceptable,1,0.021,0.0517,0.018,2.872
+13.0,BA1_96_1_G10_nosplit,Acceptable,0.5232,Acceptable,1,0.0232,0.0548,0.0177,3.092
+13.0,BA1_96_1_G3_nosplit,Acceptable,0.5126,Acceptable,1,0.0126,0.016,0.0216,0.743
+13.0,BA1_96_1_H10_nosplit,Acceptable,0.5227,Acceptable,1,0.0227,0.0694,0.0211,3.298
+13.0,BA2_96_1_C10_nosplit,Acceptable,0.519,Acceptable,1,0.019,0.0727,0.0216,3.369
+13.0,BA2_96_1_C11_nosplit,Acceptable,0.5117,Acceptable,1,0.0117,0.0463,0.026,1.779
+13.0,BA2_96_1_C8_nosplit,Acceptable,0.5205,Acceptable,1,0.0205,0.0652,0.0234,2.79
+13.0,BA2_96_1_D9_nosplit,Acceptable,0.5157,Acceptable,1,0.0157,0.0269,0.025,1.075
+13.0,BA2_96_1_E12_nosplit,Not Acceptable,0.5104,Acceptable,0,0.0104,0.0446,0.0216,2.066
+13.0,BA2_96_1_E3_nosplit,Not Acceptable,0.5016,Acceptable,0,0.0016,0.0144,0.0232,0.621
+13.0,BA2_96_1_E5_nosplit,Acceptable,0.5034,Acceptable,1,0.0034,0.0362,0.0245,1.476
+13.0,BA2_96_1_G7_nosplit,Acceptable,0.5114,Acceptable,1,0.0114,0.055,0.0247,2.23
+13.0,BA2_96_1_H11_nosplit,Acceptable,0.5013,Acceptable,1,0.0013,0.0006,0.0214,0.029
+13.0,BA2_96_2_B10_nosplit,Acceptable,0.5036,Acceptable,1,0.0036,0.0804,0.018,4.479
+13.0,BA2_96_2_C2_nosplit,Not Acceptable,0.4992,Not Acceptable,1,0.0008,0.0189,0.0199,0.948
+13.0,BA2_96_2_E8_nosplit,Acceptable,0.5088,Acceptable,1,0.0088,0.0084,0.0208,0.404
+13.0,BA2_96_2_F11_nosplit,Acceptable,0.5242,Acceptable,1,0.0242,0.045,0.0218,2.061
+13.0,BA2_96_2_F12_nosplit,Not Acceptable,0.4998,Not Acceptable,1,0.0002,0.0245,0.0254,0.966
+13.0,BA2_96_2_G1_nosplit,Acceptable,0.5197,Acceptable,1,0.0197,0.1147,0.0243,4.724
+13.0,BA2_96_2_G3_nosplit,Acceptable,0.5281,Acceptable,1,0.0281,0.1005,0.0234,4.289
+13.0,BA2_96_2_G6_nosplit,Not Acceptable,0.5088,Acceptable,0,0.0088,0.04,0.022,1.815
+13.0,BA2_96_2_G9_nosplit,Not Acceptable,0.5106,Acceptable,0,0.0106,0.1217,0.0204,5.958
+13.0,BA2_96_2_H3_nosplit,Acceptable,0.5133,Acceptable,1,0.0133,0.0224,0.0237,0.946
+13.0,BA2_96_2_H8_nosplit,Acceptable,0.5184,Acceptable,1,0.0184,0.1446,0.0238,6.072
