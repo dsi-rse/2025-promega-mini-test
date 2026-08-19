@@ -141,9 +141,9 @@ class EfficientNetClassifier(nn.Module):
         return self.head(self.backbone(x)).squeeze(-1)
 
 
-def _build_transforms(train: bool, translate: tuple = (0.1, 0.1)):
+def _build_transforms(train: bool, translate: tuple = (0.1, 0.1), augment: bool = True):
     base = [T.Resize((IMG_HEIGHT, IMG_WIDTH))]
-    if train:
+    if train and augment:
         base.extend([
             T.RandomHorizontalFlip(p=0.5),
             T.RandomAffine(degrees=180, translate=translate, fill=_FILL),
@@ -179,7 +179,8 @@ def _get_image_paths(ds: OrganoidDataset, org_ids: List[str], day: str,
 
 
 def _train_one_fold(train_paths, train_labels, val_paths, val_labels,
-                    day: str, fold_seed: int, verbose: bool) -> Tuple[np.ndarray, np.ndarray]:
+                    day: str, fold_seed: int, verbose: bool,
+                    augment: bool = True) -> Tuple[np.ndarray, np.ndarray]:
     """Train one EfficientNet fold; return (probs, preds) arrays — empty if skipped."""
     n_pos = sum(train_labels)
     n_neg = len(train_labels) - n_pos
@@ -190,7 +191,7 @@ def _train_one_fold(train_paths, train_labels, val_paths, val_labels,
     translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
 
     train_loader = DataLoader(
-        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate)),
+        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate, augment=augment)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0,
     )
     val_loader = DataLoader(
@@ -264,6 +265,7 @@ def train_one_day_kfold(
     *,
     input_mode: str = "cm_source_image",
     n_folds: int = N_FOLDS,
+    augment: bool = True,
     verbose: bool = True,
 ) -> Optional[dict]:
     """Run n_folds CV for one day; return metrics dict or None."""
@@ -307,7 +309,7 @@ def train_one_day_kfold(
 
         model, best_val_acc = _train_one_fold(
             train_paths, train_labels, val_paths, val_labels,
-            day, fold_seed, verbose,
+            day, fold_seed, verbose, augment=augment,
         )
 
         # Evaluate on test
@@ -369,7 +371,10 @@ def main():
     parser.add_argument("--filter-mode", default="series_idor",
                         choices=["base", "series_idor"])
     parser.add_argument("--n-folds", type=int, default=N_FOLDS)
+    parser.add_argument("--no-augmentation", action="store_true",
+                        help="Disable training augmentation (resize + normalize only)")
     args = parser.parse_args()
+    augment = not args.no_augmentation
 
     set_seed(SEED)
     ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
@@ -378,6 +383,7 @@ def main():
     print(f"Device:      {DEVICE}")
     print(f"Filter mode: {args.filter_mode}")
     print(f"CV folds:    {args.n_folds}")
+    print(f"Augment:     {augment}")
 
     # Build per-organoid array (label constant across days)
     all_org_ids = [oid for oid in ds.organoid_ids
@@ -399,6 +405,7 @@ def main():
             ds, day, all_org_ids, all_labels,
             input_mode=args.input_mode,
             n_folds=args.n_folds,
+            augment=augment,
             verbose=True,
         )
         if m:
@@ -407,6 +414,8 @@ def main():
                   f"FoldMean={m['balanced_accuracy_mean']:.4f}±{m['balanced_accuracy_std']:.4f}")
 
     suffix = f"_{args.filter_mode}" if args.filter_mode != "base" else ""
+    if not augment:
+        suffix += "_noaug"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUTPUT_DIR / f"perday_results_kfold{suffix}.json"
     with open(out_path, "w") as f:
