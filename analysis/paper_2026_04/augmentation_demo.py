@@ -51,14 +51,16 @@ def _resize_only():
     return T.Compose([T.Resize((IMG_HEIGHT, IMG_WIDTH))])
 
 
-def _aug_transform(translate=(0.1, 0.1)):
+def _aug_transform(translate=(0.1, 0.1), degrees=180):
     """Training augmentation without ToTensor/Normalize — returns PIL image."""
-    return T.Compose([
+    base = [
         T.Resize((IMG_HEIGHT, IMG_WIDTH)),
         T.RandomHorizontalFlip(p=0.5),
-        T.RandomAffine(degrees=180, translate=translate, fill=_FILL),
-        T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05),
-    ])
+    ]
+    if degrees > 0 or translate is not None:
+        base.append(T.RandomAffine(degrees=degrees, translate=translate, fill=_FILL))
+    base.append(T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05))
+    return T.Compose(base)
 
 
 def _to_np(pil_img):
@@ -94,9 +96,11 @@ def main():
             fontsize=11, fontweight="bold", va="center", ha="right",
         )
 
-        # Dy28: disable translation (organoid touches boundary)
-        translate = None if day_label == "Dy28" else (0.1, 0.1)
-        aug_tf = _aug_transform(translate=translate)
+        # Boundary days: disable translation and rotation (organoid fills frame)
+        is_boundary = day_label == "Dy28"
+        translate = None if is_boundary else (0.1, 0.1)
+        degrees   = 0    if is_boundary else 180
+        aug_tf = _aug_transform(translate=translate, degrees=degrees)
 
         # Columns 1–12: augmented
         random.seed(SEED)
@@ -123,7 +127,7 @@ def main():
 
     # Note about Dy28 translation
     fig.text(0.5, 0.01,
-             "Dy28: translation disabled (organoid may touch image boundary).  "
+             "Dy28: translation and rotation disabled (organoid fills frame).  "
              "Dy06/Dy20.5: rotation ±180°, translation ±10%, H-flip, colour jitter.",
              ha="center", va="bottom", fontsize=7.5, color="#555555",
              style="italic")

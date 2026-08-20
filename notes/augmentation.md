@@ -45,10 +45,11 @@ At **validation and test time**, only `Resize → ToTensor → Normalize` is app
 
 ### Special case — boundary days
 
-Days **Dy28** and **Dy30** (`_BOUNDARY_DAYS`) disable the translation component
-(`translate=None`).  At late timepoints the organoid may reach the image boundary;
-translating it further risks cropping the organoid, which would introduce
-artefactual "edge" features.  Rotation and colour jitter are still applied.
+Days **Dy28** and **Dy30** (`_BOUNDARY_DAYS`) disable both translation
+(`translate=None`) and rotation (`degrees=0`).  At late timepoints the organoid
+fills most of the frame; rotating or translating it risks cropping the organoid
+body and introducing artefactual edge features.  Horizontal flip and colour
+jitter are still applied.
 
 ---
 
@@ -61,7 +62,7 @@ original (resize only).  Columns 1–12 are 12 independent draws from the
 augmentation pipeline with different random seeds.
 
 - **Dy06 / Dy20.5** — rotation, translation, flip, and colour jitter are all active.
-- **Dy28** — translation is disabled; the organoid fills most of the frame.
+- **Dy28** — translation and rotation are both disabled; only flip and colour jitter apply.
 
 ---
 

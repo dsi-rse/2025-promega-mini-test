@@ -183,14 +183,13 @@ class _EfficientNet(nn.Module):
     def forward(self, x): return self.head(self.backbone(x)).squeeze(-1)
 
 
-def _build_transforms(train: bool, translate=(0.1, 0.1)):
+def _build_transforms(train: bool, translate=(0.1, 0.1), degrees=180):
     base = [T.Resize((IMG_HEIGHT, IMG_WIDTH))]
     if train:
-        base += [
-            T.RandomHorizontalFlip(0.5),
-            T.RandomAffine(degrees=180, translate=translate, fill=_FILL),
-            T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05),
-        ]
+        base.append(T.RandomHorizontalFlip(0.5))
+        if degrees > 0 or translate is not None:
+            base.append(T.RandomAffine(degrees=degrees, translate=translate, fill=_FILL))
+        base.append(T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05))
     base += [T.ToTensor(), T.Normalize(IMAGENET_MEAN, IMAGENET_STD)]
     return T.Compose(base)
 
@@ -223,8 +222,9 @@ def _train_efficientnet_fold(
         return None
     set_seed(fold_seed)
     translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
+    degrees   = 0   if day in _BOUNDARY_DAYS else 180
     train_loader = DataLoader(
-        _ImgDataset(train_paths, train_labels, _build_transforms(True, translate)),
+        _ImgDataset(train_paths, train_labels, _build_transforms(True, translate, degrees)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
     val_loader = DataLoader(
         _ImgDataset(val_paths, val_labels, _build_transforms(False)),

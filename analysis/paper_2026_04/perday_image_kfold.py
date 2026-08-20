@@ -141,14 +141,14 @@ class EfficientNetClassifier(nn.Module):
         return self.head(self.backbone(x)).squeeze(-1)
 
 
-def _build_transforms(train: bool, translate: tuple = (0.1, 0.1), augment: bool = True):
+def _build_transforms(train: bool, translate: tuple = (0.1, 0.1), degrees: int = 180,
+                      augment: bool = True):
     base = [T.Resize((IMG_HEIGHT, IMG_WIDTH))]
     if train and augment:
-        base.extend([
-            T.RandomHorizontalFlip(p=0.5),
-            T.RandomAffine(degrees=180, translate=translate, fill=_FILL),
-            T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05),
-        ])
+        base.append(T.RandomHorizontalFlip(p=0.5))
+        if degrees > 0 or translate is not None:
+            base.append(T.RandomAffine(degrees=degrees, translate=translate, fill=_FILL))
+        base.append(T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05))
     base.extend([T.ToTensor(), T.Normalize(IMAGENET_MEAN, IMAGENET_STD)])
     return T.Compose(base)
 
@@ -189,9 +189,10 @@ def _train_one_fold(train_paths, train_labels, val_paths, val_labels,
 
     set_seed(fold_seed)
     translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
+    degrees   = 0   if day in _BOUNDARY_DAYS else 180
 
     train_loader = DataLoader(
-        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate, augment=augment)),
+        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate, degrees=degrees, augment=augment)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0,
     )
     val_loader = DataLoader(
