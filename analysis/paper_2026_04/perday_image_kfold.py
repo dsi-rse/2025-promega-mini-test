@@ -81,7 +81,7 @@ IMG_WIDTH = 512
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD  = [0.229, 0.224, 0.225]
 
-_FILL = [int(v * 255) for v in IMAGENET_MEAN]   # [123, 116, 103]
+_FILL = [178, 178, 178]   # actual background fill of cm_image_abs (verified from data)
 _BOUNDARY_DAYS = {"Dy28", "Dy30"}
 
 

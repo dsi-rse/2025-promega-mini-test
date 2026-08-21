@@ -22,20 +22,20 @@ from sklearn.metrics import (
 )
 
 
-# ImageNet channel means in 0-255 uint8 space, matching the mean-fill preprocessing.
-# int() truncates: [123, 116, 103].  Tolerance of ±2 covers any rounding differences
-# between our fill and the external preprocessing pipeline.
-IMAGENET_FILL_U8 = np.array([123, 116, 103], dtype=np.uint8)
-_BG_TOLERANCE = 2
+# Actual background fill value used by the mean_fill_clip preprocessing pipeline.
+# Verified from corner pixels across the dataset: always exactly [178, 178, 178].
+# Also used as the RandomAffine fill colour so rotation/translation corners match.
+BG_FILL_U8 = np.array([178, 178, 178], dtype=np.uint8)
+_BG_TOLERANCE = 3  # ±3 covers JPEG/PNG rounding and bilinear interpolation edges
 
 
 class ForegroundColorJitter:
     """Apply torchvision ColorJitter to the organoid region only.
 
-    Background pixels (those matching the ImageNet mean-fill value within
-    _BG_TOLERANCE) are identified before jitter and restored afterwards.
-    This keeps both the original background AND any affine-fill corners at a
-    consistent intensity, so the model never sees colour-shifted background.
+    Background pixels (those matching BG_FILL_U8 within _BG_TOLERANCE) are
+    identified before jitter and restored afterwards.  This keeps both the
+    original background AND any affine-fill corners at a consistent intensity,
+    so the model never sees colour-shifted background or mismatched corners.
 
     Must be positioned AFTER geometric transforms (Resize, RandomAffine) and
     BEFORE ToTensor/Normalize.  Operates on PIL images.
@@ -50,11 +50,11 @@ class ForegroundColorJitter:
     def __call__(self, img: Image.Image) -> Image.Image:
         arr = np.array(img)                          # H × W × 3, uint8
         # Background mask: all channels within tolerance of fill value
-        diff = np.abs(arr.astype(np.int16) - IMAGENET_FILL_U8.astype(np.int16))
+        diff = np.abs(arr.astype(np.int16) - BG_FILL_U8.astype(np.int16))
         bg = np.all(diff <= _BG_TOLERANCE, axis=2)  # H × W bool
 
         jittered = np.array(self._jitter(img))
-        jittered[bg] = IMAGENET_FILL_U8              # restore background
+        jittered[bg] = BG_FILL_U8                   # restore background
         return Image.fromarray(jittered)
 
 
