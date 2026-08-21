@@ -12,6 +12,7 @@ from typing import Dict, Mapping, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL import Image
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -19,6 +20,42 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
     roc_auc_score,
 )
+
+
+# ImageNet channel means in 0-255 uint8 space, matching the mean-fill preprocessing.
+# int() truncates: [123, 116, 103].  Tolerance of ±2 covers any rounding differences
+# between our fill and the external preprocessing pipeline.
+IMAGENET_FILL_U8 = np.array([123, 116, 103], dtype=np.uint8)
+_BG_TOLERANCE = 2
+
+
+class ForegroundColorJitter:
+    """Apply torchvision ColorJitter to the organoid region only.
+
+    Background pixels (those matching the ImageNet mean-fill value within
+    _BG_TOLERANCE) are identified before jitter and restored afterwards.
+    This keeps both the original background AND any affine-fill corners at a
+    consistent intensity, so the model never sees colour-shifted background.
+
+    Must be positioned AFTER geometric transforms (Resize, RandomAffine) and
+    BEFORE ToTensor/Normalize.  Operates on PIL images.
+    """
+    def __init__(self, brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05):
+        from torchvision import transforms as T
+        self._jitter = T.ColorJitter(
+            brightness=brightness, contrast=contrast,
+            saturation=saturation, hue=hue,
+        )
+
+    def __call__(self, img: Image.Image) -> Image.Image:
+        arr = np.array(img)                          # H × W × 3, uint8
+        # Background mask: all channels within tolerance of fill value
+        diff = np.abs(arr.astype(np.int16) - IMAGENET_FILL_U8.astype(np.int16))
+        bg = np.all(diff <= _BG_TOLERANCE, axis=2)  # H × W bool
+
+        jittered = np.array(self._jitter(img))
+        jittered[bg] = IMAGENET_FILL_U8              # restore background
+        return Image.fromarray(jittered)
 
 
 def compute_classification_metrics(y_true, y_pred, y_prob=None) -> dict:

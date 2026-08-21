@@ -41,15 +41,31 @@ At **validation and test time**, only `Resize → ToTensor → Normalize` is app
 | `Resize` | 384 × 512 | Standardise spatial resolution; matches EfficientNet-B0 input expectations |
 | `RandomHorizontalFlip` | p = 0.5 | Organoids have no preferred left-right orientation |
 | `RandomAffine` | rotation ±180°, translate ±10% | Full rotation invariance; small translation simulates slight well-positioning variance |
-| `ColorJitter` | brightness ±0.3, contrast ±0.3, saturation ±0.2, hue ±0.05 | Compensates for day-to-day illumination drift and staining variability |
+| `ForegroundColorJitter` | brightness ±0.3, contrast ±0.3, saturation ±0.2, hue ±0.05 | Compensates for day-to-day illumination drift and staining variability; applied to organoid pixels only (see below) |
 
 ### Special case — boundary days
 
 Days **Dy28** and **Dy30** (`_BOUNDARY_DAYS`) disable both translation
 (`translate=None`) and rotation (`degrees=0`).  At late timepoints the organoid
 fills most of the frame; rotating or translating it risks cropping the organoid
-body and introducing artefactual edge features.  Horizontal flip and colour
-jitter are still applied.
+body and introducing artefactual edge features.  Horizontal flip and foreground
+colour jitter are still applied.
+
+### Foreground-only colour jitter
+
+`ForegroundColorJitter` (defined in `common.py`) wraps `torchvision.ColorJitter`
+and applies it only to the organoid region:
+
+1. Identify background pixels — those within ±2 of the ImageNet mean-fill value
+   [123, 116, 103] across all three channels.  This covers both the original
+   mean-filled background and any corners introduced by `RandomAffine`.
+2. Apply `ColorJitter` to the whole image.
+3. Restore all background pixels to exactly [123, 116, 103].
+
+This ensures (a) the background stays at a consistent intensity regardless of
+augmentation, and (b) affine-fill corners are not colour-shifted relative to the
+original background, so the model never sees a spurious intensity boundary at the
+edge of the augmented region.
 
 ---
 

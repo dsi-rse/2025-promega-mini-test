@@ -22,6 +22,8 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms as T
 
+from .common import ForegroundColorJitter
+
 warnings.filterwarnings("ignore")
 
 IMG_HEIGHT = 384
@@ -59,7 +61,8 @@ def _aug_transform(translate=(0.1, 0.1), degrees=180):
     ]
     if degrees > 0 or translate is not None:
         base.append(T.RandomAffine(degrees=degrees, translate=translate, fill=_FILL))
-    base.append(T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05))
+    base.append(ForegroundColorJitter(brightness=0.3, contrast=0.3,
+                                      saturation=0.2, hue=0.05))
     return T.Compose(base)
 
 

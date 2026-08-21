@@ -52,7 +52,11 @@ from pipeline.data_loader import (
 )
 from pipeline.splits import Splits
 
-from .common import compute_classification_metrics, plot_balanced_accuracy_by_day
+from .common import (
+    ForegroundColorJitter,
+    compute_classification_metrics,
+    plot_balanced_accuracy_by_day,
+)
 
 warnings.filterwarnings("ignore", category=UserWarning)
 os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
@@ -148,7 +152,10 @@ def _build_transforms(train: bool, translate: tuple = (0.1, 0.1), degrees: int =
         base.append(T.RandomHorizontalFlip(p=0.5))
         if degrees > 0 or translate is not None:
             base.append(T.RandomAffine(degrees=degrees, translate=translate, fill=_FILL))
-        base.append(T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05))
+        # ForegroundColorJitter: jitters organoid pixels only; background and
+        # affine-fill corners are restored to the ImageNet mean fill value.
+        base.append(ForegroundColorJitter(brightness=0.3, contrast=0.3,
+                                          saturation=0.2, hue=0.05))
     base.extend([T.ToTensor(), T.Normalize(IMAGENET_MEAN, IMAGENET_STD)])
     return T.Compose(base)
 
