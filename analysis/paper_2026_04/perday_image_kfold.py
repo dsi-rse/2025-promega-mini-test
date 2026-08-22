@@ -195,11 +195,10 @@ def _train_one_fold(train_paths, train_labels, val_paths, val_labels,
         return np.array([]), np.array([])
 
     set_seed(fold_seed)
-    translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
-    degrees   = 0   if day in _BOUNDARY_DAYS else 180
+    degrees = 0 if day in _BOUNDARY_DAYS else 180
 
     train_loader = DataLoader(
-        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=translate, degrees=degrees, augment=augment)),
+        OrganoidImageDataset(train_paths, train_labels, _build_transforms(True, translate=(0.1, 0.1), degrees=degrees, augment=augment)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0,
     )
     val_loader = DataLoader(
@@ -390,8 +389,13 @@ def main():
     print(ds.summary())
     print(f"Device:      {DEVICE}")
     print(f"Filter mode: {args.filter_mode}")
+    print(f"Input mode:  {args.input_mode}")
     print(f"CV folds:    {args.n_folds}")
     print(f"Augment:     {augment}")
+    if augment:
+        print(f"  H-flip p=0.5, translate=±10% (all days)")
+        print(f"  Rotation=±180° (non-boundary days), disabled for {sorted(_BOUNDARY_DAYS)}")
+        print(f"  ForegroundColorJitter brightness=0.3 contrast=0.3 sat=0.2 hue=0.05")
 
     # Build per-organoid array (label constant across days)
     all_org_ids = [oid for oid in ds.organoid_ids

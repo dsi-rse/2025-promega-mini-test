@@ -226,10 +226,9 @@ def _train_efficientnet_fold(
     if n_pos == 0 or n_neg == 0 or len(test_paths) == 0:
         return None
     set_seed(fold_seed)
-    translate = None if day in _BOUNDARY_DAYS else (0.1, 0.1)
-    degrees   = 0   if day in _BOUNDARY_DAYS else 180
+    degrees = 0 if day in _BOUNDARY_DAYS else 180
     train_loader = DataLoader(
-        _ImgDataset(train_paths, train_labels, _build_transforms(True, translate, degrees)),
+        _ImgDataset(train_paths, train_labels, _build_transforms(True, (0.1, 0.1), degrees)),
         batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
     val_loader = DataLoader(
         _ImgDataset(val_paths, val_labels, _build_transforms(False)),

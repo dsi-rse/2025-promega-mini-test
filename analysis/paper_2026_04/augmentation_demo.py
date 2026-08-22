@@ -99,11 +99,11 @@ def main():
             fontsize=11, fontweight="bold", va="center", ha="right",
         )
 
-        # Boundary days: disable translation and rotation (organoid fills frame)
-        is_boundary = day_label == "Dy28"
-        translate = None if is_boundary else (0.1, 0.1)
-        degrees   = 0    if is_boundary else 180
-        aug_tf = _aug_transform(translate=translate, degrees=degrees)
+        # Dy28: rotation disabled (data shows no boundary risk, but rotation
+        # of a large organoid can clip it in the non-square 384×512 frame).
+        # Translation is enabled for all days.
+        degrees = 0 if day_label == "Dy28" else 180
+        aug_tf = _aug_transform(translate=(0.1, 0.1), degrees=degrees)
 
         # Columns 1–12: augmented
         random.seed(SEED)
@@ -130,7 +130,7 @@ def main():
 
     # Note about Dy28 translation
     fig.text(0.5, 0.01,
-             "Dy28: translation and rotation disabled (organoid fills frame).  "
+             "Dy28: rotation disabled (organoid large in frame); translation ±10% enabled for all days.  "
              "Dy06/Dy20.5: rotation ±180°, translation ±10%, H-flip, colour jitter.",
              ha="center", va="bottom", fontsize=7.5, color="#555555",
              style="italic")
