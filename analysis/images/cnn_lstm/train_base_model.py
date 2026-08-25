@@ -52,6 +52,33 @@ SEED = 1
 TARGET_SIZE = (384, 512)  # (H, W) to match coworker's code
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
+# Background fill of the mean_fill_clip ('clipped') preprocessing, verified as
+# [178,178,178] in the coworker's pipeline. Used so RandomAffine corners match
+# the real background and so ColorJitter can be restricted to the organoid.
+BG_FILL_U8 = np.array([178, 178, 178], dtype=np.uint8)
+_BG_TOLERANCE = 3
+_BOUNDARY_DAYS = {28, 30}   # rotation disabled on these days (per coworker's stable setup)
+
+
+class ForegroundColorJitter:
+    """Apply ColorJitter to the organoid only; restore the 178 background.
+
+    Ported from the coworker's common.py. Place AFTER geometric transforms
+    (Resize/RandomAffine) and BEFORE ToTensor. Operates on PIL images.
+    """
+    def __init__(self, brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05):
+        self._jitter = T.ColorJitter(brightness=brightness, contrast=contrast,
+                                     saturation=saturation, hue=hue)
+
+    def __call__(self, img):
+        arr = np.array(img)
+        diff = np.abs(arr.astype(np.int16) - BG_FILL_U8.astype(np.int16))
+        bg = np.all(diff <= _BG_TOLERANCE, axis=2)
+        jittered = np.array(self._jitter(img))
+        jittered[bg] = BG_FILL_U8
+        from PIL import Image as _Image
+        return _Image.fromarray(jittered)
+
 def set_seed(seed=SEED):
     random.seed(seed)
     np.random.seed(seed)
@@ -303,15 +330,33 @@ def evaluate(model, loader, criterion, device):
 # ---------- Training ----------
 def train_for_day(target_day, train_ids, val_ids, test_ids,
                   train_meta, val_meta, test_meta, device, output_dir,
-                  image_type='std', pos_weight_scale=1.0, bbox_crop=False):
+                  image_type='std', pos_weight_scale=1.0, bbox_crop=False,
+                  strong_aug=False):
     print(f"\n{'='*70}\nTRAINING BASELINE for DAY {target_day}\n{'='*70}")
 
-    train_tf = T.Compose([
-        T.Resize(TARGET_SIZE),
-        T.RandomHorizontalFlip(0.5),
-        T.RandomVerticalFlip(0.5),
-        T.ColorJitter(0.2, 0.2, 0.2, 0.1),
-    ])
+    if strong_aug and image_type != "clipped":
+        print(f"  [strong-aug WARNING] fill=178 matches the 'clipped' (mean_fill_clip) "
+              f"background, but image_type={image_type!r}. Rotation/affine corners will "
+              f"NOT match the background — run --strong-aug with --image-type clipped.")
+    if strong_aug:
+        # Coworker's stabler augmentation: affine (fill matches the 178 background),
+        # rotation disabled on boundary days, and foreground-only ColorJitter so the
+        # model never keys on colour-shifted background / mismatched corners.
+        degrees = 0 if float(target_day) in _BOUNDARY_DAYS else 180
+        train_tf = T.Compose([
+            T.Resize(TARGET_SIZE),
+            T.RandomHorizontalFlip(0.5),
+            T.RandomAffine(degrees=degrees, translate=(0.1, 0.1), fill=[178, 178, 178]),
+            ForegroundColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05),
+        ])
+        print(f"  [strong-aug] affine(deg={degrees}, fill=178) + foreground ColorJitter")
+    else:
+        train_tf = T.Compose([
+            T.Resize(TARGET_SIZE),
+            T.RandomHorizontalFlip(0.5),
+            T.RandomVerticalFlip(0.5),
+            T.ColorJitter(0.2, 0.2, 0.2, 0.1),
+        ])
 
     eval_tf = T.Compose([
         T.Resize(TARGET_SIZE),
@@ -548,6 +593,11 @@ def main():
                               'further so the optimizer cannot ignore large-Bad misclassifications '
                               'as "cheap" losses. Useful to test whether the model is willing to '
                               'learn morphology beyond its current size shortcut.'))
+    parser.add_argument('--strong-aug', action='store_true',
+                        help=("Use the coworker's stabler augmentation: RandomAffine with "
+                              "fill matching the 178 background, rotation disabled on boundary "
+                              "days (28/30), and foreground-only ColorJitter. Default off keeps "
+                              "the current flips + whole-image jitter. A/B this against baseline."))
     args = parser.parse_args()
 
     set_seed(SEED)
@@ -584,6 +634,7 @@ def main():
             image_type=args.image_type,
             pos_weight_scale=args.pos_weight_scale,
             bbox_crop=args.bbox_crop,
+            strong_aug=args.strong_aug,
         )
         if result:
             results.append(result)
