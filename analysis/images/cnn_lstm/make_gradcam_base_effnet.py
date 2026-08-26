@@ -153,6 +153,13 @@ def main():
         choices=["none", "Acceptable", "Not Acceptable"]
     )
     parser.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
+    parser.add_argument("--model-subdir", default="base_effnet",
+                        help="Checkpoint folder under run_dir/label/ (e.g. base_effnet, "
+                             "base_effnet_strongaug) so you can Grad-CAM the augmented model.")
+    parser.add_argument("--organoids", default=None,
+                        help="Comma-separated organoid IDs to Grad-CAM exactly. Bypasses "
+                             "misses-based selection; use the SAME ids across two models "
+                             "(baseline vs strong-aug) for a fair side-by-side comparison.")
     parser.add_argument(
         "--run-dir",
         type=Path,
@@ -170,15 +177,16 @@ def main():
     day_str = f"{args.day:g}"
 
     ckpt_path = (
-        args.run_dir / label / "base_effnet" /
+        args.run_dir / label / args.model_subdir /
         f"day_{day_str}" / f"model_day_{day_str}.pth"
     )
     test_json = args.cohorts_dir / label / "series" / "test.json"
     misses_csv = args.plots_dir / f"misses_{label}.csv"
 
-    out_dir = args.plots_dir / f"gradcam_{label}_base_Dy{day_str}_{args.selection_mode}"
+    sel_tag = "chosen" if args.organoids else args.selection_mode
+    out_dir = args.plots_dir / f"gradcam_{label}_{args.model_subdir}_Dy{day_str}_{sel_tag}"
     if args.filter_label != "none":
-        out_dir = args.plots_dir / f"gradcam_{label}_base_Dy{day_str}_{args.selection_mode}_{args.filter_label.replace(' ', '_')}"
+        out_dir = args.plots_dir / f"gradcam_{label}_{args.model_subdir}_Dy{day_str}_{sel_tag}_{args.filter_label.replace(' ', '_')}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"[info] label = {label}")
@@ -193,8 +201,8 @@ def main():
         raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
     if not test_json.exists():
         raise FileNotFoundError(f"Test JSON not found: {test_json}")
-    if not misses_csv.exists():
-        raise FileNotFoundError(f"Misses CSV not found: {misses_csv}")
+    # misses CSV is now optional: only needed for the aggregation selection modes
+    # (missed / perfect). --organoids or the confidence modes work without it.
 
     sys.path.append(str(Path(".").resolve()))
     from analysis.images.cnn_lstm.train_base_model import BaselineEfficientNet
@@ -292,7 +300,29 @@ def main():
         return cam, prob_accept
 
     test_data = load_json(test_json)
-    misses = pd.read_csv(misses_csv)
+
+    def _df_from_ids(ids):
+        rows = []
+        for oid in ids:
+            rec = test_data.get(oid)
+            if rec is None:
+                print(f"[warn] requested organoid not in test JSON: {oid}")
+                continue
+            rows.append({"organoid_id": oid, "true_label": rec.get("label"),
+                         "n_votes_good": rec.get("n_votes_good", 0) or 0,
+                         "n_votes_total": rec.get("n_votes_total", 0) or 0,
+                         "miss_rate": 0.0, "total_misses": 0})
+        return pd.DataFrame(rows)
+
+    if args.organoids:
+        wanted = [s.strip() for s in args.organoids.split(",") if s.strip()]
+        misses = _df_from_ids(wanted)
+        print(f"[info] Grad-CAM on {len(misses)} explicitly-requested organoids")
+    elif misses_csv.exists():
+        misses = pd.read_csv(misses_csv)
+    else:
+        misses = _df_from_ids(list(test_data.keys()))
+        print(f"[info] no misses CSV ({misses_csv}); built {len(misses)} organoids from test JSON")
 
     # ------------------------------------------------------------------
     # Pre-pass: compute P(Acceptable) for every organoid in misses df.
@@ -331,7 +361,7 @@ def main():
     print(f"[info] probs computed for {misses['prob_accept'].notna().sum()} / "
           f"{len(misses)} organoids")
 
-    selected = select_organoids(misses, args)
+    selected = misses if args.organoids else select_organoids(misses, args)
 
     print("\n[info] selected organoids:")
     debug_cols = ["organoid_id", "true_label", "n_votes_good",
