@@ -38,14 +38,14 @@ combined without leakage.
 
 | Property | Value |
 |---|---|
-| Input | 384 × 512 RGB, mean-filled (`cm_image_abs`): background pixels replaced with ImageNet channel means |
+| Input | 384 × 512 RGB, mean-filled (`cm_image_abs`): background fill = [178, 178, 178] (verified from data) |
 | Backbone | EfficientNet-B0, ImageNet pre-trained; head frozen for first 4 epochs then last 2 blocks unfrozen |
 | Head | Linear(1280 → 128) → ReLU → Dropout(0.5) → Linear(128 → 1) |
 | Loss | BCEWithLogitsLoss with pos_weight = n_neg / n_pos |
 | Optimiser | Adam; head LR = 5 × 10⁻⁴, backbone LR = 5 × 10⁻⁵ after unfreeze |
 | Scheduler | ReduceLROnPlateau (factor 0.5, patience 5) |
 | Early stopping | Patience = 15 epochs on validation balanced accuracy; max 100 epochs |
-| Augmentation | Resize → RandomHorizontalFlip(p=0.5) → RandomAffine(±180°, translate ±10%) → ColorJitter; disabled for boundary days (Dy28, Dy30) |
+| Augmentation | Resize → RandomHorizontalFlip(p=0.5) → RandomAffine(±180°, translate ±10%, fill=[178,178,178]) → ForegroundColorJitter; rotation disabled for Dy28/Dy30 |
 | Val split | 15% of train organoids (StratifiedShuffleSplit, seed = fold seed) |
 
 See [augmentation.md](augmentation.md) for a detailed description of the image augmentation pipeline.
@@ -82,23 +82,25 @@ standalone CV runs; combined values come from the shared-split run.
 
 | Day | Metabolite | Morphology | Image |
 |---|---|---|---|
-| Dy03  | 0.559 ± 0.078 | 0.605 ± 0.133 | 0.495 ± 0.009 |
-| Dy06  | 0.576 ± 0.082 | 0.511 ± 0.064 | 0.511 ± 0.035 |
-| Dy08  | 0.598 ± 0.055 | 0.528 ± 0.072 | 0.495 ± 0.009 |
-| Dy10  | 0.529 ± 0.057 | 0.483 ± 0.087 | 0.511 ± 0.049 |
-| Dy13  | 0.595 ± 0.074 | 0.429 ± 0.065 | 0.520 ± 0.040 |
-| Dy15  | 0.609 ± 0.093 | 0.555 ± 0.053 | 0.550 ± 0.061 |
-| Dy17  | 0.585 ± 0.110 | 0.564 ± 0.076 | 0.550 ± 0.061 |
-| Dy20.5 | 0.732 ± 0.099 | 0.748 ± 0.114 | 0.566 ± 0.090 |
-| Dy24  | 0.713 ± 0.109 | 0.821 ± 0.159 | 0.581 ± 0.100 |
-| Dy28  | 0.776 ± 0.068 | 0.857 ± 0.118 | 0.780 ± 0.149 |
-| Dy30  | 0.841 ± 0.045 | 0.877 ± 0.145 | 0.815 ± 0.062 |
+| Dy03  | 0.559 ± 0.078 | 0.605 ± 0.133 | 0.511 ± 0.022 |
+| Dy06  | 0.576 ± 0.082 | 0.511 ± 0.064 | 0.500 ± 0.000 |
+| Dy08  | 0.598 ± 0.055 | 0.528 ± 0.072 | 0.500 ± 0.000 |
+| Dy10  | 0.529 ± 0.057 | 0.483 ± 0.087 | 0.491 ± 0.018 |
+| Dy13  | 0.595 ± 0.074 | 0.429 ± 0.065 | 0.500 ± 0.000 |
+| Dy15  | 0.609 ± 0.093 | 0.555 ± 0.053 | 0.545 ± 0.103 |
+| Dy17  | 0.585 ± 0.110 | 0.564 ± 0.076 | 0.607 ± 0.113 |
+| Dy20.5 | 0.732 ± 0.099 | 0.748 ± 0.114 | 0.801 ± 0.068 |
+| Dy24  | 0.713 ± 0.109 | 0.821 ± 0.159 | 0.853 ± 0.087 |
+| Dy28  | 0.776 ± 0.068 | 0.857 ± 0.118 | 0.740 ± 0.132 |
+| Dy30  | 0.841 ± 0.045 | 0.877 ± 0.145 | 0.840 ± 0.097 |
 
-**Key observations:**
+**Key observations (image updated with corrected augmentation, job 1459514):**
 - All three modalities are near chance (0.5) before Dy17; meaningful signal emerges only at Dy20.5.
-- Morphology is strongest at late days (Dy24–Dy30), though its fold std is large (up to ±0.15).
-- Image is weakest early but catches up at Dy28–Dy30.
+- Image improved dramatically after augmentation fix: Dy20.5 0.566→0.801, Dy24 0.581→0.853.
+- At Dy24–Dy30, image is now competitive with or better than metabolite.
+- Morphology is strongest at Dy28 (0.857), though its fold std is large (up to ±0.15).
 - Metabolite is most consistent across folds (lowest std).
+- 2-modality and 3-modality fusion results below are from the **old** combined run (Aug 14, pre-fix); rerun in progress (job 1489995).
 
 ### 2-Modality Pairs (mean probability fusion, shared splits, n = 132)
 
