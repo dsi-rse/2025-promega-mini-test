@@ -81,33 +81,30 @@ def update_notes_md(combined: dict, image: dict):
     text = text.replace(old_note, new_note)
 
     # Update 2-model pair table
-    strategies_2 = {
-        "met_morph_mean": "Met + Morph",
-        "met_img_mean":   "Met + Img",
-        "morph_img_mean": "Morph + Img",
-    }
+    # Combined JSON uses OOF balanced_accuracy only (no fold std for fusion strategies)
+    pair_keys = ["met+morph_mean_prob", "met+img_mean_prob", "morph+img_mean_prob"]
     pair_rows = []
     for day, label in zip(DAYS, DAY_LABELS):
         r = combined.get(day, {})
         vals = []
-        for k in ["met_morph_mean", "met_img_mean", "morph_img_mean"]:
+        for k in pair_keys:
             v = r.get(k, {})
-            m = v.get("balanced_accuracy_mean", 0)
-            s = v.get("balanced_accuracy_std", 0)
-            vals.append(f"{m:.3f} ± {s:.3f}")
-        best = max(range(3), key=lambda i: float(vals[i].split()[0]))
+            m = v.get("balanced_accuracy", 0)
+            vals.append(f"{m:.3f}")
+        best = max(range(3), key=lambda i: float(vals[i]))
         vals[best] = f"**{vals[best]}**"
         pair_rows.append(f"| {label:<7} | {' | '.join(vals)} |")
 
     three_rows = []
     for day, label in zip(DAYS, DAY_LABELS):
         r = combined.get(day, {})
-        mv = r.get("all_mean", {})
-        vv = r.get("all_vote", {})
-        m_str = f"{mv.get('balanced_accuracy_mean',0):.3f} ± {mv.get('balanced_accuracy_std',0):.3f}"
-        v_str = f"{vv.get('balanced_accuracy_mean',0):.3f} ± {vv.get('balanced_accuracy_std',0):.3f}"
-        # bold the better one
-        if mv.get('balanced_accuracy_mean',0) >= vv.get('balanced_accuracy_mean',0):
+        mv = r.get("met+morph+img_mean_prob", {})
+        vv = r.get("met+morph+img_majority_vote", {})
+        m_val = mv.get("balanced_accuracy", 0)
+        v_val = vv.get("balanced_accuracy", 0)
+        m_str = f"{m_val:.3f}"
+        v_str = f"{v_val:.3f}"
+        if m_val >= v_val:
             m_str = f"**{m_str}**"
         else:
             v_str = f"**{v_str}**"
@@ -170,8 +167,8 @@ def update_pptx(combined: dict, image: dict):
         img_r = image.get(day, {})
         com_r = combined.get(day, {})
         img_ba = f"{img_r.get('balanced_accuracy_mean',0):.3f}±{img_r.get('balanced_accuracy_std',0):.3f}"
-        com_mean = com_r.get("all_mean", {})
-        com_ba = f"{com_mean.get('balanced_accuracy_mean',0):.3f}±{com_mean.get('balanced_accuracy_std',0):.3f}"
+        com_mean = com_r.get("met+morph+img_mean_prob", {})
+        com_ba = f"{com_mean.get('balanced_accuracy',0):.3f}"
 
         # Current shape at row_start+8 = "Acc" column → repurpose as Image
         # Current shape at row_start+10 = "AUC" column → repurpose as Combined
@@ -192,22 +189,15 @@ def update_pptx(combined: dict, image: dict):
         s5_template = prs.slides[3]  # use slide 4 as template for title/subtitle boxes
 
         # Copy background
-        bg = s5_template.shapes[0]._element
-        new_s.shapes._spTree.insert(2, deepcopy(bg))
-
-        # Add title + subtitle
-        for sh in s5_template.shapes[:3]:
-            if sh.has_text_frame:
-                new_s.shapes._spTree.append(deepcopy(sh._element))
-
-        # Fix text
-        for sh in list(new_s.shapes):
-            if sh.has_text_frame:
-                txt = sh.text_frame.text
-                if "Balanced Accuracy" in txt or "comparison" in txt.lower():
-                    _set_text(sh, "Image Classifier — EfficientNet-B0")
-                elif "5-fold" in txt or "LightGBM" in txt:
-                    _set_text(sh, "series_idor · 5-fold CV (corrected augmentation, job 1459514)")
+        # Add title text box
+        from pptx.util import Pt
+        tf = new_s.shapes.add_textbox(Emu(274320), Emu(91440), Emu(10972800), Emu(548640))
+        tf.text_frame.text = "Image Classifier — EfficientNet-B0"
+        tf.text_frame.paragraphs[0].runs[0].font.size = Pt(24)
+        tf.text_frame.paragraphs[0].runs[0].font.bold = True
+        tf2 = new_s.shapes.add_textbox(Emu(274320), Emu(594360), Emu(10972800), Emu(365760))
+        tf2.text_frame.text = "series_idor · 5-fold CV (corrected augmentation, job 1459514)"
+        tf2.text_frame.paragraphs[0].runs[0].font.size = Pt(14)
 
         # Add figure
         with open(IMAGE_BA_IMG, "rb") as f:
@@ -219,21 +209,15 @@ def update_pptx(combined: dict, image: dict):
     if len(prs.slides) < 6:
         blank = prs.slide_layouts[6]
         new_s = prs.slides.add_slide(blank)
-        s5_template = prs.slides[3]
 
-        bg = s5_template.shapes[0]._element
-        new_s.shapes._spTree.insert(2, deepcopy(bg))
-        for sh in s5_template.shapes[:3]:
-            if sh.has_text_frame:
-                new_s.shapes._spTree.append(deepcopy(sh._element))
-
-        for sh in list(new_s.shapes):
-            if sh.has_text_frame:
-                txt = sh.text_frame.text
-                if "Balanced Accuracy" in txt or "comparison" in txt.lower():
-                    _set_text(sh, "Multi-Modality Fusion — Balanced Accuracy by Day")
-                elif "5-fold" in txt or "LightGBM" in txt:
-                    _set_text(sh, "Left: single modalities  ·  Right: late-fusion combinations  ·  ±1 SD shading")
+        from pptx.util import Pt
+        tf = new_s.shapes.add_textbox(Emu(274320), Emu(91440), Emu(10972800), Emu(548640))
+        tf.text_frame.text = "Multi-Modality Fusion — Balanced Accuracy by Day"
+        tf.text_frame.paragraphs[0].runs[0].font.size = Pt(24)
+        tf.text_frame.paragraphs[0].runs[0].font.bold = True
+        tf2 = new_s.shapes.add_textbox(Emu(274320), Emu(594360), Emu(10972800), Emu(365760))
+        tf2.text_frame.text = "Left: single modalities  ·  Right: late-fusion combinations  ·  ±1 SD shading"
+        tf2.text_frame.paragraphs[0].runs[0].font.size = Pt(14)
 
         with open(TWO_PANEL_IMG, "rb") as f:
             new_s.shapes.add_picture(BytesIO(f.read()),

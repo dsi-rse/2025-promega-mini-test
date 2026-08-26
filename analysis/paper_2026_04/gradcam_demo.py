@@ -223,7 +223,7 @@ def make_figure(chosen, model, day, fold_idx, out_path):
         row_label = (f"{oid}\n"
                      f"True: {'NAcc' if true_lbl else 'Acc'}  "
                      f"Pred: {'NAcc' if pred_lbl else 'Acc'}  "
-                     f"p={prob[0]:.2f}")
+                     f"p={prob:.2f}")
         axes[row_i, 0].annotate(
             row_label, xy=(0, 0.5), xycoords="axes fraction",
             xytext=(-6, 0), textcoords="offset points",
@@ -319,7 +319,7 @@ def main():
     chosen = pick_examples(test_results, n_per_group=args.n_per_group)
     print(f"\nSelected {len(chosen)} examples:")
     for group_label, oid, _, true_lbl, pred_lbl, prob in chosen:
-        print(f"  {group_label:22s}  {oid}  p={prob[0]:.3f}")
+        print(f"  {group_label:22s}  {oid}  p={prob:.3f}")
 
     out_path = OUT_DIR / f"gradcam_{args.day}_fold{args.fold}.png"
     make_figure(chosen, model, args.day, fold_idx, out_path)
