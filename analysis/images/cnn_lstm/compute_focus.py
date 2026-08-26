@@ -67,7 +67,7 @@ def process_day(day, test_ids, test_meta, args, device):
     eval_tf = T.Compose([T.Resize(TARGET_SIZE)])
     ds = SingleDayOrganoidDataset(test_ids, test_meta, day, transform=eval_tf,
                                   image_type=args.image_type, bbox_crop=args.bbox_crop)
-    ckpt = args.runs_root / args.label / "base_effnet" / f"day_{ds_day}" / f"model_day_{ds_day}.pth"
+    ckpt = args.runs_root / args.label / args.model_subdir / f"day_{ds_day}" / f"model_day_{ds_day}.pth"
     if not ckpt.exists():
         print(f"  [skip] no checkpoint for day {day}: {ckpt}")
         return [], 0
@@ -134,6 +134,9 @@ def main():
     ap.add_argument("--split-label", default=None,
                     help="Test-split cohort label if different from --label.")
     ap.add_argument("--image-type", default="clipped", choices=["clipped", "std"])
+    ap.add_argument("--model-subdir", default="base_effnet",
+                    help="Checkpoint folder under runs_root/label/ (e.g. base_effnet, "
+                         "base_effnet_strongaug) — lets you Grad-CAM the augmented model.")
     ap.add_argument("--bbox-crop", action="store_true",
                     help="Crop to mask bbox + letterbox (size removed). focus/enrichment "
                          "meaningless under bbox; only prob/confidence/correct are valid.")

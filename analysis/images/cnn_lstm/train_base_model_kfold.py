@@ -201,17 +201,17 @@ def main():
     y = [_label(meta, o) for o in ids]
     print(f"Pooled organoids: {len(ids)}  ({sum(y)} Acceptable, {len(y)-sum(y)} Not)")
 
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    out = args.output_dir / "baseline_kfold_results.json"
     results = {}
     for day in DAY_RANGES:
         print(f"\n{'='*60}\nDAY {day} — {args.n_folds}-fold CV\n{'='*60}")
         r = run_day(day, ids, meta, device, args)
         if r:
             results[str(day)] = r
-
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    out = args.output_dir / "baseline_kfold_results.json"
-    with open(out, "w") as f:
-        json.dump(results, f, indent=2)
+        # incremental save after every day so a wall-time kill can't wipe the run
+        with open(out, "w") as f:
+            json.dump(results, f, indent=2)
     print(f"\nSaved {out}")
     print(f"\n{'day':>6} {'OOF bal':>8} {'fold mean±std':>16} {'AUC':>6}")
     for day in DAY_RANGES:
