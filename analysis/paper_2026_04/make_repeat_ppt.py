@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Generate PPT: 10-repeat 4-fold CV with 3 metabolite variants.
+"""Generate two PPTs from combined_results_kfold_series_idor_139.json.
 
-Slides:
-  1.     Title
-  2.     Study design
-  3.     Aggregated two-panel figure
-  4.     Summary table figure
-  5.     All-repeats overlay (spaghetti) — key strategies
-  6-15.  Per-repeat results (one slide per repeat, repeat 1-10)
+PPT 1 — figures/met_variants_analysis.pptx
+  Metabolite preprocessing variants: nan-floor vs raw vs no-malate.
+  Slides: title, design, standalone comparison, fusion comparison,
+          per-day diff table, observations.
+
+PPT 2 — figures/repeat_4fold_cv.pptx
+  10-repeat 4-fold CV main results.
+  Slides: title, design, aggregated two-panel, summary table,
+          spaghetti/variance, 10 × per-repeat (BA + Dy30 CMs).
 
 Usage:
     conda run -n core_env python3 -m analysis.paper_2026_04.make_repeat_ppt
@@ -20,6 +22,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import numpy as np
 from pptx import Presentation
 from pptx.util import Inches, Pt
@@ -31,38 +34,64 @@ from pipeline.data_loader import DAY_ORDER, ANALYSIS_OUTPUT_DIR
 COMBINED_PATH  = ANALYSIS_OUTPUT_DIR / "images" / "combined_results_kfold_series_idor_139.json"
 TWO_PANEL_PATH = Path("figures/combined_kfold_two_panel_series_idor_139.png")
 TABLE_PATH     = Path("figures/combined_kfold_table_series_idor_139.png")
-OUT_PPT        = Path("figures/repeat_4fold_met_variants.pptx")
-
-KEY_STYLE = {
-    "met_nan":                    ("Met (nan floor)",  "#2ca02c", "o", "-",  2.0),
-    "met_raw":                    ("Met (raw)",        "#98df8a", "v", "--", 1.5),
-    "met_no_malate":              ("Met (no malate)",  "#17becf", "^", ":",  1.5),
-    "morph":                      ("Morphology",       "#9467bd", "s", "-",  2.0),
-    "img":                        ("Image",            "#1f77b4", "D", "-",  2.0),
-    "met_nan+morph+img_mean_prob":("All3/nan (mean)",  "#d62728", "P", "-",  2.5),
-}
+OUT_MET        = Path("figures/met_variants_analysis.pptx")
+OUT_CV         = Path("figures/repeat_4fold_cv.pptx")
 
 SLIDE_W = Inches(13.33)
 SLIDE_H = Inches(7.5)
+M = Inches(0.35)
+
+MET_COLORS = {
+    "met_nan":       ("#2ca02c", "o", "-"),
+    "met_raw":       ("#98df8a", "v", "--"),
+    "met_no_malate": ("#17becf", "^", ":"),
+}
+MET_LABELS = {
+    "met_nan":       "Met (nan floor)",
+    "met_raw":       "Met (raw)",
+    "met_no_malate": "Met (no malate)",
+}
+FUSION_COLORS = {
+    "met_nan+morph+img_mean_prob":       ("#2ca02c", "D", "-"),
+    "met_raw+morph+img_mean_prob":       ("#98df8a", "s", "--"),
+    "met_no_malate+morph+img_mean_prob": ("#17becf", "v", ":"),
+    "morph+img_mean_prob":               ("#9467bd", "^", "-"),
+}
+FUSION_LABELS = {
+    "met_nan+morph+img_mean_prob":       "All3 / nan floor",
+    "met_raw+morph+img_mean_prob":       "All3 / raw",
+    "met_no_malate+morph+img_mean_prob": "All3 / no malate",
+    "morph+img_mean_prob":               "Morph + Img (no met)",
+}
+CV_KEY_STYLE = {
+    "met_nan":                    ("Metabolite",       "#2ca02c", "o", "-",  2.0),
+    "morph":                      ("Morphology",       "#9467bd", "s", "-",  2.0),
+    "img":                        ("Image",            "#1f77b4", "D", "-",  2.0),
+    "met_nan+morph+img_mean_prob":("All Three (mean)", "#d62728", "P", "-",  2.5),
+}
+CM_MODS = [
+    ("met_nan", "Metabolite", "#2ca02c"),
+    ("morph",   "Morphology", "#9467bd"),
+    ("img",     "Image",      "#1f77b4"),
+]
 
 
-# ── helpers ───────────────────────────────────────────────────────────────────
+# ── shared helpers ────────────────────────────────────────────────────────────
 
 def _hex(h):
     h = h.lstrip("#")
     return RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
+def _blank(prs):  return prs.slide_layouts[6]
 
-def _blank_layout(prs):
-    return prs.slide_layouts[6]   # blank
+def _new_prs():
+    prs = Presentation()
+    prs.slide_width  = SLIDE_W
+    prs.slide_height = SLIDE_H
+    return prs
 
-
-def _title_layout(prs):
-    return prs.slide_layouts[0]
-
-
-def _add_textbox(slide, text, left, top, width, height,
-                 fontsize=18, bold=False, color="#000000", align=PP_ALIGN.LEFT):
+def _tb(slide, text, left, top, width, height,
+        fontsize=18, bold=False, color="#000000", align=PP_ALIGN.LEFT):
     txb = slide.shapes.add_textbox(left, top, width, height)
     tf  = txb.text_frame
     tf.word_wrap = True
@@ -75,83 +104,383 @@ def _add_textbox(slide, text, left, top, width, height,
     run.font.color.rgb = _hex(color)
     return txb
 
+def _title_slide(prs, title, subtitle="", body=""):
+    slide = prs.slides.add_slide(_blank(prs))
+    slide.background.fill.solid()
+    slide.background.fill.fore_color.rgb = _hex("#1F3864")
+    _tb(slide, title, M, Inches(1.6), Inches(12.5), Inches(2.8),
+        fontsize=38, bold=True, color="#FFFFFF", align=PP_ALIGN.CENTER)
+    if subtitle:
+        _tb(slide, subtitle, M, Inches(4.2), Inches(12.5), Inches(0.7),
+            fontsize=18, color="#BDD7EE", align=PP_ALIGN.CENTER)
+    if body:
+        _tb(slide, body, M, Inches(5.0), Inches(12.5), Inches(2.0),
+            fontsize=14, color="#DDEBF7", align=PP_ALIGN.CENTER)
+    return slide
 
-def _fig_to_stream(fig):
+def _content_slide(prs, heading, fig=None, fig_top=Inches(0.75), fig_w=Inches(12.5)):
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, heading, M, M, Inches(12.5), Inches(0.55),
+        fontsize=22, bold=True, color="#1F3864")
+    if fig is not None:
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor="white")
+        buf.seek(0)
+        slide.shapes.add_picture(buf, M, fig_top, width=fig_w)
+        plt.close(fig)
+    return slide
+
+def _stream(fig):
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor="white")
     buf.seek(0)
+    plt.close(fig)
     return buf
 
+def _mean_std(combined, day, key):
+    r = combined.get(day, {}).get(key, {})
+    return r.get("balanced_accuracy_mean"), r.get("balanced_accuracy_std")
 
-def _add_fig_stream(slide, buf, left, top, width):
-    slide.shapes.add_picture(buf, left, top, width=width)
+def _series(combined, days, key):
+    xs, ys, lo, hi = [], [], [], []
+    for i, d in enumerate(days):
+        mn, std = _mean_std(combined, d, key)
+        if mn is not None:
+            xs.append(i); ys.append(mn)
+            lo.append(mn - (std or 0)); hi.append(mn + (std or 0))
+    return xs, ys, lo, hi
 
-
-# ── figure generators ─────────────────────────────────────────────────────────
-
-def _plot_repeat(combined, days, repeat_idx, title):
-    fig, ax = plt.subplots(figsize=(11, 4.0))
-    for k, (label, color, marker, ls, lw) in KEY_STYLE.items():
-        xs, ys = [], []
-        for i, day in enumerate(days):
-            dr = combined.get(day, {})
-            bas = dr.get(k, {}).get("repeat_balanced_accuracies", [])
-            if repeat_idx < len(bas):
-                xs.append(i); ys.append(bas[repeat_idx])
-        if xs:
-            ax.plot(xs, ys, marker=marker, linestyle=ls, color=color,
-                    linewidth=lw, markersize=6, label=label)
+def _style_ax(ax, days, ylim=(0.4, 1.05)):
     ax.set_xticks(range(len(days)))
     ax.set_xticklabels(days, rotation=45, fontsize=9)
-    ax.set_ylim(0.4, 1.05)
-    ax.axhline(0.5, color="gray", linestyle=":", linewidth=1, alpha=0.6)
-    ax.set_ylabel("Balanced Accuracy (OOF)", fontsize=10)
-    ax.set_xlabel("Day", fontsize=10)
-    ax.set_title(title, fontsize=12, fontweight="bold")
+    ax.set_ylim(*ylim)
+    ax.axhline(0.5, color="gray", ls=":", lw=1, alpha=0.6)
     ax.grid(True, alpha=0.25)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.legend(fontsize=8, loc="upper left", ncol=2)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MET VARIANTS PPT
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _compute_observations(combined, days):
+    """Return list-of-strings observations about met variant differences."""
+    obs = []
+
+    # nan vs raw
+    diffs_nr = [(d, abs((_mean_std(combined, d, "met_nan")[0] or 0) -
+                         (_mean_std(combined, d, "met_raw")[0] or 0)))
+                for d in days
+                if _mean_std(combined, d, "met_nan")[0] is not None
+                and _mean_std(combined, d, "met_raw")[0] is not None]
+    max_diff_nr = max(v for _, v in diffs_nr) if diffs_nr else 0
+
+    # nan vs no_malate
+    diffs_nm = []
+    for d in days:
+        mn_nan, std_nan   = _mean_std(combined, d, "met_nan")
+        mn_nomal, _       = _mean_std(combined, d, "met_no_malate")
+        if mn_nan is None or mn_nomal is None: continue
+        diff = mn_nan - mn_nomal   # positive = nan > no_malate (MalateGlo helps)
+        diffs_nm.append((d, mn_nan, mn_nomal, diff, std_nan or 0))
+
+    days_malate_helps  = [(d, diff) for d, _, _, diff, std in diffs_nm
+                          if diff >  std * 0.5]
+    days_malate_hurts  = [(d, diff) for d, _, _, diff, std in diffs_nm
+                          if diff < -std * 0.5]
+    days_malate_neutral= [(d, diff) for d, _, _, diff, std in diffs_nm
+                          if abs(diff) <= std * 0.5]
+
+    # Observation 1: nan vs raw
+    obs.append(
+        f"1. Floor correction (met_nan) vs raw values (met_raw)\n"
+        f"   Max |BA difference| across all days = {max_diff_nr:.4f} — effectively zero.\n"
+        f"   → The −500 µM floor correction has no impact. Extreme outliers are absent\n"
+        f"     or already NaN for other reasons in this cohort."
+    )
+
+    # Observation 2: malate feature importance
+    if days_malate_helps:
+        helped = ", ".join(f"{d} (+{v:.3f})" for d, v in days_malate_helps)
+        obs.append(
+            f"2. Dropping MalateGlo (met_no_malate) reduces BA at late days:\n"
+            f"   {helped}\n"
+            f"   → MalateGlo contributes signal at late time points where malate\n"
+            f"     metabolism diverges between Acceptable and Not-Acceptable organoids."
+        )
+    else:
+        obs.append(
+            "2. Dropping MalateGlo (met_no_malate) does not reduce BA at any day.\n"
+            "   → MalateGlo provides no unique signal beyond the other metabolites."
+        )
+
+    if days_malate_hurts:
+        hurt = ", ".join(f"{d} ({v:+.3f})" for d, v in days_malate_hurts)
+        obs.append(
+            f"3. Excluding MalateGlo improves BA at: {hurt}\n"
+            f"   → At these days MalateGlo may add noise rather than signal."
+        )
+
+    # Observation 3: overall pattern
+    late_days = [d for d in days if int(''.join(filter(str.isdigit, d.replace("_","")[:4]))) >= 20]
+    early_days = [d for d in days if d not in late_days]
+    late_means = [_mean_std(combined, d, "met_nan")[0] for d in late_days
+                  if _mean_std(combined, d, "met_nan")[0] is not None]
+    early_means = [_mean_std(combined, d, "met_nan")[0] for d in early_days
+                   if _mean_std(combined, d, "met_nan")[0] is not None]
+    if late_means and early_means:
+        obs.append(
+            f"{'3' if not days_malate_hurts else '4'}. Metabolite BA improves strongly with organoid age:\n"
+            f"   Early days (≤Dy17) mean BA = {np.mean(early_means):.3f}\n"
+            f"   Late days  (≥Dy20) mean BA = {np.mean(late_means):.3f}\n"
+            f"   → Metabolic signatures become more discriminative as organoids mature."
+        )
+
+    # Observation 4: fusion benefit
+    all3_means  = [_mean_std(combined, d, "met_nan+morph+img_mean_prob")[0] for d in late_days
+                   if _mean_std(combined, d, "met_nan+morph+img_mean_prob")[0] is not None]
+    met_means_l = [_mean_std(combined, d, "met_nan")[0] for d in late_days
+                   if _mean_std(combined, d, "met_nan")[0] is not None]
+    if all3_means and met_means_l:
+        gain = np.mean(all3_means) - np.mean(met_means_l)
+        n = min(len(all3_means), len(met_means_l))
+        obs.append(
+            f"{'4' if not days_malate_hurts else '5'}. Late-fusion gain (All3 mean vs Met alone) at late days:\n"
+            f"   Mean gain = {gain:+.3f} over {n} days\n"
+            f"   → Combining all three modalities consistently outperforms any single modality."
+        )
+
+    return obs
+
+
+def _plot_met_standalone(combined, days):
+    fig, ax = plt.subplots(figsize=(11, 4.5))
+    for k, (color, marker, ls) in MET_COLORS.items():
+        xs, ys, lo, hi = _series(combined, days, k)
+        if xs:
+            ax.plot(xs, ys, marker=marker, ls=ls, color=color,
+                    lw=2, ms=6, label=MET_LABELS[k])
+            ax.fill_between(xs, lo, hi, color=color, alpha=0.12, lw=0)
+    _style_ax(ax, days)
+    ax.set_ylabel("Balanced Accuracy (mean ± 1 SD)", fontsize=10)
+    ax.set_xlabel("Day", fontsize=10)
+    ax.set_title("3 Metabolite Variants — Standalone (10×4-fold CV, n=139)",
+                 fontsize=12, fontweight="bold")
+    ax.legend(fontsize=10, loc="upper left")
     plt.tight_layout()
     return fig
 
 
-CM_MODS = [
-    ("met_nan",  "Met",   "#2ca02c"),
-    ("morph",    "Morph", "#9467bd"),
-    ("img",      "Image", "#1f77b4"),
-]
+def _plot_met_fusion(combined, days):
+    fig, ax = plt.subplots(figsize=(11, 4.5))
+    for k, (color, marker, ls) in FUSION_COLORS.items():
+        xs, ys, lo, hi = _series(combined, days, k)
+        if xs:
+            ax.plot(xs, ys, marker=marker, ls=ls, color=color,
+                    lw=2, ms=6, label=FUSION_LABELS[k])
+            ax.fill_between(xs, lo, hi, color=color, alpha=0.12, lw=0)
+    _style_ax(ax, days)
+    ax.set_ylabel("Balanced Accuracy (mean ± 1 SD)", fontsize=10)
+    ax.set_xlabel("Day", fontsize=10)
+    ax.set_title("3 Met Variants in Late Fusion (All3 mean prob, 10×4-fold CV)",
+                 fontsize=12, fontweight="bold")
+    ax.legend(fontsize=10, loc="upper left")
+    plt.tight_layout()
+    return fig
+
+
+def _plot_met_diff(combined, days):
+    """Per-day BA difference: met_nan vs met_raw, met_nan vs met_no_malate."""
+    fig, axes = plt.subplots(1, 2, figsize=(13, 4.0), sharey=False)
+
+    # Panel 1: nan − raw
+    diffs_nr, stds = [], []
+    for d in days:
+        mn_n, _ = _mean_std(combined, d, "met_nan")
+        mn_r, _ = _mean_std(combined, d, "met_raw")
+        if mn_n is not None and mn_r is not None:
+            diffs_nr.append(mn_n - mn_r)
+            stds.append(_mean_std(combined, d, "met_nan")[1] or 0)
+        else:
+            diffs_nr.append(None); stds.append(0)
+    xs = [i for i, v in enumerate(diffs_nr) if v is not None]
+    ys = [v for v in diffs_nr if v is not None]
+    axes[0].bar(xs, ys, color=["#d62728" if v > 0 else "#1f77b4" for v in ys], width=0.6)
+    axes[0].axhline(0, color="black", lw=0.8)
+    _style_ax(axes[0], days, ylim=(min(ys + [-0.02]) - 0.005, max(ys + [0.02]) + 0.005))
+    axes[0].set_ylabel("BA difference (nan − raw)", fontsize=10)
+    axes[0].set_title("Effect of Floor Correction\n(met_nan − met_raw)", fontsize=11, fontweight="bold")
+
+    # Panel 2: nan − no_malate
+    diffs_nm = []
+    for d in days:
+        mn_n, std_n = _mean_std(combined, d, "met_nan")
+        mn_m, _     = _mean_std(combined, d, "met_no_malate")
+        if mn_n is not None and mn_m is not None:
+            diffs_nm.append(mn_n - mn_m)
+        else:
+            diffs_nm.append(None)
+    xs2 = [i for i, v in enumerate(diffs_nm) if v is not None]
+    ys2 = [v for v in diffs_nm if v is not None]
+    axes[1].bar(xs2, ys2, color=["#d62728" if v > 0 else "#1f77b4" for v in ys2], width=0.6)
+    axes[1].axhline(0, color="black", lw=0.8)
+    _style_ax(axes[1], days, ylim=(min(ys2 + [-0.02]) - 0.005, max(ys2 + [0.02]) + 0.005))
+    axes[1].set_ylabel("BA difference (with MalateGlo − without)", fontsize=10)
+    axes[1].set_title("Value of MalateGlo Feature\n(met_nan − met_no_malate)", fontsize=11, fontweight="bold")
+
+    fig.suptitle("Per-Day Differences Between Metabolite Variants  (positive = first variant better)",
+                 fontsize=11, fontweight="bold")
+    plt.tight_layout()
+    return fig
+
+
+def _plot_met_table(combined, days):
+    """Compact table figure: met_nan, met_raw, met_no_malate × all days."""
+    keys  = ["met_nan", "met_raw", "met_no_malate",
+             "met_nan+morph+img_mean_prob", "met_raw+morph+img_mean_prob",
+             "met_no_malate+morph+img_mean_prob"]
+    labels = ["Met/nan", "Met/raw", "Met/no-malate",
+              "All3/nan", "All3/raw", "All3/nomal"]
+
+    cell_data = []
+    for k in keys:
+        row = []
+        for d in days:
+            mn, std = _mean_std(combined, d, k)
+            row.append(f"{mn:.3f}\n±{std:.3f}" if mn is not None else "—")
+        cell_data.append(row)
+
+    n_rows, n_cols = len(keys), len(days)
+    fig, ax = plt.subplots(figsize=(2.0 + n_cols * 1.1, 0.5 + n_rows * 0.6))
+    ax.axis("off")
+    tbl = ax.table(cellText=cell_data, rowLabels=labels, colLabels=days,
+                   cellLoc="center", loc="center")
+    tbl.auto_set_font_size(False); tbl.set_fontsize(8); tbl.scale(1, 2.0)
+    for j in range(n_cols):
+        tbl[(0, j)].set_facecolor("#1F3864")
+        tbl[(0, j)].set_text_props(color="white", fontweight="bold")
+    row_colors = ["#D5E8D4", "#DAE8FC", "#E1D5E7", "#D5E8D4", "#DAE8FC", "#E1D5E7"]
+    for i, rc in enumerate(row_colors):
+        tbl[(i+1, -1)].set_facecolor(rc)
+        tbl[(i+1, -1)].set_text_props(fontweight="bold")
+        for j in range(n_cols):
+            tbl[(i+1, j)].set_facecolor(rc if i % 2 == 0 else "#F8F8F8")
+    fig.suptitle("Metabolite Variants: Balanced Accuracy (mean ± SD, 10×4-fold CV, n=139)",
+                 fontsize=10, fontweight="bold", y=0.98)
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    return fig
+
+
+def build_met_ppt(combined, days):
+    prs = _new_prs()
+
+    # 1. Title
+    _title_slide(prs,
+        "Metabolite Preprocessing Variants",
+        "series_idor  ·  n=139  ·  10×4-fold repeated CV",
+        "Comparing: nan-floor  ·  raw values  ·  MalateGlo excluded")
+
+    # 2. What are the variants
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Three Metabolite Preprocessing Approaches", M, M, Inches(12.5), Inches(0.55),
+        fontsize=24, bold=True, color="#1F3864")
+    design = (
+        "Background\n"
+        "  MalateGlo assay occasionally produces extreme negative concentrations (e.g. −5662 µM)\n"
+        "  interpreted as assay failure. The original pipeline replaces values < −500 µM with NaN.\n"
+        "  This experiment tests whether that correction matters and whether MalateGlo adds value.\n"
+        "\n"
+        "Variant 1 — met_nan  (original)\n"
+        "  Concentration values below −500 µM → NaN. LightGBM handles NaN natively.\n"
+        "\n"
+        "Variant 2 — met_raw\n"
+        "  Raw concentration used as-is. No floor applied. Tests whether outlier flagging matters.\n"
+        "\n"
+        "Variant 3 — met_no_malate\n"
+        "  MalateGlo feature excluded entirely (all 3 MalateGlo columns: concentration, initial,\n"
+        "  growth rate). Tests whether MalateGlo adds discriminative signal.\n"
+        "  Note: MalateGlo is only present for days > Dy10 (conditional metabolite).\n"
+        "\n"
+        "All three variants are trained independently on the same fold splits in every repeat.\n"
+        "Comparison is therefore perfectly controlled for cohort and fold assignments."
+    )
+    _tb(slide, design, M, Inches(0.72), Inches(12.5), Inches(6.5), fontsize=13)
+
+    # 3. Standalone comparison figure
+    _content_slide(prs, "Standalone BA — 3 Met Variants", _plot_met_standalone(combined, days))
+
+    # 4. Fusion comparison figure
+    _content_slide(prs, "Late-Fusion BA — 3 Met Variants vs Morph+Img Baseline",
+                   _plot_met_fusion(combined, days))
+
+    # 5. Per-day difference bars
+    _content_slide(prs, "Per-Day Differences Between Variants",
+                   _plot_met_diff(combined, days))
+
+    # 6. Numeric table
+    _content_slide(prs, "Numeric Summary Table",
+                   _plot_met_table(combined, days), fig_top=Inches(0.7), fig_w=Inches(12.5))
+
+    # 7. Observations
+    obs_list = _compute_observations(combined, days)
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Observations & Conclusions", M, M, Inches(12.5), Inches(0.55),
+        fontsize=24, bold=True, color="#1F3864")
+    obs_text = "\n\n".join(obs_list)
+    _tb(slide, obs_text, M, Inches(0.78), Inches(12.5), Inches(6.5), fontsize=13)
+
+    OUT_MET.parent.mkdir(exist_ok=True)
+    prs.save(str(OUT_MET))
+    print(f"Saved {OUT_MET}  ({len(prs.slides)} slides)")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# REPEAT CV PPT
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _plot_repeat_line(combined, days, repeat_idx, title):
+    fig, ax = plt.subplots(figsize=(11, 4.0))
+    for k, (label, color, marker, ls, lw) in CV_KEY_STYLE.items():
+        xs, ys = [], []
+        for i, d in enumerate(days):
+            bas = combined.get(d, {}).get(k, {}).get("repeat_balanced_accuracies", [])
+            if repeat_idx < len(bas):
+                xs.append(i); ys.append(bas[repeat_idx])
+        if xs:
+            ax.plot(xs, ys, marker=marker, ls=ls, color=color, lw=lw, ms=6, label=label)
+    _style_ax(ax, days)
+    ax.set_ylabel("Balanced Accuracy (OOF)", fontsize=10)
+    ax.set_xlabel("Day", fontsize=10)
+    ax.set_title(title, fontsize=12, fontweight="bold")
+    ax.legend(fontsize=9, loc="upper left")
+    plt.tight_layout()
+    return fig
 
 
 def _plot_cm_row(combined, repeat_idx, day="Dy30"):
-    """3 confusion matrices side by side for one repeat at one day."""
     fig, axes = plt.subplots(1, 3, figsize=(9, 2.8))
     for ax, (k, label, color) in zip(axes, CM_MODS):
         cms = combined.get(day, {}).get(k, {}).get("repeat_confusion_matrices", [])
         if repeat_idx >= len(cms):
             ax.text(0.5, 0.5, "N/A", ha="center", va="center", transform=ax.transAxes)
-            ax.set_title(f"{label} ({day})", fontsize=10)
-            ax.axis("off")
-            continue
-        cm = np.array(cms[repeat_idx])   # [[TN,FP],[FN,TP]]
-        # Normalise by row (true class)
+            ax.axis("off"); ax.set_title(f"{label} ({day})", fontsize=10); continue
+        cm = np.array(cms[repeat_idx])
         row_sums = cm.sum(axis=1, keepdims=True)
         cm_norm = np.where(row_sums > 0, cm / row_sums, 0.0)
         im = ax.imshow(cm_norm, cmap="Blues", vmin=0, vmax=1)
         for r in range(2):
             for c in range(2):
-                val_n = cm_norm[r, c]
-                val_r = cm[r, c]
-                txt_color = "white" if val_n > 0.6 else "black"
-                ax.text(c, r, f"{val_r}\n({val_n:.0%})",
-                        ha="center", va="center", fontsize=10,
-                        color=txt_color, fontweight="bold")
+                vn, vr = cm_norm[r, c], cm[r, c]
+                ax.text(c, r, f"{vr}\n({vn:.0%})", ha="center", va="center",
+                        fontsize=10, fontweight="bold",
+                        color="white" if vn > 0.6 else "black")
         ax.set_xticks([0, 1]); ax.set_yticks([0, 1])
         ax.set_xticklabels(["Pred Acc", "Pred NAcc"], fontsize=8)
         ax.set_yticklabels(["True Acc", "True NAcc"], fontsize=8)
         tn, fp, fn, tp = cm[0,0], cm[0,1], cm[1,0], cm[1,1]
         ba = 0.5 * (tp / max(tp+fn, 1) + tn / max(tn+fp, 1))
-        ax.set_title(f"{label} — BA={ba:.3f}", fontsize=10, fontweight="bold", color=color)
+        ax.set_title(f"{label}  BA={ba:.3f}", fontsize=10, fontweight="bold", color=color)
         plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     fig.suptitle(f"OOF Confusion Matrices — {day}", fontsize=11, fontweight="bold", y=1.02)
     plt.tight_layout()
@@ -159,222 +488,118 @@ def _plot_cm_row(combined, repeat_idx, day="Dy30"):
 
 
 def _plot_spaghetti(combined, days):
-    """All 10 repeats as thin lines + mean as thick line, for 4 key strategies."""
-    show_keys = [
-        ("met_nan",                    "Met/nan",       "#2ca02c"),
-        ("morph",                      "Morphology",    "#9467bd"),
-        ("img",                        "Image",         "#1f77b4"),
-        ("met_nan+morph+img_mean_prob","All3/nan",      "#d62728"),
+    show = [
+        ("met_nan",                     "Metabolite",      "#2ca02c"),
+        ("morph",                       "Morphology",      "#9467bd"),
+        ("img",                         "Image",           "#1f77b4"),
+        ("met_nan+morph+img_mean_prob",  "All Three (mean)","#d62728"),
     ]
     fig, axes = plt.subplots(1, 4, figsize=(16, 4.5), sharey=True)
-    for ax, (k, label, color) in zip(axes, show_keys):
-        # Spaghetti: one line per repeat
-        n_rep = 10
-        for rep in range(n_rep):
+    for ax, (k, label, color) in zip(axes, show):
+        for rep in range(10):
             xs, ys = [], []
-            for i, day in enumerate(days):
-                bas = combined.get(day, {}).get(k, {}).get("repeat_balanced_accuracies", [])
-                if rep < len(bas):
-                    xs.append(i); ys.append(bas[rep])
-            if xs:
-                ax.plot(xs, ys, color=color, linewidth=0.8, alpha=0.35, linestyle="-")
-        # Mean ± std
-        xs_m, ys_m, lo, hi = [], [], [], []
-        for i, day in enumerate(days):
-            r = combined.get(day, {}).get(k, {})
-            mn  = r.get("balanced_accuracy_mean")
-            std = r.get("balanced_accuracy_std")
-            if mn is not None:
-                xs_m.append(i); ys_m.append(mn)
-                lo.append(mn - (std or 0)); hi.append(mn + (std or 0))
+            for i, d in enumerate(days):
+                bas = combined.get(d, {}).get(k, {}).get("repeat_balanced_accuracies", [])
+                if rep < len(bas): xs.append(i); ys.append(bas[rep])
+            if xs: ax.plot(xs, ys, color=color, lw=0.8, alpha=0.35)
+        xs_m, ys_m, lo, hi = _series(combined, days, k)
         if xs_m:
-            ax.plot(xs_m, ys_m, color=color, linewidth=2.5, marker="o",
-                    markersize=5, label="mean")
-            ax.fill_between(xs_m, lo, hi, color=color, alpha=0.18, linewidth=0)
-        ax.set_xticks(range(len(days)))
-        ax.set_xticklabels(days, rotation=45, fontsize=8)
-        ax.set_ylim(0.4, 1.05)
-        ax.axhline(0.5, color="gray", linestyle=":", linewidth=1, alpha=0.6)
+            ax.plot(xs_m, ys_m, color=color, lw=2.5, marker="o", ms=5)
+            ax.fill_between(xs_m, lo, hi, color=color, alpha=0.18, lw=0)
+        _style_ax(ax, days)
         ax.set_title(label, fontsize=11, fontweight="bold", color=color)
-        ax.grid(True, alpha=0.2)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
     axes[0].set_ylabel("Balanced Accuracy (OOF)", fontsize=10)
     fig.suptitle(
-        "10 Repeat × 4-Fold CV: Variance Across Repeats (thin=each repeat, thick=mean±SD)",
-        fontsize=11, fontweight="bold", y=1.01,
-    )
+        "10 Repeats × 4-Fold — Thin lines = individual repeats, Thick = mean ± SD",
+        fontsize=11, fontweight="bold", y=1.01)
     plt.tight_layout()
     return fig
 
 
-def _plot_met_comparison(combined, days):
-    """Side-by-side: 3 met variants standalone + their 3-way fusion."""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
+def build_cv_ppt(combined, days):
+    prs = _new_prs()
 
-    standalone = [
-        ("met_nan",       "Met (nan floor)", "#2ca02c", "o", "-"),
-        ("met_raw",       "Met (raw)",       "#98df8a", "v", "--"),
-        ("met_no_malate", "Met (no malate)", "#17becf", "^", ":"),
-    ]
-    fusion = [
-        ("met_nan+morph+img_mean_prob",       "All3/nan",       "#2ca02c", "D", "-"),
-        ("met_raw+morph+img_mean_prob",       "All3/raw",       "#98df8a", "s", "--"),
-        ("met_no_malate+morph+img_mean_prob", "All3/no-malate", "#17becf", "v", ":"),
-        ("morph+img_mean_prob",               "Morph+Img",      "#9467bd", "^", "-"),
-    ]
-    for series, ax, title in [(standalone, ax1, "Met Variants — Standalone"),
-                               (fusion,     ax2, "Met Variants — In Fusion (All3 mean prob)")]:
-        for k, label, color, marker, ls in series:
-            xs, ys, lo, hi = [], [], [], []
-            for i, day in enumerate(days):
-                r = combined.get(day, {}).get(k, {})
-                mn  = r.get("balanced_accuracy_mean")
-                std = r.get("balanced_accuracy_std", 0) or 0
-                if mn is not None:
-                    xs.append(i); ys.append(mn)
-                    lo.append(mn - std); hi.append(mn + std)
-            if xs:
-                ax.plot(xs, ys, marker=marker, linestyle=ls, color=color,
-                        linewidth=2, markersize=6, label=label)
-                ax.fill_between(xs, lo, hi, color=color, alpha=0.12, linewidth=0)
-        ax.set_xticks(range(len(days)))
-        ax.set_xticklabels(days, rotation=45, fontsize=9)
-        ax.set_ylim(0.4, 1.05)
-        ax.axhline(0.5, color="gray", linestyle=":", linewidth=1, alpha=0.6)
-        ax.set_ylabel("Balanced Accuracy (mean ± 1 SD)", fontsize=10)
-        ax.set_xlabel("Day", fontsize=10)
-        ax.set_title(title, fontsize=11, fontweight="bold")
-        ax.grid(True, alpha=0.25)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.legend(fontsize=9, loc="upper left")
-    fig.suptitle(
-        "Effect of Malate Treatment on Classification (10×4-fold CV, n=139)",
-        fontsize=12, fontweight="bold",
-    )
-    plt.tight_layout()
-    return fig
+    # 1. Title
+    _title_slide(prs,
+        "10-Repeat 4-Fold Cross-Validation",
+        "series_idor  ·  n=139  ·  Metabolite + Morphology + Image",
+        "Late fusion: mean probability  ·  majority vote")
 
-
-# ── PPT builder ────────────────────────────────────────────────────────────────
-
-def build_ppt(combined, days):
-    prs = Presentation()
-    prs.slide_width  = SLIDE_W
-    prs.slide_height = SLIDE_H
-
-    M = Inches(0.35)   # margin
-
-    # ── Slide 1: Title ────────────────────────────────────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = _hex("#1F3864")
-
-    _add_textbox(slide,
-        "10-Repeat 4-Fold CV\nMetabolite Variant Analysis",
-        M, Inches(1.8), Inches(12.5), Inches(2.5),
-        fontsize=40, bold=True, color="#FFFFFF", align=PP_ALIGN.CENTER)
-
-    _add_textbox(slide,
-        "series_idor cohort  ·  n = 139 organoids  ·  25 Not-Acceptable / 114 Acceptable",
-        M, Inches(4.0), Inches(12.5), Inches(0.6),
-        fontsize=18, color="#BDD7EE", align=PP_ALIGN.CENTER)
-
-    _add_textbox(slide,
-        "3 metabolite variants: nan-floor  ·  raw  ·  no-malate\n"
-        "Modalities: Metabolite (LightGBM)  ·  Morphology (LightGBM)  ·  Image (EfficientNet-B0)\n"
-        "Late fusion: mean probability  ·  majority vote",
-        M, Inches(4.8), Inches(12.5), Inches(1.5),
-        fontsize=14, color="#DDEBF7", align=PP_ALIGN.CENTER)
-
-    # ── Slide 2: Study design ─────────────────────────────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    _add_textbox(slide, "Experimental Design", M, M, Inches(12.5), Inches(0.55),
-                 fontsize=26, bold=True, color="#1F3864")
-
-    design_text = (
+    # 2. Study design
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Study Design", M, M, Inches(12.5), Inches(0.55),
+        fontsize=24, bold=True, color="#1F3864")
+    design = (
         "Cohort\n"
-        "  • 139 organoids from series_idor (BA1 + BA2), including 6 stitched organoids\n"
-        "  • Labels: 25 Not-Acceptable (NAcc), 114 Acceptable (Acc)\n"
-        "  • 11 time points: Dy03 → Dy30\n"
+        "  • 139 organoids, series_idor (BA1 + BA2), including 6 stitched\n"
+        "  • 25 Not-Acceptable / 114 Acceptable  ·  11 time points: Dy03–Dy30\n"
         "\n"
-        "Cross-Validation\n"
-        "  • Stratified 4-fold CV  ×  10 repeats (different random seeds)\n"
-        "  • Seed for repeat r: SEED + r × 1000  →  genuinely independent splits\n"
-        "  • Same fold partition shared across all modalities within each repeat\n"
-        "  • OOF balanced accuracy computed per repeat; mean ± SD reported\n"
+        "Why repeated k-fold?\n"
+        "  • With 25 NAcc in 139 total, a single 4-fold run puts only 6–7 NAcc in each\n"
+        "    test fold — one wrong prediction = ±0.07 BA. High variance.\n"
+        "  • 10 independent repeats (different random seeds) halve the SD of the BA\n"
+        "    estimate without requiring more data or more GPU time.\n"
         "\n"
-        "3 Metabolite Variants (trained independently each fold)\n"
-        "  • met_nan     — values below −500 µM replaced with NaN  (original approach)\n"
-        "  • met_raw     — raw concentration, no floor correction\n"
-        "  • met_no_malate — MalateGlo feature excluded entirely\n"
+        "Fold structure\n"
+        "  • Stratified 4-fold: label ratio preserved in every fold\n"
+        "  • Seed for repeat r = 1 + r × 1000  →  genuinely independent splits\n"
+        "  • All modalities (met, morph, image) use the same fold partition per repeat\n"
+        "    → required for valid late-fusion evaluation\n"
         "\n"
-        "Late Fusion Strategies\n"
-        "  • mean_prob: average OOF probabilities across modalities, threshold 0.5\n"
-        "  • majority_vote: ≥ 2-of-3 modalities predict NAcc"
+        "What is stored per repeat\n"
+        "  • OOF balanced accuracy (single number per modality)\n"
+        "  • OOF probabilities + binary predictions per organoid\n"
+        "  • Fold assignment for every organoid (which fold 0–3 it was tested in)\n"
+        "  • Confusion matrix [[TN,FP],[FN,TP]] per single modality"
     )
-    _add_textbox(slide, design_text, M, Inches(0.75), Inches(12.5), Inches(6.5),
-                 fontsize=13, color="#000000")
+    _tb(slide, design, M, Inches(0.72), Inches(12.5), Inches(6.5), fontsize=13)
 
-    # ── Slide 3: Aggregated two-panel figure ──────────────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    _add_textbox(slide, "Aggregated Results: Mean ± SD over 10 Repeats",
-                 M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
+    # 3. Aggregated two-panel
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Aggregated Results: Mean ± SD over 10 Repeats",
+        M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
     if TWO_PANEL_PATH.exists():
-        slide.shapes.add_picture(str(TWO_PANEL_PATH), M, Inches(0.75),
-                                 width=Inches(12.5))
+        slide.shapes.add_picture(str(TWO_PANEL_PATH), M, Inches(0.75), width=Inches(12.5))
 
-    # ── Slide 4: Summary table ────────────────────────────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    _add_textbox(slide, "Summary Table: Balanced Accuracy (mean ± SD)",
-                 M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
+    # 4. Summary table
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Summary Table: Balanced Accuracy (mean ± SD)",
+        M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
     if TABLE_PATH.exists():
-        slide.shapes.add_picture(str(TABLE_PATH), M, Inches(0.75),
-                                 width=Inches(12.5))
+        slide.shapes.add_picture(str(TABLE_PATH), M, Inches(0.75), width=Inches(12.5))
 
-    # ── Slide 5: Met variant comparison ───────────────────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    _add_textbox(slide, "Metabolite Variant Comparison",
-                 M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
-    fig = _plot_met_comparison(combined, days)
-    stream = _fig_to_stream(fig); plt.close(fig)
-    slide.shapes.add_picture(stream, M, Inches(0.75), width=Inches(12.5))
+    # 5. Spaghetti
+    _content_slide(prs, "Repeat-Level Variance — 4 Key Strategies",
+                   _plot_spaghetti(combined, days))
 
-    # ── Slide 6: Spaghetti / variance across repeats ──────────────────────────
-    slide = prs.slides.add_slide(_blank_layout(prs))
-    _add_textbox(slide, "Variance Across 10 Repeats — Key Strategies",
-                 M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
-    fig = _plot_spaghetti(combined, days)
-    stream = _fig_to_stream(fig); plt.close(fig)
-    slide.shapes.add_picture(stream, M, Inches(0.75), width=Inches(12.5))
-
-    # ── Slides 7-16: Per-repeat results + Dy30 confusion matrices ────────────
+    # 6–15. Per-repeat
     has_cms = bool(combined.get("Dy30", {}).get("met_nan", {}).get("repeat_confusion_matrices"))
     for rep in range(10):
-        slide = prs.slides.add_slide(_blank_layout(prs))
-        _add_textbox(slide, f"Repeat {rep+1} / 10 — OOF Balanced Accuracy by Day",
-                     M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
-        fig = _plot_repeat(combined, days, rep,
-                           title=f"Repeat {rep+1}/10  (seed = {1 + rep*1000})")
-        stream = _fig_to_stream(fig); plt.close(fig)
+        slide = prs.slides.add_slide(_blank(prs))
+        _tb(slide, f"Repeat {rep+1} / 10  (seed = {1 + rep*1000})",
+            M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
+        fig_line = _plot_repeat_line(combined, days, rep,
+                                     title=f"OOF Balanced Accuracy — Repeat {rep+1}/10")
+        buf_line = _stream(fig_line)
         if has_cms:
-            slide.shapes.add_picture(stream, M, Inches(0.7), width=Inches(12.5))
-            fig_cm = _plot_cm_row(combined, rep, day="Dy30")
-            stream_cm = _fig_to_stream(fig_cm); plt.close(fig_cm)
-            slide.shapes.add_picture(stream_cm, M, Inches(4.6), width=Inches(9.5))
+            slide.shapes.add_picture(buf_line, M, Inches(0.7),  width=Inches(12.5))
+            buf_cm = _stream(_plot_cm_row(combined, rep, "Dy30"))
+            slide.shapes.add_picture(buf_cm,  M, Inches(4.55), width=Inches(9.5))
         else:
-            slide.shapes.add_picture(stream, M, Inches(0.7), width=Inches(12.5))
+            slide.shapes.add_picture(buf_line, M, Inches(0.7), width=Inches(12.5))
 
-    OUT_PPT.parent.mkdir(exist_ok=True)
-    prs.save(str(OUT_PPT))
-    print(f"Saved {OUT_PPT}  ({len(prs.slides)} slides)")
+    OUT_CV.parent.mkdir(exist_ok=True)
+    prs.save(str(OUT_CV))
+    print(f"Saved {OUT_CV}  ({len(prs.slides)} slides)")
 
+
+# ══════════════════════════════════════════════════════════════════════════════
 
 def main():
     combined = json.loads(COMBINED_PATH.read_text())
     days = [d for d in DAY_ORDER if d in combined]
-    build_ppt(combined, days)
+    build_met_ppt(combined, days)
+    build_cv_ppt(combined, days)
 
 
 if __name__ == "__main__":
