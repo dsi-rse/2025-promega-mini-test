@@ -35,7 +35,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from PIL import Image
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, StratifiedShuffleSplit
 from sklearn.preprocessing import StandardScaler
 from torch.utils.data import DataLoader, Dataset
@@ -49,6 +49,8 @@ from pipeline.data_loader import (
     LABEL_TO_INT,
     OrganoidDataset,
     filters_for_mode,
+    idor_ba1_ba2_filters,
+    require_complete_series,
 )
 from pipeline.splits import Splits
 
@@ -320,182 +322,199 @@ def run_day(
     all_org_ids: List[str],
     all_labels: np.ndarray,
     n_folds: int,
+    n_repeats: int,
     verbose: bool,
 ) -> Optional[Dict]:
-    """Run n_folds CV for one day across all modalities; return results dict."""
+    """Run n_repeats × n_folds CV for one day; 3 met variants + morph + img."""
 
-    # ── Pre-compute full-day feature arrays (once per day) ──
-    X_met, y_met, _, met_ids = _met_features_all(ds, day)
+    # ── Pre-compute feature arrays once per day (3 met variants) ──
+    X_met_nan,       y_met_nan,       _, met_ids_nan       = _met_features_all(ds, day, malate_mode="nan")
+    X_met_raw,       y_met_raw,       _, met_ids_raw       = _met_features_all(ds, day, malate_mode="raw")
+    X_met_no_malate, y_met_no_malate, _, met_ids_no_malate = _met_features_all(ds, day, malate_mode="drop")
     X_morph, y_morph, _, morph_ids = _morph_features_all(ds, morph_df, day)
 
-    if len(X_met) == 0 and len(X_morph) == 0:
+    met_variants = {
+        "met_nan":       (X_met_nan,       y_met_nan,       met_ids_nan),
+        "met_raw":       (X_met_raw,       y_met_raw,       met_ids_raw),
+        "met_no_malate": (X_met_no_malate, y_met_no_malate, met_ids_no_malate),
+    }
+
+    if all(len(X) == 0 for X, _, _ in met_variants.values()) and len(X_morph) == 0:
         if verbose: print(f"  {day}: no metabolite or morphology data, skipping")
         return None
 
-    outer_cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=SEED)
+    # ── OOF BA, confusion-matrix and detail storage across repeats ──
+    mod_keys = ["met_nan", "met_raw", "met_no_malate", "morph", "img"]
+    repeat_oof_bas: Dict[str, List[float]] = {k: [] for k in mod_keys}
+    repeat_cms:     Dict[str, List]        = {k: [] for k in mod_keys}  # list of [[TN,FP],[FN,TP]]
+    repeat_details: List[Dict]             = []  # one entry per repeat: fold_assignments + oof_probs
 
-    # OOF probability stores: {mod: array of nan, filled per fold}
-    oof = {k: np.full(len(all_org_ids), np.nan) for k in ["met", "morph", "img"]}
-    fold_results = []   # per-fold metrics for each combo
+    fusion_keys: List[str] = []
+    for met_k in ["met_nan", "met_raw", "met_no_malate"]:
+        for combo in [[met_k, "morph"], [met_k, "img"], [met_k, "morph", "img"]]:
+            for strategy in ["mean_prob", "majority_vote"]:
+                fusion_keys.append(f"{'+'.join(combo)}_{strategy}")
+    fusion_keys += ["morph+img_mean_prob", "morph+img_majority_vote"]
+    repeat_fusion_bas: Dict[str, List[float]] = {k: [] for k in fusion_keys}
 
-    for fold_i, (tr_idx, te_idx) in enumerate(outer_cv.split(all_org_ids, all_labels)):
-        fold_seed = SEED + fold_i * 97
-        tr_oids = [all_org_ids[i] for i in tr_idx]
-        te_oids = [all_org_ids[i] for i in te_idx]
+    for rep in range(n_repeats):
+        rep_seed = SEED + rep * 1000
+        outer_cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=rep_seed)
 
-        # Inner val split (15 % of train) for EfficientNet early stopping
-        sss = StratifiedShuffleSplit(1, test_size=0.15, random_state=fold_seed)
-        inner_tr_idx, inner_val_idx = next(sss.split(tr_oids, all_labels[tr_idx]))
-        inner_tr_oids  = [tr_oids[i] for i in inner_tr_idx]
-        inner_val_oids = [tr_oids[i] for i in inner_val_idx]
+        oof: Dict[str, np.ndarray] = {k: np.full(len(all_org_ids), np.nan) for k in mod_keys}
 
-        if verbose:
-            print(f"  Fold {fold_i+1}/{n_folds}  "
-                  f"train={len(inner_tr_oids)}  val={len(inner_val_oids)}  test={len(te_oids)}")
+        # Record which fold each organoid is assigned to for this repeat
+        fold_assignments = np.full(len(all_org_ids), -1, dtype=int)
 
-        fold_probs: Dict[str, np.ndarray] = {}
-        fold_te_ids: Dict[str, List[str]] = {}
+        for fold_i, (tr_idx, te_idx) in enumerate(outer_cv.split(all_org_ids, all_labels)):
+            fold_assignments[te_idx] = fold_i
+            fold_seed = rep_seed + fold_i * 97
+            tr_oids = [all_org_ids[i] for i in tr_idx]
+            te_oids = [all_org_ids[i] for i in te_idx]
 
-        # ── Metabolite ──────────────────────────────────────────────────────
-        X_tr_m, y_tr_m, _ = _filter_fold(X_met, y_met, met_ids, inner_tr_oids)
-        X_te_m, y_te_m, valid_te_m = _filter_fold(X_met, y_met, met_ids, te_oids)
-        if len(X_tr_m) > 0 and len(X_te_m) > 0:
-            p = _train_lgbm_fold(X_tr_m, y_tr_m, X_te_m, fold_seed)
-            if p is not None:
-                fold_probs["met"] = p
-                fold_te_ids["met"] = valid_te_m
-                for oid, prob in zip(valid_te_m, p):
-                    oof["met"][all_org_ids.index(oid)] = prob
-                ba = balanced_accuracy_score(y_te_m, (p >= 0.5).astype(int))
-                if verbose: print(f"    met  bal_acc={ba:.3f}")
+            sss = StratifiedShuffleSplit(1, test_size=0.15, random_state=fold_seed)
+            inner_tr_idx, inner_val_idx = next(sss.split(tr_oids, all_labels[tr_idx]))
+            inner_tr_oids  = [tr_oids[i] for i in inner_tr_idx]
+            inner_val_oids = [tr_oids[i] for i in inner_val_idx]
 
-        # ── Morphology ──────────────────────────────────────────────────────
-        X_tr_o, y_tr_o, _ = _filter_fold(X_morph, y_morph, morph_ids, inner_tr_oids)
-        X_te_o, y_te_o, valid_te_o = _filter_fold(X_morph, y_morph, morph_ids, te_oids)
-        if len(X_tr_o) > 0 and len(X_te_o) > 0:
-            p = _train_lgbm_fold(X_tr_o, y_tr_o, X_te_o, fold_seed)
-            if p is not None:
-                fold_probs["morph"] = p
-                fold_te_ids["morph"] = valid_te_o
-                for oid, prob in zip(valid_te_o, p):
-                    oof["morph"][all_org_ids.index(oid)] = prob
-                ba = balanced_accuracy_score(y_te_o, (p >= 0.5).astype(int))
-                if verbose: print(f"    morph bal_acc={ba:.3f}")
+            if verbose:
+                print(f"  Rep {rep+1}/{n_repeats} Fold {fold_i+1}/{n_folds}  "
+                      f"train={len(inner_tr_oids)}  val={len(inner_val_oids)}  test={len(te_oids)}")
 
-        # ── Image ────────────────────────────────────────────────────────────
-        train_paths, train_labels, _ = _get_img_paths(ds, inner_tr_oids, day)
-        val_paths,   val_labels,   _ = _get_img_paths(ds, inner_val_oids, day)
-        test_paths,  test_labels,  valid_te_i = _get_img_paths(ds, te_oids, day)
-        if len(train_paths) > 0 and len(test_paths) > 0:
-            p = _train_efficientnet_fold(
-                train_paths, train_labels, val_paths, val_labels,
-                test_paths, test_labels, day, fold_seed,
-            )
-            if p is not None:
-                fold_probs["img"] = p
-                fold_te_ids["img"] = valid_te_i
-                for oid, prob in zip(valid_te_i, p):
-                    oof["img"][all_org_ids.index(oid)] = prob
-                ba = balanced_accuracy_score(test_labels, (p >= 0.5).astype(int))
-                if verbose: print(f"    img  bal_acc={ba:.3f}")
+            fold_probs: Dict[str, np.ndarray] = {}
+            fold_te_ids: Dict[str, List[str]] = {}
 
-        # ── Fold-level combined metrics ──────────────────────────────────────
-        fold_combo: Dict = {}
-        combo_defs = {
-            "met+morph":    ["met", "morph"],
-            "met+img":      ["met", "img"],
-            "morph+img":    ["morph", "img"],
-            "met+morph+img":["met", "morph", "img"],
+            # ── 3 Metabolite variants ───────────────────────────────────────
+            for met_k, (X_met, y_met, met_ids) in met_variants.items():
+                X_tr_m, y_tr_m, _ = _filter_fold(X_met, y_met, met_ids, inner_tr_oids)
+                X_te_m, y_te_m, valid_te_m = _filter_fold(X_met, y_met, met_ids, te_oids)
+                if len(X_tr_m) > 0 and len(X_te_m) > 0:
+                    p = _train_lgbm_fold(X_tr_m, y_tr_m, X_te_m, fold_seed)
+                    if p is not None:
+                        fold_probs[met_k] = p
+                        fold_te_ids[met_k] = valid_te_m
+                        for oid, prob in zip(valid_te_m, p):
+                            oof[met_k][all_org_ids.index(oid)] = prob
+                        if verbose:
+                            ba = balanced_accuracy_score(y_te_m, (p >= 0.5).astype(int))
+                            print(f"    {met_k} bal_acc={ba:.3f}")
+
+            # ── Morphology ──────────────────────────────────────────────────
+            X_tr_o, y_tr_o, _ = _filter_fold(X_morph, y_morph, morph_ids, inner_tr_oids)
+            X_te_o, y_te_o, valid_te_o = _filter_fold(X_morph, y_morph, morph_ids, te_oids)
+            if len(X_tr_o) > 0 and len(X_te_o) > 0:
+                p = _train_lgbm_fold(X_tr_o, y_tr_o, X_te_o, fold_seed)
+                if p is not None:
+                    fold_probs["morph"] = p
+                    fold_te_ids["morph"] = valid_te_o
+                    for oid, prob in zip(valid_te_o, p):
+                        oof["morph"][all_org_ids.index(oid)] = prob
+                    if verbose:
+                        ba = balanced_accuracy_score(y_te_o, (p >= 0.5).astype(int))
+                        print(f"    morph bal_acc={ba:.3f}")
+
+            # ── Image ────────────────────────────────────────────────────────
+            train_paths, train_labels, _ = _get_img_paths(ds, inner_tr_oids, day)
+            val_paths,   val_labels,   _ = _get_img_paths(ds, inner_val_oids, day)
+            test_paths,  test_labels,  valid_te_i = _get_img_paths(ds, te_oids, day)
+            if len(train_paths) > 0 and len(test_paths) > 0:
+                p = _train_efficientnet_fold(
+                    train_paths, train_labels, val_paths, val_labels,
+                    test_paths, test_labels, day, fold_seed,
+                )
+                if p is not None:
+                    fold_probs["img"] = p
+                    fold_te_ids["img"] = valid_te_i
+                    for oid, prob in zip(valid_te_i, p):
+                        oof["img"][all_org_ids.index(oid)] = prob
+                    if verbose:
+                        ba = balanced_accuracy_score(test_labels, (p >= 0.5).astype(int))
+                        print(f"    img  bal_acc={ba:.3f}")
+
+        # ── Per-repeat OOF BAs + confusion matrices (single modalities) ───────
+        for k in mod_keys:
+            valid = ~np.isnan(oof[k])
+            if valid.sum() < 2: continue
+            yt = all_labels[valid]; yp = (oof[k][valid] >= 0.5).astype(int)
+            if len(np.unique(yt)) < 2: continue
+            repeat_oof_bas[k].append(float(balanced_accuracy_score(yt, yp)))
+            cm = confusion_matrix(yt, yp, labels=[0, 1])
+            repeat_cms[k].append(cm.tolist())
+
+        # ── Per-repeat detail record (probs + fold assignments) ─────────────
+        detail: Dict = {
+            "seed":             rep_seed,
+            "org_ids":          all_org_ids,
+            "true_labels":      all_labels.tolist(),
+            "fold_assignments": fold_assignments.tolist(),
+            "oof_probs": {
+                k: [None if np.isnan(v) else round(float(v), 6)
+                    for v in oof[k]]
+                for k in mod_keys
+            },
+            "oof_preds": {
+                k: [None if np.isnan(oof[k][i]) else int(oof[k][i] >= 0.5)
+                    for i in range(len(all_org_ids))]
+                for k in mod_keys
+            },
         }
-        for combo_name, mods in combo_defs.items():
-            # Organoids present in ALL listed modalities for this fold
-            common_ids = set(fold_te_ids.get(mods[0], []))
-            for m in mods[1:]:
-                common_ids &= set(fold_te_ids.get(m, []))
-            if not common_ids:
-                continue
-            common_ids = [o for o in te_oids if o in common_ids]
-            for strategy in ("mean_prob", "majority_vote"):
-                prob_map = {}
-                true_labels = None
-                for m in mods:
-                    te_ids_m = fold_te_ids[m]
-                    id_to_prob = dict(zip(te_ids_m, fold_probs[m]))
-                    prob_map[m] = np.array([id_to_prob[o] for o in common_ids])
-                    if true_labels is None:
-                        # recover true labels
-                        lbl_map = {}
-                        for oid in common_ids:
-                            lbl = ds.organoid_label(oid)
-                            if lbl in LABEL_TO_INT:
-                                lbl_map[oid] = LABEL_TO_INT[lbl]
-                        true_labels = np.array([lbl_map[o] for o in common_ids if o in lbl_map])
-                        common_ids_valid = [o for o in common_ids if o in lbl_map]
-                        for m2 in mods:
-                            id_to_prob = dict(zip(fold_te_ids[m2], fold_probs[m2]))
-                            prob_map[m2] = np.array([id_to_prob[o] for o in common_ids_valid])
+        repeat_details.append(detail)
 
-                combined = _combine(prob_map, strategy)
-                if strategy == "majority_vote":
-                    preds = combined.astype(int)
-                    ba = balanced_accuracy_score(true_labels, preds) if len(true_labels) > 0 else 0.0
-                else:
-                    preds = (combined >= 0.5).astype(int)
-                    ba = balanced_accuracy_score(true_labels, preds) if len(true_labels) > 0 else 0.0
-                fold_combo[f"{combo_name}_{strategy}"] = ba
-        fold_results.append(fold_combo)
+        # ── Per-repeat fusion BAs ────────────────────────────────────────────
+        for met_k in ["met_nan", "met_raw", "met_no_malate"]:
+            for combo_mods in [[met_k, "morph"], [met_k, "img"], [met_k, "morph", "img"]]:
+                combo_name = "+".join(combo_mods)
+                valid = np.ones(len(all_org_ids), dtype=bool)
+                for m in combo_mods:
+                    valid &= ~np.isnan(oof[m])
+                if valid.sum() < 2: continue
+                yt = all_labels[valid]
+                if len(np.unique(yt)) < 2: continue
+                for strategy in ["mean_prob", "majority_vote"]:
+                    prob_map = {m: oof[m][valid] for m in combo_mods}
+                    combined = _combine(prob_map, strategy)
+                    preds = (combined.astype(int) if strategy == "majority_vote"
+                             else (combined >= 0.5).astype(int))
+                    fkey = f"{combo_name}_{strategy}"
+                    repeat_fusion_bas[fkey].append(float(balanced_accuracy_score(yt, preds)))
 
-    # ── Aggregate OOF across all folds ──────────────────────────────────────
-    results: Dict = {}
-
-    # Single-modality OOF metrics
-    for mod in ["met", "morph", "img"]:
-        valid = ~np.isnan(oof[mod])
-        if valid.sum() == 0: continue
-        yt = all_labels[valid]; yp_prob = oof[mod][valid]
-        yp = (yp_prob >= 0.5).astype(int)
-        if len(np.unique(yt)) < 2: continue
-        m = compute_classification_metrics(yt, yp, yp_prob)
-        fold_bas = [f.get(mod, np.nan) for f in fold_results
-                    if not np.isnan(f.get(mod, np.nan))]
-        # fold_bas from individual modality not tracked above; use OOF only
-        results[mod] = m
-
-    # Combined OOF metrics
-    combo_defs = {
-        "met+morph":    ["met", "morph"],
-        "met+img":      ["met", "img"],
-        "morph+img":    ["morph", "img"],
-        "met+morph+img":["met", "morph", "img"],
-    }
-    for combo_name, mods in combo_defs.items():
-        # Organoids where ALL mods have OOF probs
-        valid = np.ones(len(all_org_ids), dtype=bool)
-        for m in mods:
-            valid &= ~np.isnan(oof[m])
-        if valid.sum() == 0: continue
-        yt = all_labels[valid]
-        if len(np.unique(yt)) < 2: continue
-
-        for strategy in ("mean_prob", "majority_vote"):
-            prob_map = {m: oof[m][valid] for m in mods}
+        for strategy in ["mean_prob", "majority_vote"]:
+            valid = ~np.isnan(oof["morph"]) & ~np.isnan(oof["img"])
+            if valid.sum() < 2: continue
+            yt = all_labels[valid]
+            if len(np.unique(yt)) < 2: continue
+            prob_map = {"morph": oof["morph"][valid], "img": oof["img"][valid]}
             combined = _combine(prob_map, strategy)
-            if strategy == "majority_vote":
-                preds = combined.astype(int)
-            else:
-                preds = (combined >= 0.5).astype(int)
-            key = f"{combo_name}_{strategy}"
-            # Use mean-prob array as proxy probability for AUC
-            prob_for_metrics = np.stack([oof[m][valid] for m in mods], axis=1).mean(axis=1)
-            results[key] = compute_classification_metrics(yt, preds, prob_for_metrics)
+            preds = (combined.astype(int) if strategy == "majority_vote"
+                     else (combined >= 0.5).astype(int))
+            repeat_fusion_bas[f"morph+img_{strategy}"].append(float(balanced_accuracy_score(yt, preds)))
 
-    # Attach per-fold mean bal_acc for combined models
-    for key in list(results.keys()):
-        fold_bas = [f[key] for f in fold_results if key in f]
-        if fold_bas:
-            results[key]["balanced_accuracy_mean"] = float(np.mean(fold_bas))
-            results[key]["balanced_accuracy_std"]  = float(np.std(fold_bas))
-            results[key]["n_folds"] = len(fold_bas)
+    # ── Aggregate over repeats ───────────────────────────────────────────────
+    results: Dict = {}
+    for k in mod_keys:
+        bas = repeat_oof_bas[k]
+        if not bas: continue
+        results[k] = {
+            "balanced_accuracy_mean":       float(np.mean(bas)),
+            "balanced_accuracy_std":        float(np.std(bas)),
+            "n_repeats":                    len(bas),
+            "n_folds":                      n_folds,
+            "repeat_balanced_accuracies":   bas,
+            "repeat_confusion_matrices":    repeat_cms[k],
+        }
+    for fk in fusion_keys:
+        bas = repeat_fusion_bas.get(fk, [])
+        if not bas: continue
+        results[fk] = {
+            "balanced_accuracy_mean":       float(np.mean(bas)),
+            "balanced_accuracy_std":        float(np.std(bas)),
+            "n_repeats":                    len(bas),
+            "n_folds":                      n_folds,
+            "repeat_balanced_accuracies":   bas,
+        }
+
+    if repeat_details:
+        results["repeat_details"] = repeat_details
 
     return results if results else None
 
@@ -508,15 +527,28 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--days", nargs="+", default=None)
     parser.add_argument("--n-folds", type=int, default=N_FOLDS)
+    parser.add_argument("--n-repeats", type=int, default=1,
+                        help="Number of repeated k-fold runs (different seeds)")
+    parser.add_argument("--include-stitched", action="store_true",
+                        help="Include stitched organoids (n=139, no Splits canonical)")
     args = parser.parse_args()
 
     set_seed(SEED)
-    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
-                         filters=filters_for_mode(FILTER_MODE))
+    if args.include_stitched:
+        ds = OrganoidDataset(ALL_DATA_PATH, splits=None,
+                             filters=[*idor_ba1_ba2_filters(),
+                                      require_complete_series(drop_stitched=False)])
+    else:
+        ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
+                             filters=filters_for_mode(FILTER_MODE))
     morph_df = _load_morph_df()
-    print(ds.summary())
-    print(f"Device:  {DEVICE}")
-    print(f"Folds:   {args.n_folds}")
+    try:
+        print(ds.summary())
+    except RuntimeError:
+        print(f"OrganoidDataset: {len(list(ds.organoid_ids))} organoids (no splits assigned)")
+    print(f"Device:   {DEVICE}")
+    print(f"Folds:    {args.n_folds}")
+    print(f"Repeats:  {args.n_repeats}")
 
     all_org_ids = [o for o in ds.organoid_ids if ds.organoid_label(o) in LABEL_TO_INT]
     all_labels  = np.array([LABEL_TO_INT[ds.organoid_label(o)] for o in all_org_ids])
@@ -531,24 +563,32 @@ def main():
             continue
         print(f"\n{'='*55}\nCombined — {day}\n{'='*55}")
         day_res = run_day(day, ds, morph_df, all_org_ids, all_labels,
-                          n_folds=args.n_folds, verbose=True)
+                          n_folds=args.n_folds, n_repeats=args.n_repeats, verbose=True)
         if day_res:
             all_results[day] = day_res
 
     # ── Save JSON ────────────────────────────────────────────────────────────
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUTPUT_DIR / "combined_results_kfold_series_idor.json"
+    suffix = "_139" if args.include_stitched else ""
+    # Per-day output when a single day is requested (parallel jobs mode)
+    if args.days and len(args.days) == 1:
+        day_tag = args.days[0]
+        out_path = OUTPUT_DIR / f"combined_results_kfold_series_idor{suffix}_{day_tag}.json"
+    else:
+        out_path = OUTPUT_DIR / f"combined_results_kfold_series_idor{suffix}.json"
     with open(out_path, "w") as f:
         json.dump(all_results, f, indent=2)
     print(f"\nSaved {out_path}")
 
     # ── Summary table ────────────────────────────────────────────────────────
-    COMBO_DISPLAY = ["met", "morph", "img",
-                     "met+morph_mean_prob", "met+morph_majority_vote",
-                     "met+img_mean_prob",   "met+img_majority_vote",
-                     "morph+img_mean_prob", "morph+img_majority_vote",
-                     "met+morph+img_mean_prob", "met+morph+img_majority_vote"]
-    header = f"{'Day':<10}" + "".join(f"{k:>22}" for k in COMBO_DISPLAY)
+    COMBO_DISPLAY = [
+        "met_nan", "met_raw", "met_no_malate", "morph", "img",
+        "met_nan+morph+img_mean_prob", "met_nan+morph+img_majority_vote",
+        "met_raw+morph+img_mean_prob",
+        "met_no_malate+morph+img_mean_prob",
+        "morph+img_mean_prob",
+    ]
+    header = f"{'Day':<10}" + "".join(f"{k:>30}" for k in COMBO_DISPLAY)
     print(f"\n{'='*len(header)}")
     print(header)
     print('='*len(header))
@@ -558,40 +598,46 @@ def main():
         row = f"{day:<10}"
         for k in COMBO_DISPLAY:
             m = dr.get(k)
-            ba = m.get("balanced_accuracy_mean", m["balanced_accuracy"]) if m else float("nan")
-            row += f"{ba:>22.3f}"
+            ba = m.get("balanced_accuracy_mean", float("nan")) if m else float("nan")
+            std = m.get("balanced_accuracy_std", float("nan")) if m else float("nan")
+            cell = f"{ba:.3f}±{std:.3f}" if not (ba != ba) else "—"
+            row += f"{cell:>30}"
         print(row)
 
-    # ── Figure: three-modality mean-prob vs single modalities ───────────────
+    # ── Figure: met_nan+morph+img vs single modalities ───────────────────────
     if all_results:
         import shutil
         FIGURE_DIR.mkdir(parents=True, exist_ok=True)
-        series = {}
         key_style = {
-            "met":                    ("Metabolite LGBM",      "#2ca02c", "o", "-"),
-            "morph":                  ("Morphology LGBM",      "#9467bd", "s", "-"),
-            "img":                    ("Image EfficientNet",   "#1f77b4", "^", "-"),
-            "met+morph+img_mean_prob":("Combined (mean prob)", "#d62728", "D", "-"),
-            "met+morph+img_majority_vote":("Combined (vote)",  "#ff7f0e", "P", "--"),
+            "met_nan":                        ("Met (nan floor)",    "#2ca02c", "o", "-"),
+            "met_raw":                        ("Met (raw)",          "#98df8a", "v", "--"),
+            "met_no_malate":                  ("Met (no malate)",    "#17becf", "^", ":"),
+            "morph":                          ("Morphology",         "#9467bd", "s", "-"),
+            "img":                            ("Image",              "#1f77b4", "^", "-"),
+            "met_nan+morph+img_mean_prob":    ("All3/nan (mean)",    "#d62728", "D", "-"),
+            "met_nan+morph+img_majority_vote":("All3/nan (vote)",    "#ff7f0e", "P", "--"),
         }
+        series = {}
         for k, (label, color, marker, ls) in key_style.items():
             day_metrics = {d: all_results[d][k]
                            for d in DAY_ORDER if d in all_results and k in all_results[d]}
             if day_metrics:
                 series[label] = day_metrics
 
-        fig_name = "combined_kfold_balanced_accuracy_series_idor.png"
+        n_str = "139" if args.include_stitched else "132"
+        cv_str = f"{args.n_repeats}×{args.n_folds}-fold"
+        fig_name = f"combined_kfold_balanced_accuracy_series_idor{'_139' if args.include_stitched else ''}.png"
         plot_balanced_accuracy_by_day(
             series,
             day_order=DAY_ORDER,
             output_path=FIGURE_DIR / fig_name,
-            title="Combined Model: Balanced Accuracy by Day (series_idor, 5-fold CV)",
+            title=f"Combined Model: Balanced Accuracy by Day (series_idor, n={n_str}, {cv_str} CV)",
             style_overrides={
                 label: {"color": color, "marker": marker, "linestyle": ls}
                 for _, (label, color, marker, ls) in key_style.items()
             },
         )
-        repo_fig = Path(f"figures/{fig_name}")
+        repo_fig = Path("figures") / fig_name
         repo_fig.parent.mkdir(exist_ok=True)
         shutil.copy(FIGURE_DIR / fig_name, repo_fig)
         print(f"Copied figure to {repo_fig}")

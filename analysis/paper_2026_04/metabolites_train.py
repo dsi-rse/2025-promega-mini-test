@@ -35,7 +35,12 @@ from pipeline.data_loader import (
     ANALYSIS_OUTPUT_DIR,
     DAY_ORDER,
     FIGURE_DIR,
+    LABEL_TO_INT,
     OrganoidDataset,
+    REQUIRED_METABOLITES,
+    CONDITIONAL_METABOLITES,
+    CONCENTRATION_FLOOR,
+    get_day_int_floor,
     filters_for_mode,
 )
 from pipeline.splits import Splits
@@ -129,29 +134,83 @@ MODEL_SPECS = {
 }
 
 
-def _features_for_day_all(ds: OrganoidDataset, day: str):
+def _features_for_day_all(ds: OrganoidDataset, day: str, malate_mode: str = "nan"):
     """Pull (X, y, feat_names, org_ids) for ALL labeled organoids on one day.
 
     Concatenates train + val + test splits so that k-fold CV can reassign
     organoids freely without being constrained by the canonical split.
+    Falls back to iterating organoid_ids directly when no splits are assigned.
+
+    malate_mode (no-splits path only):
+      'nan'  — values < CONCENTRATION_FLOOR replaced with NaN (default)
+      'raw'  — raw concentration values, no floor applied
+      'drop' — MalateGlo feature excluded entirely
     """
-    parts = []
-    for split in ("train", "val", "test"):
-        X, y, names, ids = ds.get_metabolite_features(
-            split, day, include_growth=True, include_initial=True,
+    # Fast path: canonical splits available (malate_mode not applied here)
+    if ds._splits is not None:
+        parts = []
+        for split in ("train", "val", "test"):
+            X, y, names, ids = ds.get_metabolite_features(
+                split, day, include_growth=True, include_initial=True,
+            )
+            if len(X):
+                parts.append((X, y, names, ids))
+        if not parts:
+            return np.empty((0, 0)), np.empty(0), [], []
+        Xs, ys, names_list, ids_list = zip(*parts)
+        feat_names = names_list[0]
+        return (
+            np.vstack(Xs),
+            np.concatenate(ys),
+            feat_names,
+            [oid for ids in ids_list for oid in ids],
         )
-        if len(X):
-            parts.append((X, y, names, ids))
-    if not parts:
-        return np.empty((0, 0)), np.empty(0), [], []
-    Xs, ys, names_list, ids_list = zip(*parts)
-    feat_names = names_list[0]
-    return (
-        np.vstack(Xs),
-        np.concatenate(ys),
-        feat_names,
-        [oid for ids in ids_list for oid in ids],
-    )
+
+    # No-splits fallback: iterate all organoids directly
+    day_num = get_day_int_floor(day)
+    active_mets = list(REQUIRED_METABOLITES)
+    for met, cond_fn in CONDITIONAL_METABOLITES.items():
+        if day_num is not None and cond_fn(day_num):
+            if malate_mode == "drop" and met == "MalateGlo":
+                continue
+            active_mets.append(met)
+
+    feat_names = []
+    for met in active_mets:
+        feat_names.append(f"{met}_concentration_uM")
+        feat_names.append(f"{met}_initial_concentration")
+        feat_names.append(f"{met}_growth_rate")
+
+    rows, labels, ids = [], [], []
+    for oid in ds.organoid_ids:
+        label_str = ds.organoid_label(oid)
+        if label_str not in LABEL_TO_INT:
+            continue
+        rec = ds.get_record(oid, day)
+        if rec is None:
+            continue
+        mets = rec.get("metabolite", {})
+        row = []
+        skip = False
+        for met in active_mets:
+            met_data = mets.get(met, {})
+            val = met_data.get("concentration_uM")
+            if val is None:
+                skip = True; break
+            if malate_mode == "nan" and val < CONCENTRATION_FLOOR:
+                val = np.nan
+            row.append(val)
+            row.append(met_data.get("initial_concentration", np.nan))
+            row.append(met_data.get("growth_rate", np.nan))
+        if skip:
+            continue
+        rows.append(row)
+        labels.append(LABEL_TO_INT[label_str])
+        ids.append(oid)
+
+    if not rows:
+        return np.empty((0, len(feat_names))), np.empty(0, dtype=int), feat_names, []
+    return np.vstack(rows), np.array(labels, dtype=int), feat_names, ids
 
 
 def _train_kfold(

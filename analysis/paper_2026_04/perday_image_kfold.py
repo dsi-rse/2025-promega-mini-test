@@ -49,6 +49,8 @@ from pipeline.data_loader import (
     LABEL_TO_INT,
     OrganoidDataset,
     filters_for_mode,
+    idor_ba1_ba2_filters,
+    require_complete_series,
 )
 from pipeline.splits import Splits
 
@@ -380,15 +382,22 @@ def main():
     parser.add_argument("--n-folds", type=int, default=N_FOLDS)
     parser.add_argument("--no-augmentation", action="store_true",
                         help="Disable training augmentation (resize + normalize only)")
+    parser.add_argument("--include-stitched", action="store_true",
+                        help="Include stitched organoids (drop_stitched=False, no Splits canonical)")
     args = parser.parse_args()
     augment = not args.no_augmentation
 
     set_seed(SEED)
-    ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
-                         filters=filters_for_mode(args.filter_mode))
+    if args.include_stitched:
+        ds = OrganoidDataset(ALL_DATA_PATH, splits=None,
+                             filters=[*idor_ba1_ba2_filters(),
+                                      require_complete_series(drop_stitched=False)])
+    else:
+        ds = OrganoidDataset(ALL_DATA_PATH, splits=Splits.canonical(),
+                             filters=filters_for_mode(args.filter_mode))
     print(ds.summary())
     print(f"Device:      {DEVICE}")
-    print(f"Filter mode: {args.filter_mode}")
+    print(f"Filter mode: {args.filter_mode}{'  +stitched' if args.include_stitched else ''}")
     print(f"Input mode:  {args.input_mode}")
     print(f"CV folds:    {args.n_folds}")
     print(f"Augment:     {augment}")
@@ -426,6 +435,8 @@ def main():
                   f"FoldMean={m['balanced_accuracy_mean']:.4f}±{m['balanced_accuracy_std']:.4f}")
 
     suffix = f"_{args.filter_mode}" if args.filter_mode != "base" else ""
+    if args.include_stitched:
+        suffix += "_139"
     if not augment:
         suffix += "_noaug"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

@@ -23,11 +23,11 @@ import numpy as np
 
 from pipeline.data_loader import ANALYSIS_OUTPUT_DIR, DAY_ORDER
 
-_AUG_PATH   = ANALYSIS_OUTPUT_DIR / "images" / "perday_results_kfold_series_idor.json"
-_NOAUG_PATH = ANALYSIS_OUTPUT_DIR / "images" / "perday_results_kfold_series_idor_noaug.json"
+_AUG_PATH   = ANALYSIS_OUTPUT_DIR / "images" / "perday_results_kfold_series_idor_139.json"
+_NOAUG_PATH = ANALYSIS_OUTPUT_DIR / "images" / "perday_results_kfold_series_idor_139_noaug.json"
 _FIGURE_DIR = ANALYSIS_OUTPUT_DIR / "figures"
 _REPO_DIR   = Path("figures")
-_OUT_NAME   = "aug_comparison_series_idor.png"
+_OUT_NAME   = "aug_comparison_series_idor_139.png"
 
 
 def _load(path):
@@ -93,7 +93,7 @@ def main():
     ax_main.legend(fontsize=10, loc="upper left")
     ax_main.set_title(
         "EfficientNet-B0: Augmentation vs No Augmentation\n"
-        "(5-fold CV, series_idor, n = 132, cm_image input)",
+        "(4-fold CV, series_idor, n = 139 incl. stitched, cm_image input)",
         fontsize=12, fontweight="bold",
     )
 

@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 """Two-panel balanced-accuracy comparison: single modalities vs fusion strategies.
 
-Left panel:  Metabolite / Morphology / Image — each from its own standalone 5-fold CV.
-Right panel: Fusion combinations from the shared-split combined_kfold run.
+Left panel:  Metabolite (nan/raw/no-malate) / Morphology / Image — all from the
+             shared-split combined_kfold run (139 organoids, 10×4-fold CV).
+Right panel: Fusion combinations from the same run.
 
 Also prints a plain-text table of mean +/- std for every strategy at every day.
 
 Reads:
-  - analysis_output/metabolites/results.json
-  - /net/projects2/.../multimodel/morphology_series_idor/results.json
-  - analysis_output/images/perday_results_kfold_series_idor.json
-  - analysis_output/images/combined_results_kfold_series_idor.json
+  - analysis_output/images/combined_results_kfold_series_idor_139.json
 
 Output:
-  - figures/combined_kfold_two_panel_series_idor.png
+  - figures/combined_kfold_two_panel_series_idor_139.png
 
 Usage:
     make run ARGS="-m analysis.paper_2026_04.plot_combined_comparison"
@@ -30,16 +28,10 @@ import matplotlib.pyplot as plt
 from pipeline.data_loader import ANALYSIS_OUTPUT_DIR, DAY_ORDER
 
 # ── Paths ────────────────────────────────────────────────────────────────────
-_MET_PATH = ANALYSIS_OUTPUT_DIR / "metabolites" / "results.json"
-_MORPH_PATH = Path(
-    "/net/projects2/promega/2026_04_15_data/analysis_output"
-    "/multimodel/morphology_series_idor/results.json"
-)
-_IMG_PATH      = ANALYSIS_OUTPUT_DIR / "images" / "perday_results_kfold_series_idor.json"
-_COMBINED_PATH = ANALYSIS_OUTPUT_DIR / "images" / "combined_results_kfold_series_idor.json"
+_COMBINED_PATH = ANALYSIS_OUTPUT_DIR / "images" / "combined_results_kfold_series_idor_139.json"
 _FIGURE_DIR    = ANALYSIS_OUTPUT_DIR / "figures"
 _REPO_FIG_DIR  = Path("figures")
-_OUT_NAME      = "combined_kfold_two_panel_series_idor.png"
+_OUT_NAME      = "combined_kfold_two_panel_series_idor_139.png"
 
 
 def _load(path):
@@ -103,7 +95,7 @@ def _plot_panel(ax, series_cfg, days):
     ax.set_xticklabels(days, rotation=45, fontsize=9)
     ax.set_ylim(0.4, 1.05)
     ax.axhline(0.5, color="gray", linestyle=":", linewidth=1, alpha=0.6)
-    ax.set_ylabel("Balanced Accuracy (5-fold CV mean ± 1 SD)", fontsize=10)
+    ax.set_ylabel("Balanced Accuracy (CV mean ± 1 SD)", fontsize=10)
     ax.set_xlabel("Day", fontsize=10)
     ax.grid(True, alpha=0.25)
     ax.spines["top"].set_visible(False)
@@ -120,7 +112,7 @@ def _print_table(all_series, days):
     sep = "=" * len(header)
     print()
     print(sep)
-    print("Balanced Accuracy: mean +/- std (5-fold CV)")
+    print("Balanced Accuracy: mean +/- std (10×4-fold repeated CV, n=139)")
     print(sep)
     print(header)
     print("-" * len(header))
@@ -205,12 +197,12 @@ def _save_table_figure(all_series, days):
                 tbl[(i + 1, j)].set_facecolor("#EEF2FA")
 
     fig.suptitle(
-        "Balanced Accuracy: mean ± std (5-fold CV) — All Strategies by Day",
+        "Balanced Accuracy: mean ± std (10×4-fold CV) — All Strategies by Day",
         fontsize=10, fontweight="bold", y=0.98,
     )
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    tbl_name = "combined_kfold_table_series_idor.png"
+    tbl_name = "combined_kfold_table_series_idor_139.png"
     out_path  = _FIGURE_DIR / tbl_name
     repo_path = _REPO_FIG_DIR / tbl_name
     _FIGURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -222,37 +214,37 @@ def _save_table_figure(all_series, days):
 
 
 def main():
-    met_raw      = _load(_MET_PATH)["lgbm"]
-    morph_raw    = _load(_MORPH_PATH)["lgbm"]
-    img_raw      = _load(_IMG_PATH)
     combined_raw = _load(_COMBINED_PATH)
 
-    days = [d for d in DAY_ORDER if d in img_raw or d in combined_raw]
+    days = [d for d in DAY_ORDER if d in combined_raw]
 
     # ── series config: (label, {day: result_dict}, color, marker, linestyle) ─
     left_series = [
-        ("Metabolite (standalone)", _build_series(met_raw),   "#2ca02c", "o", "-"),
-        ("Morphology (standalone)", _build_series(morph_raw), "#9467bd", "s", "-"),
-        ("Image (standalone)",      _build_series(img_raw),   "#1f77b4", "^", "-"),
+        ("Metabolite",  _build_series(combined_raw, "met_nan"), "#2ca02c", "o", "-"),
+        ("Morphology",  _build_series(combined_raw, "morph"),   "#9467bd", "s", "-"),
+        ("Image",       _build_series(combined_raw, "img"),     "#1f77b4", "^", "-"),
     ]
 
     right_series = [
-        ("Met + Morph",      _build_series(combined_raw, "met+morph_mean_prob"),         "#e377c2", "o",  "-"),
-        ("Met + Img",        _build_series(combined_raw, "met+img_mean_prob"),            "#8c564b", "s",  "-"),
-        ("Morph + Img",      _build_series(combined_raw, "morph+img_mean_prob"),          "#17becf", "^",  "-"),
-        ("All Three (mean)", _build_series(combined_raw, "met+morph+img_mean_prob"),      "#d62728", "D",  "-"),
-        ("All Three (vote)", _build_series(combined_raw, "met+morph+img_majority_vote"),  "#ff7f0e", "P",  "--"),
+        ("Met + Morph",      _build_series(combined_raw, "met_nan+morph_mean_prob"),          "#e377c2", "o",  "-"),
+        ("Met + Img",        _build_series(combined_raw, "met_nan+img_mean_prob"),             "#8c564b", "s",  "-"),
+        ("Morph + Img",      _build_series(combined_raw, "morph+img_mean_prob"),              "#17becf", "^",  "-"),
+        ("All Three (mean)", _build_series(combined_raw, "met_nan+morph+img_mean_prob"),      "#d62728", "D",  "-"),
+        ("All Three (vote)", _build_series(combined_raw, "met_nan+morph+img_majority_vote"),  "#ff7f0e", "P",  "--"),
     ]
 
     all_series = left_series + right_series
 
-    # Full set for table — pairs (mean prob only) + three-way both strategies
-    table_series = left_series + [
-        ("Met+Morph (mean)",  _build_series(combined_raw, "met+morph_mean_prob"),         "#e377c2", "o", "-"),
-        ("Met+Img (mean)",    _build_series(combined_raw, "met+img_mean_prob"),            "#8c564b", "s", "-"),
-        ("Morph+Img (mean)",  _build_series(combined_raw, "morph+img_mean_prob"),          "#17becf", "^", "-"),
-        ("All3 (mean)",       _build_series(combined_raw, "met+morph+img_mean_prob"),      "#d62728", "D", "-"),
-        ("All3 (vote)",       _build_series(combined_raw, "met+morph+img_majority_vote"),  "#ff7f0e", "P", "--"),
+    # Full set for table
+    table_series = [
+        ("Metabolite",       _build_series(combined_raw, "met_nan"),                          "#2ca02c", "o", "-"),
+        ("Morphology",       _build_series(combined_raw, "morph"),                            "#9467bd", "s", "-"),
+        ("Image",            _build_series(combined_raw, "img"),                              "#1f77b4", "^", "-"),
+        ("Met+Morph",        _build_series(combined_raw, "met_nan+morph_mean_prob"),          "#e377c2", "o", "-"),
+        ("Met+Img",          _build_series(combined_raw, "met_nan+img_mean_prob"),             "#8c564b", "s", "-"),
+        ("Morph+Img",        _build_series(combined_raw, "morph+img_mean_prob"),              "#17becf", "^", "-"),
+        ("All3 (mean)",      _build_series(combined_raw, "met_nan+morph+img_mean_prob"),      "#d62728", "D", "-"),
+        ("All3 (vote)",      _build_series(combined_raw, "met_nan+morph+img_majority_vote"),  "#ff7f0e", "P", "--"),
     ]
 
     # ── Figure ───────────────────────────────────────────────────────────────
@@ -265,11 +257,11 @@ def main():
     _plot_panel(ax_right, right_series, days)
 
     ax_left.set_title(
-        "Single Modality\n(standalone 5-fold CVs, n varies)",
+        "Single Modality — 3 Met Variants\n(10×4-fold repeated CV, series_idor, n=139)",
         fontsize=11, fontweight="bold",
     )
     ax_right.set_title(
-        "Late-Fusion Strategies\n(shared splits, series_idor, n=132)",
+        "Late-Fusion Strategies\n(shared splits, series_idor, n=139)",
         fontsize=11, fontweight="bold",
     )
 
