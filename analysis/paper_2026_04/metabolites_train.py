@@ -134,7 +134,12 @@ MODEL_SPECS = {
 }
 
 
-def _features_for_day_all(ds: OrganoidDataset, day: str, malate_mode: str = "nan"):
+def _features_for_day_all(
+    ds: OrganoidDataset,
+    day: str,
+    malate_mode: str = "nan",
+    force_malate: bool = False,
+):
     """Pull (X, y, feat_names, org_ids) for ALL labeled organoids on one day.
 
     Concatenates train + val + test splits so that k-fold CV can reassign
@@ -145,6 +150,9 @@ def _features_for_day_all(ds: OrganoidDataset, day: str, malate_mode: str = "nan
       'nan'  — values < CONCENTRATION_FLOOR replaced with NaN (default)
       'raw'  — raw concentration values, no floor applied
       'drop' — MalateGlo feature excluded entirely
+
+    force_malate: if True, include MalateGlo even on days where the conditional
+      check would normally exclude it (e.g. Dy10).  Used for targeted experiments.
     """
     # Fast path: canonical splits available (malate_mode not applied here)
     if ds._splits is not None:
@@ -170,7 +178,8 @@ def _features_for_day_all(ds: OrganoidDataset, day: str, malate_mode: str = "nan
     day_num = get_day_int_floor(day)
     active_mets = list(REQUIRED_METABOLITES)
     for met, cond_fn in CONDITIONAL_METABOLITES.items():
-        if day_num is not None and cond_fn(day_num):
+        active = (day_num is not None and cond_fn(day_num)) or (force_malate and met == "MalateGlo")
+        if active:
             if malate_mode == "drop" and met == "MalateGlo":
                 continue
             active_mets.append(met)

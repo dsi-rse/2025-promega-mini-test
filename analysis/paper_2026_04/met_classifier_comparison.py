@@ -140,12 +140,20 @@ def _train_fold(
 
 # ── Per-day runner ───────────────────────────────────────────────────────────
 
-def run_day(day: str, ds: OrganoidDataset, n_folds: int, n_repeats: int, verbose: bool) -> dict:
+def run_day(
+    day: str,
+    ds: OrganoidDataset,
+    n_folds: int,
+    n_repeats: int,
+    verbose: bool,
+    force_malate: bool = False,
+) -> dict:
     """Run all classifiers × variants for one day; return results dict."""
     # Pre-compute features for each malate mode (expensive to recompute per repeat)
     features: Dict[str, tuple] = {}
     for mode, mode_key in MAL_MODES:
-        X, y, _, org_ids = _features_for_day_all(ds, day, malate_mode=mode)
+        X, y, _, org_ids = _features_for_day_all(ds, day, malate_mode=mode,
+                                                  force_malate=force_malate)
         if X is None or len(X) == 0:
             print(f"  [{day}] no data for mode={mode}, skipping day")
             return {}
@@ -213,9 +221,17 @@ def main():
     parser.add_argument("--verbose",   action="store_true")
     parser.add_argument("--include-stitched", action="store_true",
                         help="Include stitched organoids (n=139; default: n=132)")
+    parser.add_argument("--force-malate", action="store_true",
+                        help="Include MalateGlo even on days where it is normally "
+                             "excluded (e.g. Dy10).  Saves to a separate output file.")
     args = parser.parse_args()
 
     days = args.days or list(DAY_ORDER)
+
+    out_path = (
+        ANALYSIS_OUTPUT_DIR / "images" / "met_classifier_comparison_dy10_malate.json"
+        if args.force_malate else OUTPUT_PATH
+    )
 
     if args.include_stitched:
         ds = OrganoidDataset(
@@ -230,13 +246,13 @@ def main():
     print(f"Dataset: {len(ds.organoid_ids)} organoids  "
           f"({'including' if args.include_stitched else 'excluding'} stitched)")
     print(f"Protocol: {args.n_repeats}×{args.n_folds}-fold  "
-          f"classifiers={CLF_NAMES}  days={days}")
+          f"classifiers={CLF_NAMES}  days={days}  force_malate={args.force_malate}")
 
     # Load any existing partial results
-    if OUTPUT_PATH.exists():
-        with open(OUTPUT_PATH) as f:
+    if out_path.exists():
+        with open(out_path) as f:
             all_results = json.load(f)
-        print(f"Resuming from {OUTPUT_PATH}  ({len(all_results)} days already done)")
+        print(f"Resuming from {out_path}  ({len(all_results)} days already done)")
     else:
         all_results = {}
 
@@ -245,13 +261,14 @@ def main():
             print(f"[{day}] already done, skipping")
             continue
         print(f"\n[{day}] running {args.n_repeats}×{args.n_folds}-fold ...")
-        day_results = run_day(day, ds, args.n_folds, args.n_repeats, args.verbose)
+        day_results = run_day(day, ds, args.n_folds, args.n_repeats, args.verbose,
+                              force_malate=args.force_malate)
         if day_results:
             all_results[day] = day_results
-            OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-            with open(OUTPUT_PATH, "w") as f:
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(out_path, "w") as f:
                 json.dump(all_results, f, indent=2)
-            print(f"  Saved → {OUTPUT_PATH}")
+            print(f"  Saved → {out_path}")
 
     # Print summary table
     print("\n\n=== Summary (mean BA) ===")

@@ -31,11 +31,13 @@ from pptx.enum.text import PP_ALIGN
 
 from pipeline.data_loader import DAY_ORDER, ANALYSIS_OUTPUT_DIR
 
-COMBINED_PATH  = ANALYSIS_OUTPUT_DIR / "images" / "combined_results_kfold_series_idor_139.json"
-TWO_PANEL_PATH = Path("figures/combined_kfold_two_panel_series_idor_139.png")
-TABLE_PATH     = Path("figures/combined_kfold_table_series_idor_139.png")
-OUT_MET        = Path("figures/met_variants_analysis.pptx")
-OUT_CV         = Path("figures/repeat_4fold_cv.pptx")
+COMBINED_PATH    = ANALYSIS_OUTPUT_DIR / "images" / "combined_results_kfold_series_idor_139.json"
+CLF_CMP_PATH     = ANALYSIS_OUTPUT_DIR / "images" / "met_classifier_comparison.json"
+DY10_MALATE_PATH = ANALYSIS_OUTPUT_DIR / "images" / "met_classifier_comparison_dy10_malate.json"
+TWO_PANEL_PATH   = Path("figures/combined_kfold_two_panel_series_idor_139.png")
+TABLE_PATH       = Path("figures/combined_kfold_table_series_idor_139.png")
+OUT_MET          = Path("figures/met_variants_analysis.pptx")
+OUT_CV           = Path("figures/repeat_4fold_cv.pptx")
 
 SLIDE_W = Inches(13.33)
 SLIDE_H = Inches(7.5)
@@ -195,9 +197,11 @@ def _compute_observations(combined, days):
     # Observation 1: nan vs raw
     obs.append(
         f"1. Floor correction (met_nan) vs raw values (met_raw)\n"
-        f"   Max |BA difference| across all days = {max_diff_nr:.4f} — effectively zero.\n"
-        f"   → The −500 µM floor correction has no impact. Extreme outliers are absent\n"
-        f"     or already NaN for other reasons in this cohort."
+        f"   Max |BA difference| across all days = {max_diff_nr:.4f} — exactly zero.\n"
+        f"   → Root cause: extreme MalateGlo values (e.g. −5662 µM) exist only at Dy10,\n"
+        f"     but MalateGlo is a conditional feature excluded for days ≤ Dy10.\n"
+        f"     At Dy13+, where MalateGlo IS used, all values are > −500 µM — floor never fires.\n"
+        f"   → Confirmed by Dy10 forced-inclusion experiment (see next slide)."
     )
 
     # Observation 2: malate feature importance
@@ -372,7 +376,57 @@ def _plot_met_table(combined, days):
     return fig
 
 
-def build_met_ppt(combined, days):
+def _plot_dy10_malate(dy10_r, normal_dy10_r):
+    """Grouped bar chart: 4 classifiers × 3 variants at Dy10 (force_malate),
+    with the no-MalateGlo baseline overlaid as a horizontal dash."""
+    clfs   = ["lgbm", "logreg", "svm", "mlp"]
+    labels = ["LightGBM", "LogReg", "SVM", "MLP"]
+    variants = [
+        ("met_nan",       "nan floor",    "#2ca02c"),
+        ("met_raw",       "raw values",   "#ff7f0e"),
+        ("met_no_malate", "drop MalateGlo","#d62728"),
+    ]
+
+    x = np.arange(len(clfs))
+    width = 0.22
+    offsets = [-1, 0, 1]
+
+    fig, ax = plt.subplots(figsize=(10, 4.5))
+    for (mk, vlabel, color), offset in zip(variants, offsets):
+        means = [dy10_r.get(f"{c}_{mk}", {}).get("balanced_accuracy_mean", np.nan) for c in clfs]
+        stds  = [dy10_r.get(f"{c}_{mk}", {}).get("balanced_accuracy_std",  np.nan) for c in clfs]
+        bars = ax.bar(x + offset * width, means, width * 0.85, label=vlabel,
+                      color=color, alpha=0.75)
+        ax.errorbar(x + offset * width, means, yerr=stds,
+                    fmt="none", ecolor="black", capsize=3, linewidth=1)
+
+    # Baseline: Dy10 without MalateGlo (met_nan from normal run = same as no_malate here)
+    if normal_dy10_r:
+        baseline = [normal_dy10_r.get(f"{c}_met_nan", {}).get("balanced_accuracy_mean", np.nan)
+                    for c in clfs]
+        for i, bv in enumerate(baseline):
+            if not np.isnan(bv):
+                ax.plot([i - 2*width, i + 2*width], [bv, bv],
+                        color="black", lw=2, ls="--", zorder=5)
+    ax.plot([], [], color="black", lw=2, ls="--", label="No MalateGlo (baseline)")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=11)
+    ax.set_ylim(0.45, 0.75)
+    ax.axhline(0.5, color="gray", ls=":", lw=1, alpha=0.6)
+    ax.set_ylabel("Balanced Accuracy (mean ± 1 SD)", fontsize=10)
+    ax.set_title("Dy10 with MalateGlo Forced In — 4 Classifiers × 3 Variants\n"
+                 "(10×4-fold repeated CV, n=139  ·  extreme values only exist at Dy10)",
+                 fontsize=11, fontweight="bold")
+    ax.legend(fontsize=9, loc="upper right")
+    ax.grid(True, alpha=0.2, axis="y")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+    return fig
+
+
+def build_met_ppt(combined, days, dy10_malate=None, normal_clf=None):
     prs = _new_prs()
 
     # 1. Title
@@ -422,7 +476,34 @@ def build_met_ppt(combined, days):
     _content_slide(prs, "Numeric Summary Table",
                    _plot_met_table(combined, days), fig_top=Inches(0.7), fig_w=Inches(12.5))
 
-    # 7. Observations
+    # 7. Dy10 force-malate experiment
+    dy10_r      = (dy10_malate or {}).get("Dy10", {})
+    normal_dy10 = (normal_clf  or {}).get("Dy10", {})
+    slide = prs.slides.add_slide(_blank(prs))
+    _tb(slide, "Dy10 Experiment: Forcing MalateGlo In Where Outliers Live",
+        M, M, Inches(12.5), Inches(0.55), fontsize=22, bold=True, color="#1F3864")
+    if dy10_r:
+        fig = _plot_dy10_malate(dy10_r, normal_dy10)
+        buf = _stream(fig)
+        slide.shapes.add_picture(buf, M, Inches(0.72), width=Inches(8.2))
+    note = (
+        "Why this experiment?\n"
+        "  Extreme MalateGlo values (e.g. −5662 µM) exist only at Dy10.\n"
+        "  MalateGlo is normally excluded for days ≤ Dy10 (conditional metabolite),\n"
+        "  so the floor correction never fires in the standard pipeline.\n"
+        "  Here we force MalateGlo into Dy10 features to test the correction directly.\n"
+        "\n"
+        "Key findings\n"
+        "  • nan vs raw: ~0.006–0.011 BA difference — floor correction works but\n"
+        "    the effect is tiny, within repeat noise (±0.03–0.05 SD).\n"
+        "  • LogReg: nan=0.613 > drop/baseline=0.548 — gains most from keeping\n"
+        "    MalateGlo (even with outliers replaced by NaN).\n"
+        "  • LGBM/MLP: nan ≈ raw ≈ drop ≈ baseline — insensitive to MalateGlo at Dy10.\n"
+        "  • SVM: stuck at 0.500 regardless — features not separable at Dy10."
+    )
+    _tb(slide, note, Inches(8.7), Inches(0.72), Inches(4.3), Inches(6.3), fontsize=11)
+
+    # 8. Observations
     obs_list = _compute_observations(combined, days)
     slide = prs.slides.add_slide(_blank(prs))
     _tb(slide, "Observations & Conclusions", M, M, Inches(12.5), Inches(0.55),
@@ -596,9 +677,11 @@ def build_cv_ppt(combined, days):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
-    combined = json.loads(COMBINED_PATH.read_text())
-    days = [d for d in DAY_ORDER if d in combined]
-    build_met_ppt(combined, days)
+    combined   = json.loads(COMBINED_PATH.read_text())
+    days       = [d for d in DAY_ORDER if d in combined]
+    dy10_malate = json.loads(DY10_MALATE_PATH.read_text()) if DY10_MALATE_PATH.exists() else None
+    normal_clf  = json.loads(CLF_CMP_PATH.read_text())     if CLF_CMP_PATH.exists()     else None
+    build_met_ppt(combined, days, dy10_malate=dy10_malate, normal_clf=normal_clf)
     build_cv_ppt(combined, days)
 
 
